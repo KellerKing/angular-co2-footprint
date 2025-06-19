@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-filtertabelle4',
+  selector: 'app-filtertabelle',
   imports: [],
   template: `
     <p>
