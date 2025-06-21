@@ -1,15 +1,11 @@
+import { HeaderEntryDto } from "./headerEntryDto";
+
 export class HeaderDto {
-  title: string;
-  logoUrl: string;
-  sortOrder?: number;
-  isActive?: boolean;
-  link: string;
+  headerEntries: HeaderEntryDto[];
+  logoUrl?: string;
   
-  constructor(title: string, logoUrl: string, link: string, sortOrder?: number, isActive?: boolean) {
-    this.title = title;
+  constructor(headerEntries: HeaderEntryDto[], logoUrl?: string) {
+    this.headerEntries = headerEntries;
     this.logoUrl = logoUrl;
-    this.link = link;
-    this.sortOrder = sortOrder;
-    this.isActive = isActive;
   }
 }
