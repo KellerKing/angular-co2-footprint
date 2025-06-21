@@ -26,11 +26,6 @@ import { HeaderEntryDto } from './headerEntryDto';
           } @empty {
             <span class="nav-item">No entries available</span>
           }
-          <!-- <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a
-          >
-          <a class="nav-item nav-link" href="#">Features</a>
-          <a class="nav-item nav-link" href="#">Pricing</a>
-          <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
         </div>
       </div>
     </nav>`,
@@ -51,3 +46,4 @@ export class HeaderComponent {
 
  //https://angular.dev/guide/components/inputs
 //https://v18.angular.dev/guide/signals/model
+//https://angular.dev/guide/routing
