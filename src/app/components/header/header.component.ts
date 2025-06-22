@@ -1,14 +1,15 @@
 import { Component, input, model } from '@angular/core';
 import { HeaderDto } from './headerDto';
 import { HeaderEntryDto } from './headerEntryDto';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [RouterLink, RouterLinkActive],
   template: `
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
       <a class="navbar-brand" href="#">Navbar</a>
-      <button
+      <button (click)="toggleNavbar()"
         class="navbar-toggler"
         type="button"
         data-toggle="collapse"
@@ -22,7 +23,13 @@ import { HeaderEntryDto } from './headerEntryDto';
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           @for (item of getSortedHeaderEntries(); track $index) {
-            <a class="nav-item nav-link" [class.active] = "item.isActive" [href]="item.link">{{item.title}}</a>
+            <a 
+              routerLink={{item.routerLink}} 
+              routerLinkActive="active" 
+              [routerLinkActiveOptions]="{exact: true}"
+              class="nav-item nav-link">
+              {{item.title}}
+            </a>
           } @empty {
             <span class="nav-item">No entries available</span>
           }
@@ -41,6 +48,12 @@ export class HeaderComponent {
         (a: HeaderEntryDto, b: HeaderEntryDto) => a.sortOrder - b.sortOrder
       ) || []
     );
+  }
+
+  toggleNavbar() : void {
+    const navbar = document.querySelector('.navbar-collapse');
+    if (!navbar) return;
+    navbar.classList.toggle('show');  
   }
 }
 

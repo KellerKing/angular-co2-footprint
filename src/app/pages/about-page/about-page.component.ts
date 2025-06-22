@@ -11,6 +11,4 @@ import { Component } from '@angular/core';
   `,
   styles: ``
 })
-export class AboutPageComponent {
-
-}
+export class AboutPageComponent {}
