@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { HeaderDto } from './headerDto';
 import { HeaderEntryDto } from './headerEntryDto';
 import {RouterLink, RouterLinkActive} from '@angular/router';
@@ -7,8 +7,10 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
   selector: 'app-header',
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-      <a class="navbar-brand" href="#">Navbar</a>
+    <nav class="navbar navbar-light bg-light navbar-expand-lg ps-3">
+      <a class="navbar-brand" [routerLink]="['/']">
+        <img [src]=[this.headerData()?.logoUrl] width="100" height="40" class="d-inline-block align-top" alt="">
+      </a>
       <button (click)="toggleNavbar()"
         class="navbar-toggler"
         type="button"
@@ -39,7 +41,7 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
   styles: ``,
 })
 export class HeaderComponent {
-  headerData = model<HeaderDto>();
+  headerData = input<HeaderDto>();
 
 
   getSortedHeaderEntries(): HeaderEntryDto[] {

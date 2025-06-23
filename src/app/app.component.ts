@@ -9,6 +9,7 @@ import { HeaderComponent } from './components/header/header.component';
   <header class="app-header">
         <app-header
       [headerData]="{
+        logoUrl: 'logo_iu.svg',
         headerEntries: [
           { title: 'Home', routerLink: '', sortOrder: 1, isActive: true },
           { title: 'About', routerLink: 'about', sortOrder: 2, isActive: false }
