@@ -12,7 +12,8 @@ import { HeaderComponent } from './components/header/header.component';
         logoUrl: 'logo_iu.svg',
         headerEntries: [
           { title: 'Home', routerLink: '', sortOrder: 1, isActive: true },
-          { title: 'About', routerLink: 'about', sortOrder: 2, isActive: false }
+          { title: 'Tabelle', routerLink: 'tabelle', sortOrder: 2, isActive: false },
+          { title: 'About', routerLink: 'about', sortOrder: 3, isActive: false },
         ]
       }"
     >
