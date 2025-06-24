@@ -25,10 +25,11 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           @for (item of getSortedHeaderEntries(); track $index) {
+            <!-- exact: true damit / nicht z.B zu /impressum aktiv wird -->
             <a 
               routerLink={{item.routerLink}} 
               routerLinkActive="active" 
-              [routerLinkActiveOptions]="{exact: true}"
+              [routerLinkActiveOptions]="{exact: true}" 
               class="nav-item nav-link">
               {{item.title}}
             </a>
