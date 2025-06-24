@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 
+
 @Component({
-  selector: 'app-filtertabelle',
+  selector: 'app-about-page',
   imports: [],
   template: `
     <p>
-      filtertabelle4 works!
+      about-page works!
     </p>
   `,
   styles: ``
 })
-export class Filtertabelle4Component {
-
-}
+export class AboutPageComponent {}
