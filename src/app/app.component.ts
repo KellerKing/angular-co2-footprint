@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
+import { UnternehmenService, Unternehmen } from './service/unternehmen.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,14 @@ import { HeaderComponent } from './components/header/header.component';
 })
 export class AppComponent {
   title = 'angular-demo';
+
+  private unternehmenService = inject(UnternehmenService);
     
+  constructor() {
+    // Fetch all companies on initialization  
+    const alleUnternehmen = this.unternehmenService.getAlleUnternehmen;
+    console.log(alleUnternehmen);  
+  }
 
   onActive(event: any): void {
     // Handle the active route change if needed

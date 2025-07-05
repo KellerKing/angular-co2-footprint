@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
   `,
   styles: ``
 })
-export class Filtertabelle4Component {
+export class FiltertabelleComponent {
 
 }
+//tutorial: https://getbootstrap.com/docs/4.0/content/tables/
