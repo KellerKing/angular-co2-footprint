@@ -38,7 +38,8 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
           }
         </div>
       </div>
-    </nav>`,
+    </nav>
+  `,
   styles: ``,
 })
 export class HeaderComponent {
