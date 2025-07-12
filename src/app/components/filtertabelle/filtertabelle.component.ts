@@ -5,27 +5,44 @@ import { SpaltenDto } from './spaltenDto';
   selector: 'app-filtertabelle',
   imports: [],
   template: `
-    <div class="table-responsive">
-      <table class="table table-striped table-hover table-sm">
-        <thead class="table-light">
-          <tr>
-            @for (col of spalten; track $index) {
-            <th> {{ col.header }} </th>
-            } @empty {
-            <th>– keine Spalten –</th>
-            }
-          </tr>
-        </thead>
-        <tbody>
-          @for (row of daten; track row) {
-          <tr>
-            @for (col of spalten; track  $index) {
-            <td> {{ getCellValue(row, col) }}</td>
-            }
-          </tr>  
+    <div class="container">
+      @if (hasSpaltenZumFiltern()) {
+      <div class="">
+        <form class="input-group-prepend">
+          @for (col of getFilterbarSpalten(); track $index) {
+          <input
+            type="text"
+            class="form-control mb-3"
+            placeholder="{{ col.header }}..."
+            attr.aria-label="{{ col.header }}"
+            aria-describedby="basic-addon1"
+          />
           }
-        </tbody>
-      </table>
+        </form>
+      </div>
+      }
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm">
+          <thead class="table-light">
+            <tr>
+              @for (col of spalten; track $index) {
+              <th>{{ col.header }}</th>
+              } @empty {
+              <th>– keine Spalten –</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of daten; track row) {
+            <tr>
+              @for (col of spalten; track $index) {
+              <td>{{ getCellValue(row, col) }}</td>
+              }
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   `,
   styles: ``,
@@ -56,6 +73,14 @@ export class FiltertabelleComponent {
     ];
   }
 
+  hasSpaltenZumFiltern(): boolean {
+    return this.spalten.some((col) => col.filterbar);
+  }
+
+  getFilterbarSpalten(): SpaltenDto<Daten>[] {
+    return this.spalten.filter((col) => col.filterbar);
+  }
+
   getCellValue(row: Daten, col: SpaltenDto<Daten>): any {
     const m = col.mappingName;
 
@@ -80,6 +105,7 @@ export class FiltertabelleComponent {
   }
 }
 //tutorial: https://getbootstrap.com/docs/4.0/content/tables/
+//https://www.delftstack.com/de/howto/angular/angular-2-sortable-table/
 
 export interface Daten {
   name: string;
