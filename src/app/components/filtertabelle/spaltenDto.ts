@@ -1,5 +1,5 @@
-export interface SpaltenDto<T> {
-    mappingName: keyof T;
+export interface SpaltenDto {
+    mappingName: string;
     header: string;
     filterbar?: boolean;
     sortierbar?: boolean;
