@@ -3,49 +3,68 @@ import { SpaltenDto } from './spaltenDto';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-filtertabelle',
-  imports: [MatTableModule, MatSortModule, MatInputModule],
+  imports: [MatTableModule, MatSortModule, MatInputModule, MatExpansionModule],
   template: `
-    @if (hasSpaltenZumFiltern()) {
-    <form class="form-inline bg-light highlight">
-      @for (col of getFilterbarSpalten(); track $index) {
-      <div class="row">
-        <mat-form-field>
-          <mat-label>{{ col.header }}</mat-label>
-          <input matInput placeholder="{{ col.header }}..." value="Sushi" />
-        </mat-form-field>
+    <div class="m-2">
+      @if (hasSpaltenZumFiltern()) {
+
+      <div class="mb-4">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Filter</mat-panel-title>
+          </mat-expansion-panel-header>
+          <form class="form-inline bg-light highlight">
+            @for (col of getFilterbarSpalten(); track $index) {
+            <div class="row">
+              <mat-form-field>
+                <mat-label>{{ col.header }}</mat-label>
+                <input
+                  matInput
+                  placeholder="{{ col.header }}..."
+                  value="Sushi"
+                />
+              </mat-form-field>
+            </div>
+            }
+          </form>
+        </mat-expansion-panel>
       </div>
       }
-    </form>
-    }
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-      <!-- Note that these columns can be defined in any order.
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+      >
+        <!-- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
-      <!-- Spalten Templates definieren -->
-      @for (col of spalten; track $index) {
-      <ng-container [matColumnDef]="col.mappingName">
-        @if (col.sortierbar) {
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ col.header }}
-        </th>
-        } @else {
-        <th mat-header-cell *matHeaderCellDef>
-          {{ col.header }}
-        </th>
+        <!-- Spalten Templates definieren -->
+        @for (col of spalten; track $index) {
+        <ng-container [matColumnDef]="col.mappingName">
+          @if (col.sortierbar) {
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ col.header }}
+          </th>
+          } @else {
+          <th mat-header-cell *matHeaderCellDef>
+            {{ col.header }}
+          </th>
+          }
+
+          <td mat-cell *matCellDef="let element">
+            {{ getCellValue(element, col) }}
+          </td>
+        </ng-container>
         }
 
-        <td mat-cell *matCellDef="let element">
-          {{ getCellValue(element, col) }}
-        </td>
-      </ng-container>
-      }
-
-      <tr mat-header-row *matHeaderRowDef="getSpaltenNamen()"></tr>
-      <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="getSpaltenNamen()"></tr>
+        <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
+      </table>
+    </div>
   `,
   styles: ``,
 })
