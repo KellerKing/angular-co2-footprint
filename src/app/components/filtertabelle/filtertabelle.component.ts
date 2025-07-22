@@ -1,26 +1,21 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { SpaltenDto } from './spaltenDto';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-filtertabelle',
-  imports: [MatTableModule, MatSortModule],
+  imports: [MatTableModule, MatSortModule, MatInputModule],
   template: `
     @if (hasSpaltenZumFiltern()) {
-    <form class="form-inline m-2 p-2 bg-light highlight">
+    <form class="form-inline bg-light highlight">
       @for (col of getFilterbarSpalten(); track $index) {
-      <div class="form-row align-items-center mb-3">
-        <label for="{{ col.mappingName }}">{{ col.header }}</label>
-        <div class="col-auto">
-          <input
-            type="text"
-            class="form-control"
-            id="{{ col.mappingName }}"
-            (input)="changeFilter($event, col.mappingName)"
-            placeholder="{{ col.header }}..."
-          />
-        </div>
+      <div class="row">
+        <mat-form-field>
+          <mat-label>{{ col.header }}</mat-label>
+          <input matInput placeholder="{{ col.header }}..." value="Sushi" />
+        </mat-form-field>
       </div>
       }
     </form>
@@ -55,8 +50,6 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
   styles: ``,
 })
 export class FiltertabelleComponent implements AfterViewInit {
-  
-
   spalten: SpaltenDto[] = [];
   daten: Daten[] = [
     { name: 'Max', alter: 25 },
@@ -113,7 +106,12 @@ export class FiltertabelleComponent implements AfterViewInit {
     this.filterValues[mappingName] = ($event.target as HTMLInputElement).value;
 
     this.dataSource.filter = JSON.stringify(this.filterValues);
-    console.log('Filter geändert:', mappingName, 'Wert:', ($event.target as HTMLInputElement).value);
+    console.log(
+      'Filter geändert:',
+      mappingName,
+      'Wert:',
+      ($event.target as HTMLInputElement).value
+    );
   }
 }
 //tutorial: https://getbootstrap.com/docs/4.0/content/tables/
