@@ -15,21 +15,22 @@ export interface Unternehmen {
 export class UnternehmenService {
 
   //private http = inject(HttpClient);
-  
+  private m_Url = '/db.json';
+  private m_Http = inject(HttpClient);
 
   getAlleUnternehmen(): Observable<Unternehmen[]> {
-    return of([
-      {
-        name: 'Unternehmen A', 
-        land: 'Deutschland',
-        countryCode: 'DE',
-        branche: 'Technologie',
-        co2Verbrauch: 1000,
-        id: 1
-      }
-    ]);
-    //return inject(HttpClient).get<Unternehmen[]>('assets/db.json');
-    //return this.http.get<Unternehmen[]>('db.json');
+    // return of([
+    //   {
+    //     name: 'Unternehmen A', 
+    //     land: 'Deutschland',
+    //     countryCode: 'DE',
+    //     branche: 'Technologie',
+    //     co2Verbrauch: 1000,
+    //     id: 1
+    //   }
+    // ]);
+    //return inject(HttpClient).get<Unternehmen[]>(this.m_Url);
+    return this.m_Http.get<Unternehmen[]>(this.m_Url);
   }
 
 }

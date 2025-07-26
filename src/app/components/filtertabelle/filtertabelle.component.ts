@@ -131,12 +131,6 @@ export class FiltertabelleComponent implements AfterViewInit, OnInit {
     this.dataSource.filter = JSON.stringify(
       Array.from(this.filterValues.entries())
     );
-    console.log(
-      'Filter geändert:',
-      mappingName,
-      'Wert:',
-      ($event.target as HTMLInputElement).value
-    );
   }
 
   filterPredicate = (data: Daten, filter: string): boolean => {
