@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { SpaltenDto } from './spaltenDto';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
@@ -25,7 +25,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
                 <input
                   matInput
                   placeholder="{{ col.header }}..."
-                  value="Sushi"
+                  [value]="filterValues.get(col.mappingName)"
+                  (input)="changeFilter($event, col.mappingName)"
                 />
               </mat-form-field>
             </div>
@@ -34,11 +35,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
         </mat-expansion-panel>
       </div>
       }
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        matSort
-      >
+      <table mat-table [dataSource]="dataSource" matSort>
         <!-- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
@@ -68,14 +65,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
   `,
   styles: ``,
 })
-export class FiltertabelleComponent implements AfterViewInit {
+export class FiltertabelleComponent implements AfterViewInit, OnInit {
   spalten: SpaltenDto[] = [];
   daten: Daten[] = [
     { name: 'Max', alter: 25 },
     { name: 'Anna', alter: 30 },
   ];
 
-  filterValues: { [key: string]: string } = {};
+  filterValues = new Map<string, string>();
   @ViewChild(MatSort) sort!: MatSort;
   dataSource = new MatTableDataSource(this.daten);
 
@@ -96,11 +93,15 @@ export class FiltertabelleComponent implements AfterViewInit {
       },
     ];
 
-    this.filterValues = this.getFilterbarSpalten().reduce((acc, col) => {
-      acc[col.mappingName] = '';
-      return acc;
-    }, {} as { [key: string]: string });
+    for (const filterbareSpalte of this.getFilterbarSpalten()) {
+      this.filterValues.set(filterbareSpalte.mappingName, '');
+    }
   }
+
+  ngOnInit(): void {
+    this.dataSource.filterPredicate = this.filterPredicate;
+  }
+
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
   }
@@ -122,9 +123,14 @@ export class FiltertabelleComponent implements AfterViewInit {
   }
 
   changeFilter($event: Event, mappingName: string) {
-    this.filterValues[mappingName] = ($event.target as HTMLInputElement).value;
+    this.filterValues.set(
+      mappingName,
+      ($event.target as HTMLInputElement).value
+    );
 
-    this.dataSource.filter = JSON.stringify(this.filterValues);
+    this.dataSource.filter = JSON.stringify(
+      Array.from(this.filterValues.entries())
+    );
     console.log(
       'Filter geändert:',
       mappingName,
@@ -132,6 +138,23 @@ export class FiltertabelleComponent implements AfterViewInit {
       ($event.target as HTMLInputElement).value
     );
   }
+
+  filterPredicate = (data: Daten, filter: string): boolean => {
+    const filterMap = new Map<string, string>(JSON.parse(filter));
+
+    for (const [key, value] of filterMap.entries()) {
+      if (!value || value.trim() === '') continue;
+
+      const cellValue = data[key as keyof Daten];
+      if (cellValue === undefined || cellValue === null) continue;
+
+      const cellValueStr = String(cellValue).toLowerCase(); //TODO: handle non-string values
+      if (!cellValueStr.includes(value.toLowerCase())) {
+        return false;
+      }
+    }
+    return true;
+  };
 }
 //tutorial: https://getbootstrap.com/docs/4.0/content/tables/
 //https://www.delftstack.com/de/howto/angular/angular-2-sortable-table/
