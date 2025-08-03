@@ -20,7 +20,7 @@ export class TabelleDataService {
     ];
   }
 
-  getUnternehmen(): Observable<Unternehmen[]> {
+  getDaten(): Observable<any[]> {
     const unternehmen = this.m_UnternehmenService.getAlleUnternehmen();
     return unternehmen;
   }
