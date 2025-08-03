@@ -42,7 +42,7 @@ export class AppComponent {
 
   constructor() {
     // Fetch all companies on initialization
-    const alleUnternehmen = this.unternehmenService.getAlleUnternehmen();
+    const alleUnternehmen = this.unternehmenService.getUnternehmen(2, 10);
     alleUnternehmen.forEach((element) => {
       console.log(element);
     });

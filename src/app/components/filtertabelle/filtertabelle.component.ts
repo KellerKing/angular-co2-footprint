@@ -1,13 +1,36 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ViewChild,
+  OnInit,
+  input,
+  Input,
+  inject,
+} from '@angular/core';
 import { SpaltenDto } from './spaltenDto';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { Observable, map, take } from 'rxjs';
+import { TabelleDataService } from '../../service/tabelleDataService';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  Unternehmen,
+  UnternehmenService,
+} from '../../service/unternehmen.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
+  imports: [
+    MatTableModule,
+    MatSortModule,
+    MatInputModule,
+    MatExpansionModule,
+    MatPaginatorModule,
+    AsyncPipe,
+  ],
   selector: 'app-filtertabelle',
-  imports: [MatTableModule, MatSortModule, MatInputModule, MatExpansionModule],
   template: `
     <div class="m-2">
       @if (hasSpaltenZumFiltern()) {
@@ -35,91 +58,101 @@ import { MatExpansionModule } from '@angular/material/expansion';
         </mat-expansion-panel>
       </div>
       }
-      <table mat-table [dataSource]="dataSource" matSort>
-        <!-- Note that these columns can be defined in any order.
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="(dataSource | async) ?? []" matSort>
+          <!-- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
-        <!-- Spalten Templates definieren -->
-        @for (col of spalten; track $index) {
-        <ng-container [matColumnDef]="col.mappingName">
-          @if (col.sortierbar) {
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ col.header }}
-          </th>
-          } @else {
-          <th mat-header-cell *matHeaderCellDef>
-            {{ col.header }}
-          </th>
+          <!-- Spalten Templates definieren -->
+          @for (col of inputSpalten; track $index) {
+          <ng-container [matColumnDef]="col.mappingName">
+            @if (col.sortierbar) {
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ col.header }}
+            </th>
+            } @else {
+            <th mat-header-cell *matHeaderCellDef>
+              {{ col.header }}
+            </th>
+            }
+
+            <td mat-cell *matCellDef="let element">
+              {{ getCellValue(element, col) }}
+            </td>
+          </ng-container>
           }
 
-          <td mat-cell *matCellDef="let element">
-            {{ getCellValue(element, col) }}
-          </td>
-        </ng-container>
-        }
+          <tr mat-header-row *matHeaderRowDef="getSpaltenNamen()"></tr>
+          <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
+        </table>
 
-        <tr mat-header-row *matHeaderRowDef="getSpaltenNamen()"></tr>
-        <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
-      </table>
+        @if (pagingEnabled) {
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          [pageSize]="pageSize"
+          [showFirstLastButtons]="true"
+        >
+        </mat-paginator>
+        }
+      </div>
     </div>
   `,
   styles: ``,
 })
 export class FiltertabelleComponent implements AfterViewInit, OnInit {
-  spalten: SpaltenDto[] = [];
-  daten: Daten[] = [
-    { name: 'Max', alter: 25 },
-    { name: 'Anna', alter: 30 },
-  ];
+  @Input() inputData!: Observable<Unternehmen[]>;
+  @Input() inputSpalten: SpaltenDto[] = [];
+  @Input() pageSize: number = 20;
+  @Input() pagingEnabled: boolean = false;
 
   filterValues = new Map<string, string>();
+  dataSource!: Observable<MatTableDataSource<Unternehmen>>;
+
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource = new MatTableDataSource(this.daten);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor() {
-    // Beispielhafte Initialisierung
-    this.spalten = [
-      {
-        mappingName: 'name',
-        header: 'Name',
-        filterbar: true,
-        sortierbar: false,
-      },
-      {
-        mappingName: 'alter',
-        header: 'Alter',
-        filterbar: true,
-        sortierbar: true,
-      },
-    ];
-
     for (const filterbareSpalte of this.getFilterbarSpalten()) {
       this.filterValues.set(filterbareSpalte.mappingName, '');
     }
   }
 
   ngOnInit(): void {
-    this.dataSource.filterPredicate = this.filterPredicate;
+    //this.dataSource.filterPredicate = this.filterPredicate;
+    // this.dataSource.paginator = this.paginator;
+    this.dataSource = this.inputData.pipe(
+      map((data) => new MatTableDataSource<Unternehmen>(data))
+    );
+    console.log(
+      'FiltertabelleComponent initialized with data:',
+      this.inputData
+    );
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
+    this.dataSource.pipe(take(1)).subscribe((ds) => {
+      ds.paginator = this.paginator;
+      ds.sort = this.sort;
+      ds.filterPredicate = this.filterPredicate;
+      console.log('DataSource initialized with paginator and sort:', ds);
+    });
+    // this.dataSource.sort = this.sort;
   }
 
   hasSpaltenZumFiltern(): boolean {
-    return this.spalten.some((col) => col.filterbar);
+    return this.inputSpalten.some((col) => col.filterbar);
   }
 
   getFilterbarSpalten(): SpaltenDto[] {
-    return this.spalten.filter((col) => col.filterbar);
+    return this.inputSpalten.filter((col) => col.filterbar);
   }
 
   getSpaltenNamen(): string[] {
-    return this.spalten.map((col) => col.mappingName);
+    return this.inputSpalten.map((col) => col.mappingName);
   }
 
-  getCellValue(row: Daten, col: SpaltenDto): any {
-    return row[col.mappingName as keyof Daten];
+  getCellValue(row: Unternehmen, col: SpaltenDto): any {
+    return row[col.mappingName as keyof Unternehmen];
   }
 
   changeFilter($event: Event, mappingName: string) {
@@ -128,18 +161,20 @@ export class FiltertabelleComponent implements AfterViewInit, OnInit {
       ($event.target as HTMLInputElement).value
     );
 
-    this.dataSource.filter = JSON.stringify(
-      Array.from(this.filterValues.entries())
-    );
+    // this.dataSource.filter = JSON.stringify(
+    //   Array.from(this.filterValues.entries())
+    // );
   }
 
-  filterPredicate = (data: Daten, filter: string): boolean => {
+  filterPredicate = (data: Unternehmen, filter: string): boolean => {
     const filterMap = new Map<string, string>(JSON.parse(filter));
+
+    console.log('Filter predicate called with:', filterMap);
 
     for (const [key, value] of filterMap.entries()) {
       if (!value || value.trim() === '') continue;
 
-      const cellValue = data[key as keyof Daten];
+      const cellValue = data[key as keyof Unternehmen];
       if (cellValue === undefined || cellValue === null) continue;
 
       const cellValueStr = String(cellValue).toLowerCase(); //TODO: handle non-string values
@@ -153,8 +188,3 @@ export class FiltertabelleComponent implements AfterViewInit, OnInit {
 //tutorial: https://getbootstrap.com/docs/4.0/content/tables/
 //https://www.delftstack.com/de/howto/angular/angular-2-sortable-table/
 //https://material.angular.dev/components/table/overview
-
-export interface Daten {
-  name: string;
-  alter: number;
-}
