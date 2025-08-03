@@ -2,24 +2,18 @@ import {
   AfterViewInit,
   Component,
   ViewChild,
-  OnInit,
-  input,
   Input,
-  inject,
 } from '@angular/core';
 import { SpaltenDto } from './spaltenDto';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Observable, map, take } from 'rxjs';
-import { TabelleDataService } from '../../service/tabelleDataService';
+import { Observable } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import {
   Unternehmen,
-  UnternehmenService,
 } from '../../service/unternehmen.service';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   imports: [
@@ -28,7 +22,6 @@ import { AsyncPipe } from '@angular/common';
     MatInputModule,
     MatExpansionModule,
     MatPaginatorModule,
-    AsyncPipe,
   ],
   selector: 'app-filtertabelle',
   template: `
@@ -48,7 +41,7 @@ import { AsyncPipe } from '@angular/common';
                 <input
                   matInput
                   placeholder="{{ col.header }}..."
-                  [value]="filterValues.get(col.mappingName)"
+                  [value]="getFilterValue(col.mappingName)"
                   (input)="changeFilter($event, col.mappingName)"
                 />
               </mat-form-field>
@@ -59,10 +52,7 @@ import { AsyncPipe } from '@angular/common';
       </div>
       }
       <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="(dataSource | async) ?? []" matSort>
-          <!-- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
-
+        <table mat-table [dataSource]="dataSource" matSort>
           <!-- Spalten Templates definieren -->
           @for (col of inputSpalten; track $index) {
           <ng-container [matColumnDef]="col.mappingName">
@@ -99,48 +89,35 @@ import { AsyncPipe } from '@angular/common';
   `,
   styles: ``,
 })
-export class FiltertabelleComponent implements AfterViewInit, OnInit {
+export class FiltertabelleComponent implements AfterViewInit {
   @Input() inputData!: Observable<Unternehmen[]>;
   @Input() inputSpalten: SpaltenDto[] = [];
   @Input() pageSize: number = 20;
-  @Input() pagingEnabled: boolean = false;
+  @Input() pagingEnabled: boolean = true;
 
   filterValues = new Map<string, string>();
-  dataSource!: Observable<MatTableDataSource<Unternehmen>>;
+  dataSource!: MatTableDataSource<Unternehmen>;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor() {
-    for (const filterbareSpalte of this.getFilterbarSpalten()) {
-      this.filterValues.set(filterbareSpalte.mappingName, '');
-    }
-  }
-
-  ngOnInit(): void {
-    //this.dataSource.filterPredicate = this.filterPredicate;
-    // this.dataSource.paginator = this.paginator;
-    this.dataSource = this.inputData.pipe(
-      map((data) => new MatTableDataSource<Unternehmen>(data))
-    );
-    console.log(
-      'FiltertabelleComponent initialized with data:',
-      this.inputData
-    );
-  }
 
   ngAfterViewInit(): void {
-    this.dataSource.pipe(take(1)).subscribe((ds) => {
-      ds.paginator = this.paginator;
-      ds.sort = this.sort;
-      ds.filterPredicate = this.filterPredicate;
-      console.log('DataSource initialized with paginator and sort:', ds);
+    this.inputData.subscribe((data) => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.filterPredicate = this.filterPredicate;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      console.log('DataSource initialized with data:', data);
     });
-    // this.dataSource.sort = this.sort;
   }
 
   hasSpaltenZumFiltern(): boolean {
     return this.inputSpalten.some((col) => col.filterbar);
+  }
+
+  getFilterValue(mappingName: string): string {
+    return this.filterValues.get(mappingName) || '';
   }
 
   getFilterbarSpalten(): SpaltenDto[] {
@@ -161,15 +138,15 @@ export class FiltertabelleComponent implements AfterViewInit, OnInit {
       ($event.target as HTMLInputElement).value
     );
 
-    // this.dataSource.filter = JSON.stringify(
-    //   Array.from(this.filterValues.entries())
-    // );
+    const filter = Array.from(this.filterValues.entries());
+    this.dataSource.filter = JSON.stringify(filter);
+
+    this.dataSource.paginator?.firstPage();
+    this.dataSource.sort?.sortChange.emit();
   }
 
   filterPredicate = (data: Unternehmen, filter: string): boolean => {
     const filterMap = new Map<string, string>(JSON.parse(filter));
-
-    console.log('Filter predicate called with:', filterMap);
 
     for (const [key, value] of filterMap.entries()) {
       if (!value || value.trim() === '') continue;
@@ -177,7 +154,8 @@ export class FiltertabelleComponent implements AfterViewInit, OnInit {
       const cellValue = data[key as keyof Unternehmen];
       if (cellValue === undefined || cellValue === null) continue;
 
-      const cellValueStr = String(cellValue).toLowerCase(); //TODO: handle non-string values
+      //Es werden nur Strings verglichen weil die Filterung auf Textfelder abzielt
+      const cellValueStr = String(cellValue).toLowerCase(); 
       if (!cellValueStr.includes(value.toLowerCase())) {
         return false;
       }

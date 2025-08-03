@@ -19,7 +19,8 @@ export class UnternehmenService {
 
 
   getAlleUnternehmen(): Observable<Unternehmen[]> {
-    return this.m_Http.get<Unternehmen[]>(this.m_Url).pipe(map((data: Unternehmen[]) => {return data.slice(0, 20);}));
+    return this.m_Http.get<Unternehmen[]>(this.m_Url);
+    //return this.m_Http.get<Unternehmen[]>(this.m_Url).pipe(map((data: Unternehmen[]) => {return data.slice(0, 20);}));
   }
 
   getUnternehmen(pageIndex: number, count: number): Observable<Unternehmen[]> {
