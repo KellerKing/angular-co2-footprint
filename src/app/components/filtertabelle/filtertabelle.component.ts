@@ -11,9 +11,6 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import {
-  Unternehmen,
-} from '../../service/unternehmen.service';
 
 @Component({
   imports: [
@@ -90,13 +87,13 @@ import {
   styles: ``,
 })
 export class FiltertabelleComponent implements AfterViewInit {
-  @Input() inputData!: Observable<Unternehmen[]>;
+  @Input() inputData!: Observable<any[]>;
   @Input() inputSpalten: SpaltenDto[] = [];
   @Input() pageSize: number = 20;
   @Input() pagingEnabled: boolean = true;
 
   filterValues = new Map<string, string>();
-  dataSource!: MatTableDataSource<Unternehmen>;
+  dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -128,8 +125,8 @@ export class FiltertabelleComponent implements AfterViewInit {
     return this.inputSpalten.map((col) => col.mappingName);
   }
 
-  getCellValue(row: Unternehmen, col: SpaltenDto): any {
-    return row[col.mappingName as keyof Unternehmen];
+  getCellValue(row: any, col: SpaltenDto): any {
+    return row[col.mappingName as keyof any];
   }
 
   changeFilter($event: Event, mappingName: string) {
@@ -145,13 +142,13 @@ export class FiltertabelleComponent implements AfterViewInit {
     this.dataSource.sort?.sortChange.emit();
   }
 
-  filterPredicate = (data: Unternehmen, filter: string): boolean => {
+  filterPredicate = (data: any, filter: string): boolean => {
     const filterMap = new Map<string, string>(JSON.parse(filter));
 
     for (const [key, value] of filterMap.entries()) {
       if (!value || value.trim() === '') continue;
 
-      const cellValue = data[key as keyof Unternehmen];
+      const cellValue = data[key as keyof any];
       if (cellValue === undefined || cellValue === null) continue;
 
       //Es werden nur Strings verglichen weil die Filterung auf Textfelder abzielt
