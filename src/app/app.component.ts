@@ -2,12 +2,13 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { UnternehmenService, Unternehmen } from './service/unternehmen.service';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent],
   template: `
-    <header class="app-header">
+    <header>
       <app-header
         [headerData]="{
           logoUrl: 'logo_iu.svg',
@@ -30,8 +31,12 @@ import { UnternehmenService, Unternehmen } from './service/unternehmen.service';
       >
       </app-header>
     </header>
-
-    <router-outlet (activate)="onActive($event)" />
+    <body>
+      <router-outlet (activate)="onActive($event)" />
+      <footer class="footer fixed-bottom">
+        <app-footer></app-footer>
+      </footer>
+    </body>
   `,
   styles: [],
 })
