@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
+import { ɵEmptyOutletComponent } from "@angular/router";
 
 @Component({
   selector: 'app-footer',
@@ -10,12 +11,8 @@ import { DialogComponent } from '../dialog/dialog.component';
       class="navbar bg-body-tertiary navbar-light bg-light navbar-expand-lg ps-3 border-top drop-shadow footer mt-auto"
     >
       <div class="container justify-content-center">
-      <button 
-       (click)="openRechtliches()"
-        class="btn btn-primary"
-        >
-        Rechtliche Hinweise
-      </button>
+      <ng-content></ng-content>
+      
       </div>
 </div>
   `,

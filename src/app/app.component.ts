@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { UnternehmenService, Unternehmen } from './service/unternehmen.service';
 import { FooterComponent } from './components/footer/footer.component';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +36,11 @@ import { FooterComponent } from './components/footer/footer.component';
     <body>
       <router-outlet (activate)="onActive($event)" />
       <footer class="footer fixed-bottom">
-        <app-footer></app-footer>
+        <app-footer>
+          <button (click)="openRechtliches()" class="btn btn-primary">
+            Rechtliche Hinweise
+          </button>
+        </app-footer>
       </footer>
     </body>
   `,
@@ -44,7 +50,7 @@ export class AppComponent {
   title = 'angular-demo';
 
   private unternehmenService = inject(UnternehmenService);
-
+  readonly m_Dialog = inject(MatDialog);
   constructor() {
     // Fetch all companies on initialization
     const alleUnternehmen = this.unternehmenService.getUnternehmen(2, 10);
@@ -56,5 +62,10 @@ export class AppComponent {
   onActive(event: any): void {
     // Handle the active route change if needed
     console.log('Active route changed:', event);
+  }
+
+  openRechtliches(): void {
+    console.log('Rechtliche Hinweise clicked');
+    const dialog = this.m_Dialog.open(DialogComponent, {});
   }
 }
