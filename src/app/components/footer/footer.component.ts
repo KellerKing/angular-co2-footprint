@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../dialog/dialog.component';
+import { DialogRechtlichesComponent } from '../dialog.rechtliches/dialog.rechtliches.component';
 import { ɵEmptyOutletComponent } from "@angular/router";
 
 @Component({
@@ -24,7 +24,7 @@ export class FooterComponent {
 
   openRechtliches(): void {
     console.log('Rechtliche Hinweise clicked');
-    const dialog = this.dialog.open(DialogComponent, {});
+    const dialog = this.dialog.open(DialogRechtlichesComponent, {});
 
     dialog.afterClosed().subscribe(result => {
       console.log('Dialog closed with result:', result);

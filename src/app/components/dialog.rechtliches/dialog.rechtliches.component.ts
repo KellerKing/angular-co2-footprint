@@ -9,9 +9,10 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
-  selector: 'dialog-overview-example-dialog',
+  selector: 'app-dialog.rechtliches',
   imports: [
     MatFormFieldModule,
     MatInputModule,
@@ -20,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
+    MatDialogModule
   ],
   template: `
     <h2 mat-dialog-title>Rechtliche Hinweise</h2>
@@ -45,15 +47,9 @@ import { MatInputModule } from '@angular/material/input';
       </p>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button="elevated" (click)="onNoClick()">Schließen</button>
+      <button mat-button mat-dialog-close cdkFocusInitial>Schließen</button>
     </mat-dialog-actions>
   `,
 })
-export class DialogComponent {
-  readonly dialogRef = inject(MatDialogRef<DialogComponent>);
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
+export class DialogRechtlichesComponent {}
 //https://v20.material.angular.dev/components/dialog/overview
