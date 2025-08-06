@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogContent,
   MatDialogRef,
@@ -11,6 +12,15 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
+
+export interface DialogSettingsInput {
+  isRightToLeft: boolean;
+}
+
+export interface DialogSettingsOutput {
+  isRightToLeft: boolean;
+  isCancelled: boolean;
+}
 
 @Component({
   selector: 'app-dialog.settings',
@@ -34,17 +44,32 @@ import { MatDialogModule } from '@angular/material/dialog';
         >Ist Anwendung RTL: {{ isRightToLeft }}</mat-slide-toggle
       >
     </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-button [mat-dialog-close]="true" cdkFocusInitial>
-        Install
+    <mat-dialog-actions>
+      <button mat-button (click)="onExitDialog(true)">Cancel</button>
+      <button mat-button (click)="onExitDialog(false)" cdkFocusInitial>
+        Übernehmen
       </button>
     </mat-dialog-actions>
   `,
   styles: ``,
 })
 export class DialogSettingsComponent {
-  readonly dialogRef = inject(MatDialogRef<DialogSettingsComponent>);
+  readonly dialogRef = inject(
+    MatDialogRef<DialogSettingsComponent, DialogSettingsOutput>
+  );
 
-  isRightToLeft = false;
+  isRightToLeft: boolean;
+
+  constructor(@Inject(MAT_DIALOG_DATA) data: DialogSettingsInput) {
+    this.isRightToLeft = data.isRightToLeft;
+  }
+
+  onExitDialog(isCancelled: boolean): void {
+    if (isCancelled) {
+      this.dialogRef.close({ isCancelled: isCancelled });
+      return;
+    }
+
+    this.dialogRef.close({ isRightToLeft: this.isRightToLeft });
+  }
 }

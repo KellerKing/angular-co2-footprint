@@ -3,8 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { UnternehmenService, Unternehmen } from './service/unternehmen.service';
 import { FooterComponent } from './components/footer/footer.component';
-import { DialogComponent } from './components/dialog/dialog.component';
+import { DialogRechtlichesComponent } from './components/dialog.rechtliches/dialog.rechtliches.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogSettingsComponent, DialogSettingsInput, DialogSettingsOutput } from './components/dialog.settings/dialog.settings.component';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,9 @@ import { MatDialog } from '@angular/material/dialog';
           <button (click)="openRechtliches()" class="btn btn-primary">
             Rechtliche Hinweise
           </button>
+          <button (click)="openSettings()" class="btn btn-primary">
+            Einstellungen
+          </button>
         </app-footer>
       </footer>
     </body>
@@ -66,6 +70,32 @@ export class AppComponent {
 
   openRechtliches(): void {
     console.log('Rechtliche Hinweise clicked');
-    const dialog = this.m_Dialog.open(DialogComponent, {});
+    this.m_Dialog.open(DialogRechtlichesComponent, { disableClose: true });
+  }
+
+  openSettings(): void {
+    console.log('Settings clicked');
+    this.m_Dialog
+      .open<
+      DialogSettingsComponent,
+      DialogSettingsInput,
+      DialogSettingsOutput> 
+      (DialogSettingsComponent, {
+        data: { isRightToLeft: false },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((x) => this.handleSettingsChange(x));
+  }
+
+  handleSettingsChange(settings?: DialogSettingsOutput): void {
+    if (!settings || settings.isCancelled)
+      return;
+    // Handle the settings change, e.g., apply RTL layout
+    if (settings.isRightToLeft) {
+      document.documentElement.setAttribute('dir', 'rtl');
+    } else {
+      document.documentElement.removeAttribute('dir');
+    } 
   }
 }
