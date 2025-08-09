@@ -1,13 +1,25 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { UnternehmenService, Unternehmen } from './service/unternehmen.service';
+import { FooterComponent } from './components/footer/footer.component';
+import { DialogRechtlichesComponent } from './components/dialog.rechtliches/dialog.rechtliches.component';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  DialogSettingsComponent,
+  DialogSettingsInput,
+  DialogSettingsOutput,
+} from './components/dialog.settings/dialog.settings.component';
+import { SettingsDialogService } from './service/settings/settings.dialog.service';
+import { DirectionService } from './service/direction.service';
+import { SettingsDataService } from './service/settings/settings.data.service';
+import { retry } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent],
   template: `
-    <header class="app-header">
+    <header>
       <app-header
         [headerData]="{
           logoUrl: 'logo_iu.svg',
@@ -30,26 +42,66 @@ import { UnternehmenService, Unternehmen } from './service/unternehmen.service';
       >
       </app-header>
     </header>
-
-    <router-outlet (activate)="onActive($event)" />
+    <body>
+      <router-outlet (activate)="onActive($event)" />
+      <footer class="footer fixed-bottom">
+        <app-footer>
+          <div class="d-flex justify-content-center gap-3">
+            <button (click)="openRechtliches()" class="btn btn-primary">
+              Rechtliche Hinweise
+            </button>
+            <button (click)="openSettings()" class="btn btn-primary">
+              Einstellungen
+            </button>
+          </div>
+        </app-footer>
+      </footer>
+    </body>
   `,
   styles: [],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'angular-demo';
 
-  private unternehmenService = inject(UnternehmenService);
-
-  constructor() {
-    // Fetch all companies on initialization
-    const alleUnternehmen = this.unternehmenService.getUnternehmen(2, 10);
-    alleUnternehmen.forEach((element) => {
-      console.log(element);
-    });
-  }
+  readonly m_Dialog = inject(MatDialog);
+  readonly m_SettingsDialogService = inject(SettingsDialogService);
+  readonly m_DirectionService = inject(DirectionService);
+  readonly m_SettingsService = inject(SettingsDataService);
 
   onActive(event: any): void {
-    // Handle the active route change if needed
     console.log('Active route changed:', event);
+  }
+
+  ngOnInit(): void {
+    if (this.m_SettingsService.HasSettings) {
+      const settings = this.m_SettingsService.Settings;
+      this.m_DirectionService.richtungAktuallisieren(settings.isRightToLeft);
+      return;
+    }
+    
+    const isRtl = this.m_DirectionService.isRichtungRtlBeiErstenStart();
+    this.m_DirectionService.richtungAktuallisieren(isRtl);
+    this.m_SettingsService.updateSettings(isRtl);
+  }
+
+  openRechtliches(): void {
+    console.log('Rechtliche Hinweise clicked');
+    this.m_Dialog.open(DialogRechtlichesComponent, { disableClose: true });
+  }
+
+  openSettings(): void {
+    console.log('Settings clicked');
+    this.m_SettingsDialogService
+      .openSettingsDialog(this.m_SettingsService.Settings.isRightToLeft)
+      .subscribe((settings) => {
+        this.handleSettingsChange(settings);
+      });
+  }
+
+  handleSettingsChange(settings?: DialogSettingsOutput): void {
+    if (!settings || settings.isCancelled) return;
+
+    this.m_DirectionService.richtungAktuallisieren(settings.isRightToLeft);
+    this.m_SettingsService.updateSettings(settings.isRightToLeft);
   }
 }

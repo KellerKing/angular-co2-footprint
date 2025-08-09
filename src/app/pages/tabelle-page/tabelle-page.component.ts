@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FiltertabelleComponent } from '../../components/filtertabelle/filtertabelle.component';
-import { TabelleDataService } from '../../service/tabelleDataService';
+import { TabelleDataService } from '../../service/tabelle.data.service';
 import { SpaltenDto } from '../../components/filtertabelle/spaltenDto';
 import { Observable } from 'rxjs';
 
