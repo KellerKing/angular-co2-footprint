@@ -45,17 +45,17 @@ export interface DialogSettingsOutput {
       >
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button (click)="onExitDialog(true)">Cancel</button>
       <button mat-button (click)="onExitDialog(false)" cdkFocusInitial>
         Übernehmen
       </button>
+       <button mat-button (click)="onExitDialog(true)">Cancel</button>
     </mat-dialog-actions>
   `,
   styles: ``,
 })
 export class DialogSettingsComponent {
   readonly dialogRef = inject(
-    MatDialogRef<DialogSettingsComponent, DialogSettingsOutput>
+    MatDialogRef<DialogSettingsComponent, DialogSettingsOutput> //DialogSettingsOutput ist hier der Rückgabetyp der in app.component.ts beim subscribe verwendet wird
   );
 
   isRightToLeft: boolean;

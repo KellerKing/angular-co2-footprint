@@ -1,7 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogRechtlichesComponent } from '../dialog.rechtliches/dialog.rechtliches.component';
-import { ɵEmptyOutletComponent } from "@angular/router";
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -18,16 +15,4 @@ import { ɵEmptyOutletComponent } from "@angular/router";
   `,
   styles: ``,
 })
-export class FooterComponent {
-
-  readonly dialog = inject(MatDialog);
-
-  openRechtliches(): void {
-    console.log('Rechtliche Hinweise clicked');
-    const dialog = this.dialog.open(DialogRechtlichesComponent, {});
-
-    dialog.afterClosed().subscribe(result => {
-      console.log('Dialog closed with result:', result);
-    });
-  }
-}
+export class FooterComponent {}

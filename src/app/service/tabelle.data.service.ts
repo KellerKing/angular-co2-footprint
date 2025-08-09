@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Unternehmen, UnternehmenService } from './unternehmen.service';
+import { UnternehmenService } from './unternehmen.service';
 import { SpaltenDto } from '../components/filtertabelle/spaltenDto';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TabelleDataService {
