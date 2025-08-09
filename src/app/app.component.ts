@@ -69,7 +69,6 @@ export class AppComponent implements OnInit {
   readonly m_SettingsService = inject(SettingsDataService);
 
   onActive(event: any): void {
-    // Handle the active route change if needed
     console.log('Active route changed:', event);
   }
 
