@@ -11,8 +11,11 @@ import { Component } from '@angular/core';
           <br />
           <h2>Programmierung von Webanwendungsoberflächen</h2>
           <br />
-          <p>
-            Wilkommen zu meiner Lösung der Aufgabenstellung 1: CO2-Footprint.
+
+          <p class="mt-5 fs-4">
+            Die Seite soll für für eine fitive Non-Profit-Organisation sein, um
+            einen Überblick darüber zu schaffen, welche Unternehmen bzw. Länder
+            wie viel Co2 Jährlich emittieren.
           </p>
         </div>
         <div class="col-sm">
@@ -27,14 +30,7 @@ import { Component } from '@angular/core';
       </div>
     </div>
 
-    <div class="container mt-5">
-      <p>
-        Die Seite soll für für eine fitive Non-Profit-Organisation sein, um
-        einen Überblick darüber zu schaffen, welche Unternehmen bzw. Länder wie
-        viel Co2 Jährlich emittieren. Über den Header kann auf die einzelnen
-        Seiten navigiert werden.
-      </p>
-
+    <div class="container" style="margin-top: 5%;">
       <h3 class="pt-3">Tabelle</h3>
       <p>
         Der Schwerpunkt liegt auf dem Menüpunkt "Tabelle". Über ihn gelangt man
