@@ -23,8 +23,8 @@ jobs:
       - name: Build Angular app
         run: npm run build -- --configuration production --base-href="/angular-co2-footprint/"
 
-      - name: Add .nojekyll
-        run: touch dist/<projektname>/.nojekyll
+      #- name: Add .nojekyll
+      #  run: touch dist/angular-co2-footprint/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
