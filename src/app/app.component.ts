@@ -1,50 +1,48 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
-import { UnternehmenService, Unternehmen } from './service/unternehmen.service';
 import { FooterComponent } from './components/footer/footer.component';
 import { DialogRechtlichesComponent } from './components/dialog.rechtliches/dialog.rechtliches.component';
 import { MatDialog } from '@angular/material/dialog';
 import {
-  DialogSettingsComponent,
-  DialogSettingsInput,
   DialogSettingsOutput,
 } from './components/dialog.settings/dialog.settings.component';
 import { SettingsDialogService } from './service/settings/settings.dialog.service';
 import { DirectionService } from './service/direction.service';
 import { SettingsDataService } from './service/settings/settings.data.service';
-import { retry } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, FooterComponent],
   template: `
-    <header>
-      <app-header
-        [headerData]="{
-          logoUrl: 'logo_iu.svg',
-          headerEntries: [
-            { title: 'Home', routerLink: '', sortOrder: 1, isActive: true },
-            {
-              title: 'Tabelle',
-              routerLink: 'tabelle',
-              sortOrder: 2,
-              isActive: false
-            },
-            {
-              title: 'About',
-              routerLink: 'about',
-              sortOrder: 3,
-              isActive: false
-            }
-          ]
-        }"
-      >
-      </app-header>
-    </header>
-    <body>
-      <router-outlet (activate)="onActive($event)" />
-      <footer class="footer fixed-bottom">
+    <body class="d-flex flex-column min-vh-100">
+      <header>
+        <app-header
+          [headerData]="{
+            logoUrl: 'logo_iu.svg',
+            headerEntries: [
+              { title: 'Home', routerLink: '', sortOrder: 1, isActive: true },
+              {
+                title: 'Tabelle',
+                routerLink: 'tabelle',
+                sortOrder: 2,
+                isActive: false
+              },
+              {
+                title: 'About',
+                routerLink: 'about',
+                sortOrder: 3,
+                isActive: false
+              }
+            ]
+          }"
+        >
+        </app-header>
+      </header>
+      <main class="flex-fill">
+        <router-outlet (activate)="onActive($event)" />
+      </main>
+      <footer>
         <app-footer>
           <div class="d-flex justify-content-center gap-3">
             <button (click)="openRechtliches()" class="btn btn-primary">
@@ -78,7 +76,7 @@ export class AppComponent implements OnInit {
       this.m_DirectionService.richtungAktuallisieren(settings.isRightToLeft);
       return;
     }
-    
+
     const isRtl = this.m_DirectionService.isRichtungRtlBeiErstenStart();
     this.m_DirectionService.richtungAktuallisieren(isRtl);
     this.m_SettingsService.updateSettings(isRtl);
@@ -100,7 +98,11 @@ export class AppComponent implements OnInit {
 
   handleSettingsChange(settings?: DialogSettingsOutput): void {
     if (!settings || settings.isCancelled) return;
-
+    // Nachteile dieser Implementierung:
+    // - Es wird nicht geprüft, ob die Einstellungen geändert wurden.
+    // - Da global die Einstellungen geändert werden, kann jede Komponente nicht unabhängig darauf reagieren.
+    //    Beispielsweise könnte der Header in rtl und ltr gleich bleiben und nur der Textfluss der Page wird geändert.
+    //    Darum wäre es besser, wenn die Einstellungen ein Observable wären, das die Komponenten abonnieren können und dann einzeln darauf reagieren.
     this.m_DirectionService.richtungAktuallisieren(settings.isRightToLeft);
     this.m_SettingsService.updateSettings(settings.isRightToLeft);
   }
