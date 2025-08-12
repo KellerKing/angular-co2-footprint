@@ -43,8 +43,16 @@ jobs:
     # build
       - name: build
         run: npm run build
-
-
+    
+    # Upload
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          # Artifact name
+          name: github-pages # optional, default is github-pages
+          # Path of the directory containing the static assets.
+          path: dist/angular-demo # default is _site/
+          
   deploy:
     # Add a dependency to the build job
     needs: build
