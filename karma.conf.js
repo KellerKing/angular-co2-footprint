@@ -15,7 +15,13 @@ module.exports = function (config) {
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadless', 'ChromeHeadlessNoSandbox'],
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-gpu']
+      }
+    },
     client: {
       jasmine: {
         // you can add configuration options for Jasmine here
