@@ -40,6 +40,6 @@ jobs:
     
     # test
       - name: test
-        run: ng test --no-watch --no-progress --browsers=ChromeHeadless
+        run: npx ng test --no-watch --no-progress --browsers=ChromeHeadless
           
               
