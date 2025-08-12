@@ -36,10 +36,10 @@ jobs:
 
     # build
       - name: build
-        run: npm run build -- --configuration production
+        run: npx ng build --configuration production
     
     # test
       - name: test
-        run: npx ng test --no-watch --no-progress --browsers=ChromeHeadless
+        run: npx ng test --no-watch --no-progress --browsers=ChromeHeadless --no-sandbox
           
               
