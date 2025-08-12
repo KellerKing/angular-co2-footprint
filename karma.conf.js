@@ -20,7 +20,8 @@ module.exports = function (config) {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox', '--disable-gpu']
-      },
+      }
+    },
     client: {
       jasmine: {
         // you can add configuration options for Jasmine here
