@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
+import { APP_BASE_HREF } from '@angular/common';
 
 export interface Unternehmen {
   name: string;
@@ -13,14 +14,13 @@ export interface Unternehmen {
 
 @Injectable({ providedIn: 'root' })
 export class UnternehmenService {
-  //private http = inject(HttpClient);
-  private m_Url = '/db.json';
-  private m_Http = inject(HttpClient);
+  private readonly m_Url = './db.json';
+  private readonly m_Http = inject(HttpClient);
+  private readonly m_BaseHref = inject(APP_BASE_HREF, { optional: true }) ?? '/';
 
 
   getAlleUnternehmen(): Observable<Unternehmen[]> {
-    return this.m_Http.get<Unternehmen[]>(this.m_Url);
-    //return this.m_Http.get<Unternehmen[]>(this.m_Url).pipe(map((data: Unternehmen[]) => {return data.slice(0, 20);}));
+    return this.m_Http.get<Unternehmen[]>(this.getPfad(this.m_BaseHref, this.m_Url));
   }
 
   getUnternehmen(pageIndex: number, count: number): Observable<Unternehmen[]> {
@@ -38,6 +38,11 @@ export class UnternehmenService {
       })
     );
     return result;
+  }
+
+  private getPfad(basePfad : string, realtiverPfad: string) : string {
+    const linkerTeil = basePfad.endsWith('/') ? basePfad.slice(0, -1) : basePfad;
+    return `${linkerTeil}/${realtiverPfad}`;
   }
 }
 
