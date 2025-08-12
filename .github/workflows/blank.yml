@@ -51,7 +51,7 @@ jobs:
           # Artifact name
           name: github-pages # optional, default is github-pages
           # Path of the directory containing the static assets.
-          path: dist/angular-demo # default is _site/
+          path: dist/angular-demo/browser # default is _site/
           
   deploy:
     # Add a dependency to the build job
