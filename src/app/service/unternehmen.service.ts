@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
-import { APP_BASE_HREF } from '@angular/common';
+import { BasePfadHelper } from './base.pfad.helper';
 
 export interface Unternehmen {
   name: string;
@@ -16,11 +16,11 @@ export interface Unternehmen {
 export class UnternehmenService {
   private readonly m_Url = './db.json';
   private readonly m_Http = inject(HttpClient);
-  private readonly m_BaseHref = inject(APP_BASE_HREF, { optional: true }) ?? '/';
+  private readonly m_BasePfadHelper = inject(BasePfadHelper);
 
 
   getAlleUnternehmen(): Observable<Unternehmen[]> {
-    return this.m_Http.get<Unternehmen[]>(this.getPfad(this.m_BaseHref, this.m_Url));
+    return this.m_Http.get<Unternehmen[]>(this.m_BasePfadHelper.getVollstaendigenPfad(this.m_Url));
   }
 
   getUnternehmen(pageIndex: number, count: number): Observable<Unternehmen[]> {
@@ -38,11 +38,6 @@ export class UnternehmenService {
       })
     );
     return result;
-  }
-
-  private getPfad(basePfad : string, realtiverPfad: string) : string {
-    const linkerTeil = basePfad.endsWith('/') ? basePfad.slice(0, -1) : basePfad;
-    return `${linkerTeil}/${realtiverPfad}`;
   }
 }
 
