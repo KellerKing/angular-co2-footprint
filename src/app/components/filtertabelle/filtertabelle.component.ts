@@ -3,6 +3,7 @@ import {
   Component,
   ViewChild,
   Input,
+  inject,
 } from '@angular/core';
 import { SpaltenDto } from './spaltenDto';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -11,6 +12,7 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { Sanitizer } from '../../service/sanitizer';
 
 @Component({
   imports: [
@@ -25,7 +27,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     <div class="m-2">
       @if (hasSpaltenZumFiltern()) {
 
-      <div class="mb-4">
+      <div>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>Filter</mat-panel-title>
@@ -38,8 +40,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
                 <input
                   matInput
                   placeholder="{{ col.header }}..."
-                  [value]="getFilterValue(col.mappingName)"
+                  value="{{ getFilterValue(col.mappingName) }}"
                   (input)="changeFilter($event, col.mappingName)"
+                  [maxLength]="100"
                 />
               </mat-form-field>
             </div>
@@ -75,7 +78,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
         @if (pagingEnabled) {
         <mat-paginator
-          [pageSizeOptions]="[5, 10, 20]"
+          [pageSizeOptions]="[5, 10, 20, 50, 100, 200, 500, 1000]"
           [pageSize]="pageSize"
           [showFirstLastButtons]="true"
         >
@@ -98,6 +101,7 @@ export class FiltertabelleComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  private readonly m_Sanitizer = inject(Sanitizer);
 
   ngAfterViewInit(): void {
     this.inputData.subscribe((data) => {
@@ -105,7 +109,6 @@ export class FiltertabelleComponent implements AfterViewInit {
       this.dataSource.filterPredicate = this.filterPredicate;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      console.log('DataSource initialized with data:', data);
     });
   }
 
@@ -130,10 +133,16 @@ export class FiltertabelleComponent implements AfterViewInit {
   }
 
   changeFilter($event: Event, mappingName: string) {
-    this.filterValues.set(
-      mappingName,
-      ($event.target as HTMLInputElement).value
-    );
+    const target = $event.target as HTMLInputElement;
+    const sanitizeResult = this.m_Sanitizer.sanitize(target.value);
+
+    if (sanitizeResult.hasFehler) {
+      const ausgabe = sanitizeResult.fehler.join(", \r\n");
+      alert("Fehlerhafte Zeichen erkannt:" + "\r\n" + ausgabe);
+      target.value = sanitizeResult.wertOhneFehler;
+    }
+
+    this.filterValues.set(mappingName, target.value);
 
     const filter = Array.from(this.filterValues.entries());
     this.dataSource.filter = JSON.stringify(filter);
@@ -152,7 +161,7 @@ export class FiltertabelleComponent implements AfterViewInit {
       if (cellValue === undefined || cellValue === null) continue;
 
       //Es werden nur Strings verglichen weil die Filterung auf Textfelder abzielt
-      const cellValueStr = String(cellValue).toLowerCase(); 
+      const cellValueStr = String(cellValue).toLowerCase();
       if (!cellValueStr.includes(value.toLowerCase())) {
         return false;
       }
@@ -160,6 +169,3 @@ export class FiltertabelleComponent implements AfterViewInit {
     return true;
   };
 }
-//tutorial: https://getbootstrap.com/docs/4.0/content/tables/
-//https://www.delftstack.com/de/howto/angular/angular-2-sortable-table/
-//https://material.angular.dev/components/table/overview

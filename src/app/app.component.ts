@@ -39,7 +39,7 @@ import { SettingsDataService } from './service/settings/settings.data.service';
         >
         </app-header>
       </header>
-      <main class="flex-fill">
+      <main class="flex-fill mb-2">
         <router-outlet (activate)="onActive($event)" />
       </main>
       <footer>
