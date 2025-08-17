@@ -1,3 +1,42 @@
+## Link zur Live Version
+
+- https://kellerking.github.io/angular-co2-footprint/
+
+
+## Beschreibung
+
+Das ist meine lösung implementierung der Aufgabenstellung 1 der Fallstudie des Moduls IPWA01-01. Konkret geht es darum, eine Webanwendung zu entwickeln, die mittels moderner Javascript und oder CSS Frameworks aufegbaut ist. 
+
+
+## Branching Strategie /Entwicklung
+
+Es wird sich im groben an Gitflow orientiert (https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). 
+Es gibt zwei Haupt Branches. Master und Develop.
+
+Auf dem Developbranch wird entwickelt. Von diesem Branch werden feature Branches abgebranched. Wenn diese fertig sind, werden Pull Requests auf Develop gestellt. Ab jetzt beginnt ein unterschied zu Gitflow. Eigentlich würde zu gegebener Zeit auf basis von Develop ein Release Branch erstellt. Auf diesem würden Bugfixes gemacht werden und eben das Release. Wenn der fertig ist, würde dieser nach master/main migriert werden, das Release gelöscht und dann von master nach develop gemerged.
+
+In diesem Projekt ist kein Release Branch vorgesehen, da es keine produktive Anwendung ist und es keine Releases im klassischen Sinne gibt. Im Fall dieses Projekt wird ein Pull Request von develop nach master erstellt wenn genug features im develop integriert wurden. Ausgehend vom Master wird dann ein deployment vorgenommen. Release Versionen/Tags gibt es hier nicht und wären für eine nicht produktive Anwendung overhead.
+
+Es ist wichtig zu wissen, dass dieses vorgehen eingehalten werden muss. Es kann nicht direkt auf develop oder master entwickelt werden. Wenn etwas auf master gefixed wird, wird abgebranched und dann per Pull Request wieder in master integriert und auch sofort nach develop. 
+
+
+## Pipelines 
+
+Es gibt zwei Pipelines. Einmal eine CI und eine für das Deployment. Sie werden hier erklärt.
+
+### CI
+
+### Depyloment
+
+Es gibt eine Github Action die manuell gestartet werden muss (**angular-co2-footprint-deploy**). Als Branch kann nur Master ausgewählt werden. Wenn 
+ 
+
+## Verwendete Technologien Frameworks
+
+## Projekt lokal starten
+
+## Known Issues
+
 # AngularDemo
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.0.
