@@ -24,22 +24,52 @@ Es ist wichtig zu wissen, dass dieses vorgehen eingehalten werden muss. Es kann 
 
 Es gibt zwei Pipelines. Einmal eine CI und eine für das Deployment. Sie werden hier erklärt.
 
+
 ### CI
+
+**angular-co2-footprint-ci**
+Diese Pipeline baut das Projekt und führt die Tests aus. Sie wird getriggert wenn auf master und develop gepushed oder ein pull request darauf erstellt wird. Aufgrund einer Richtlinie kann der Pullrequest nur ausgeführt werden wenn die Pipeline und somit alle Tests erfolgreich gelaufen sind. Dadurch soll zu jedem Zeitpunkt ein funktionierender Stand auf den beiden Hauptbranches existieren.
+
 
 ### Depyloment
 
-Es gibt eine Github Action die manuell gestartet werden muss (**angular-co2-footprint-deploy**). Als Branch kann nur Master ausgewählt werden. Wenn 
+Es gibt eine Github Action die manuell gestartet werden muss (**angular-co2-footprint-deploy**). Als Branch kann nur Master ausgewählt werden. Sie bsut die Komponente und depolyed sie als Github Page. Da die Ci Pipeline bereits die Tests ausführt wird hier darauf verzichtet. Eine besonderheit ist bei build, dass der Basispfad (href) angepasst wird. Das liegt an der Url der Github Page. **Sollte das Repo umbenannt werden, muss unbedingt der Build step angepasst werden.**
  
 
-## Verwendete Technologien Frameworks
+## Verwendete Technologien/Frameworks
+
+Auflistung der wichtigsten Technologien
+
+- [Angular CLI](https://github.com/angular/angular-cli) version 19.0.0.
+- [Bootstrap](https://getbootstrap.com) version 5.3.7
+- [Angular Material](https://material.angular.dev) version 19.2
+- [Karma tests - Kommt mit Angular mit ](https://karma-runner.github.io/6.4/index.html) version 6.4
+- [Puppeteer headless Browser ](https://pptr.dev) version 24.16
+
 
 ## Projekt lokal starten
 
+**Voraussetzungen**
+- Installierte Version von npm >= 22
+- Zugriff auf ein Terminal
+
+**Starten**
+
+Mit diesem Befehl startet der Server in der Entwicklungsumgebung und ist unter `http://localhost:4200/` erreichbar.
+
+```bash
+ng serve
+```
+Mit dem folgendem Befehl startet der Browser automatisch mit der entsprechenden Url. 
+
+```bash
+ng s -o
+```
+
+**Testen**
+
 ## Known Issues
 
-# AngularDemo
-
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.0.
 
 ## Development server
 
@@ -82,17 +112,3 @@ To execute unit tests with the [Karma](https://karma-runner.github.io) test runn
 ```bash
 ng test
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
