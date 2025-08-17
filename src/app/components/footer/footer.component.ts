@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   imports: [],
   template: `
     <div
-      class="navbar bg-body-tertiary navbar-light bg-light navbar-expand-lg ps-3 border-top mt-auto"
+      class="navbar bg-body-tertiary navbar-light bg-light navbar-expand-lg border-top mt-auto mb-2"
     >
       <div class="container justify-content-center">
       <ng-content></ng-content>
