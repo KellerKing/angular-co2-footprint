@@ -45,7 +45,6 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 export class HeaderComponent {
   headerData = input<HeaderDto>();
 
-
   getSortedHeaderEntries(): HeaderEntryDto[] {
     return (
       this.headerData()?.headerEntries?.sort(
