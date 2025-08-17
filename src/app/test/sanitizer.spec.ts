@@ -23,7 +23,7 @@ describe('Sanitizer', () => {
     expect(result.fehler).toEqual([]);
   });
 
-  it('lässt erlaubte Zeichen (Buchstaben, Zahlen, Leerzeichen, ._-) unverändert', () => {
+  it('lässt erlaubte Zeichen  unverändert', () => {
     const input = 'Abc_123- Test.txt';
     const result = sut.sanitize(input);
     expect(result.wertOhneFehler).toBe(input);
