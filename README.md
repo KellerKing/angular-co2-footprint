@@ -8,6 +8,45 @@ https://kellerking.github.io/angular-co2-footprint/
 Das ist meine lösung implementierung der Aufgabenstellung 1 der Fallstudie des Moduls IPWA01-01. Konkret geht es darum, eine Webanwendung zu entwickeln, die mittels moderner Javascript und oder CSS Frameworks aufegbaut ist. 
 
 
+## Projekt lokal starten
+
+**Voraussetzungen**
+- Installierte Version von npm >= 22
+- Zugriff auf ein Terminal
+
+
+### Starten / Development server
+
+Mit diesem Befehl startet der Server in der Entwicklungsumgebung und ist unter `http://localhost:4200/` erreichbar.
+```bash
+ng serve
+```
+
+Mit dem folgendem Befehl startet der Browser automatisch mit der entsprechenden Url. 
+```bash
+ng s -o
+```
+
+### Bauen
+
+Baut in `dist/` Ordner.
+```bash
+ng build
+```
+
+### Testen
+
+Mit UI:
+```bash
+ng test
+```
+
+Ohne UI:
+```bash
+npx ng test --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox
+```
+
+
 ## Branching Strategie /Entwicklung
 
 Es wird sich im groben an Gitflow orientiert (https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). 
@@ -47,43 +86,7 @@ Auflistung der wichtigsten Technologien
 - [Puppeteer headless Browser ](https://pptr.dev) version 24.16
 
 
-## Projekt lokal starten
 
-**Voraussetzungen**
-- Installierte Version von npm >= 22
-- Zugriff auf ein Terminal
-
-
-### Starten / Development server
-
-Mit diesem Befehl startet der Server in der Entwicklungsumgebung und ist unter `http://localhost:4200/` erreichbar.
-```bash
-ng serve
-```
-
-Mit dem folgendem Befehl startet der Browser automatisch mit der entsprechenden Url. 
-```bash
-ng s -o
-```
-
-### Bauen
-
-Baut in `dist/` Ordner.
-```bash
-ng build
-```
-
-### Testen
-
-Mit UI:
-```bash
-ng test
-```
-
-Ohne UI:
-```bash
-npx ng test --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox
-```
 
 ## Known Issues
 
