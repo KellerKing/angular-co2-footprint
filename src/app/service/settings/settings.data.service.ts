@@ -11,11 +11,11 @@ export class SettingsDataService {
     this.settings = initialSettings;
   }
 
-  get Settings(): SettingsDto {
+  get settings(): SettingsDto {
     return this.settings;
   }
 
-  get HasSettings(): boolean {
+  get hasSettings(): boolean {
     return sessionStorage.getItem(this.localStorageKey) != null;
   }
 

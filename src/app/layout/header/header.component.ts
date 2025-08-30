@@ -1,6 +1,5 @@
 import { Component, input } from '@angular/core';
-import { HeaderDto } from './headerDto';
-import { HeaderEntryDto } from './headerEntryDto';
+import { HeaderModel, HeaderEntryModel } from './header.model';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
@@ -8,8 +7,8 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
   imports: [RouterLink, RouterLinkActive],
   template: `
     <nav class="navbar navbar-light bg-light navbar-expand-lg ps-3">
-      <a class="navbar-brand" [routerLink]="['/']">
-        <img [src]=[this.headerData()?.logoUrl] width="100" height="40" class="d-inline-block align-top" alt="">
+      <a class="navbar-brand" routerLink="{{this.headerData()?.homeLink}}">
+        <img src = "{{this.headerData()?.logoUrl}}" width="100" height="40" class="d-inline-block align-top" alt="">
       </a>
       <button (click)="toggleNavbar()"
         class="navbar-toggler"
@@ -34,7 +33,7 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
               {{item.title}}
             </a>
           } @empty {
-            <span class="nav-item">No entries available</span>
+            <span class="nav-item">Hier gibts nix zu sehen</span>
           }
         </div>
       </div>
@@ -43,12 +42,12 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
   styles: ``,
 })
 export class HeaderComponent {
-  headerData = input<HeaderDto>();
+  headerData = input<HeaderModel>();
 
-  getSortedHeaderEntries(): HeaderEntryDto[] {
+  getSortedHeaderEntries(): HeaderEntryModel[] {
     return (
       this.headerData()?.headerEntries?.sort(
-        (a: HeaderEntryDto, b: HeaderEntryDto) => a.sortOrder - b.sortOrder
+        (a: HeaderEntryModel, b: HeaderEntryModel) => a.sortOrder - b.sortOrder
       ) || []
     );
   }

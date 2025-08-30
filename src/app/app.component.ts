@@ -1,8 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { DialogRechtlichesComponent } from './components/dialog.rechtliches/dialog.rechtliches.component';
 import { MatDialog } from '@angular/material/dialog';
 import {
   DialogSettingsOutput,
@@ -10,40 +7,23 @@ import {
 import { SettingsDialogService } from './service/settings/settings.dialog.service';
 import { DirectionService } from './service/direction.service';
 import { SettingsDataService } from './service/settings/settings.data.service';
+import { HeaderContainer } from "./layout/header/header.container";
+import { FooterContainer } from "./layout/footer/footer-container";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderContainer, FooterContainer],
   template: `
     <body class="d-flex flex-column min-vh-100">
       <header>
-        <app-header
-          [headerData]="{
-            logoUrl: 'logo_iu.svg',
-            headerEntries: [
-              { title: 'Home', routerLink: '', sortOrder: 1, isActive: true },
-              {
-                title: 'Tabelle',
-                routerLink: 'tabelle',
-                sortOrder: 2,
-                isActive: false
-              },
-              {
-                title: 'About',
-                routerLink: 'about',
-                sortOrder: 3,
-                isActive: false
-              }
-            ]
-          }"
-        >
-        </app-header>
+        <app-header-container></app-header-container>
       </header>
       <main class="flex-fill mb-2">
-        <router-outlet (activate)="onActive($event)" />
+        <router-outlet />
       </main>
       <footer>
-        <app-footer>
+        <app-footer-container></app-footer-container>
+        <!-- <app-footer>
           <div class="d-flex justify-content-center gap-3">
             <button (click)="openRechtliches()" class="btn btn-primary">
               Rechtliche Hinweise
@@ -52,27 +32,21 @@ import { SettingsDataService } from './service/settings/settings.data.service';
               Einstellungen
             </button>
           </div>
-        </app-footer>
+        </app-footer> -->
       </footer>
     </body>
   `,
   styles: [],
 })
 export class AppComponent implements OnInit {
-  title = 'angular-demo';
-
   readonly m_Dialog = inject(MatDialog);
   readonly m_SettingsDialogService = inject(SettingsDialogService);
   readonly m_DirectionService = inject(DirectionService);
   readonly m_SettingsService = inject(SettingsDataService);
 
-  onActive(event: any): void {
-    console.log('Active route changed:', event);
-  }
-
   ngOnInit(): void {
-    if (this.m_SettingsService.HasSettings) {
-      const settings = this.m_SettingsService.Settings;
+    if (this.m_SettingsService.hasSettings) {
+      const settings = this.m_SettingsService.settings;
       this.m_DirectionService.richtungAktuallisieren(settings.isRightToLeft);
       return;
     }
@@ -82,15 +56,10 @@ export class AppComponent implements OnInit {
     this.m_SettingsService.updateSettings(isRtl);
   }
 
-  openRechtliches(): void {
-    console.log('Rechtliche Hinweise clicked');
-    this.m_Dialog.open(DialogRechtlichesComponent, { disableClose: true });
-  }
-
   openSettings(): void {
     console.log('Settings clicked');
     this.m_SettingsDialogService
-      .openSettingsDialog(this.m_SettingsService.Settings.isRightToLeft)
+      .openSettingsDialog(this.m_SettingsService.settings.isRightToLeft)
       .subscribe((settings) => {
         this.handleSettingsChange(settings);
       });
