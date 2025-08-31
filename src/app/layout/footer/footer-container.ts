@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, input, Output } from '@angular/core';
-import { FooterComponent } from './footer.component';
+import { FooterComponent } from './footer-component';
 import { DialogFacade } from '../../facade/dialog-facade';
 import { createRechtlichesFooterData } from './footer-helper';
 import { SettingsModel } from '../../service/settings/settings-mode';

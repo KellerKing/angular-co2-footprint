@@ -1,8 +1,8 @@
 import { Component, computed, inject, input, Input, OnInit, signal } from "@angular/core";
-import { HeaderComponent } from "./header.component";
+import { HeaderComponent } from "./header-component";
 import { Route, Router } from "@angular/router";
-import { HeaderModel } from "./header.model";
-import { createViewModels } from "./header-viewmodel.creator";
+import { HeaderModel } from "./header-model";
+import { createViewModels } from "./header-viewmodel-creator";
 
 @Component({
   selector: 'app-header-container',

@@ -1,4 +1,4 @@
-import { HeaderModel } from './header.model';
+import { HeaderModel } from './header-model';
 
 export function createViewModels(): HeaderModel {
   return {

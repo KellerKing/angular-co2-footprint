@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { HeaderModel, HeaderEntryModel } from './header.model';
+import { HeaderModel, HeaderEntryModel } from './header-model';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({

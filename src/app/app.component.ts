@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderContainer } from './layout/header/header.container';
+import { HeaderContainer } from './layout/header/header-container';
 import { FooterContainer } from './layout/footer/footer-container';
 import { SettingsModel } from './service/settings/settings-mode';
 import { SettingsFacade } from './facade/settings-facade';

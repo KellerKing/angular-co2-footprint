@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
-import { AboutPageComponent } from './pages/about-page/about-page.component';
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { TabellePageComponent } from './pages/tabelle-page/tabelle-page.component';
+import { HomePageContainer } from './pages/home-page/home-page-container';
+import { AboutPageContainer } from './pages/about-page/about-page-container';
+import { TabellePageContainer } from './pages/tabelle-page/tabelle-page-component';
 
 export const routes: Routes = [
     {
         path: '',
-        component: HomePageComponent,
+        component: HomePageContainer,
     },
     {
         path: 'about',
-        component: AboutPageComponent
+        component: AboutPageContainer
     },
     {
         path: 'tabelle',
-        component: TabellePageComponent
+        component: TabellePageContainer
     },
 ];

@@ -5,14 +5,14 @@ import {
   Input,
   inject,
 } from '@angular/core';
-import { SpaltenDto } from './spaltenDto';
+import { SpaltenModel } from './spalten-model';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { Sanitizer } from '../../service/sanitizer';
+import { Sanitizer } from '../../../../service/sanitizer/sanitizer';
 
 @Component({
   imports: [
@@ -91,7 +91,7 @@ import { Sanitizer } from '../../service/sanitizer';
 })
 export class FiltertabelleComponent implements AfterViewInit {
   @Input() inputData!: Observable<any[]>;
-  @Input() inputSpalten: SpaltenDto[] = [];
+  @Input() inputSpalten: SpaltenModel[] = [];
   @Input() pageSize: number = 20;
   @Input() pagingEnabled: boolean = true;
 
@@ -120,7 +120,7 @@ export class FiltertabelleComponent implements AfterViewInit {
     return this.filterValues.get(mappingName) || '';
   }
 
-  getFilterbarSpalten(): SpaltenDto[] {
+  getFilterbarSpalten(): SpaltenModel[] {
     return this.inputSpalten.filter((col) => col.filterbar);
   }
 
@@ -128,7 +128,7 @@ export class FiltertabelleComponent implements AfterViewInit {
     return this.inputSpalten.map((col) => col.mappingName);
   }
 
-  getCellValue(row: any, col: SpaltenDto): any {
+  getCellValue(row: any, col: SpaltenModel): any {
     return row[col.mappingName as keyof any];
   }
 

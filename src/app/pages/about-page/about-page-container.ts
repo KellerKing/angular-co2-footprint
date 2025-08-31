@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { AboutPageComponent } from './about-page-component';
 
 @Component({
-  selector: 'app-about-page',
-  imports: [],
+  selector: 'app-about-page-container',
+  imports: [AboutPageComponent],
   template: `
-    <div class="container-fluid p-3">
+    <app-about-page-component>
       <p>
         Diese Seite hat keine Funktionalität, sondern dient lediglich als
         Beispiel für das Navigieren über den Header. Nachfolgend der Demtext,
@@ -16,8 +17,8 @@ import { Component } from '@angular/core';
         dolorem quidem corporis nostrum molestias? Assumenda architecto quidem
         voluptates officiis!
       </p>
-    </div>
+    </app-about-page-component>
   `,
   styles: ``,
 })
-export class AboutPageComponent {}
+export class AboutPageContainer {}
