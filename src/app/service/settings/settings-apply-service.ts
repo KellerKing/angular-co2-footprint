@@ -3,7 +3,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
-export class DirectionService {
+export class SettingsApplyService {
   constructor(
     private dir: Directionality,
     @Inject(DOCUMENT) private document: Document

@@ -11,7 +11,7 @@ import { createViewModels } from "./header-viewmodel.creator";
   imports: [HeaderComponent],
 })
 
-export class HeaderContainer implements OnInit {
+export class HeaderContainer {
     //private m_Router = inject(Router);
     
     //routes = signal(this.m_Router.config);
@@ -20,9 +20,4 @@ export class HeaderContainer implements OnInit {
     erstelleViewModels() : HeaderModel {
         return createViewModels();
     }
-
-    ngOnInit(): void {
-        
-    }
-    
 }

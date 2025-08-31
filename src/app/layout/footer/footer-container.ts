@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, input, Output } from '@angular/core';
 import { FooterComponent } from './footer.component';
 import { DialogFacade } from '../../components/dialog-facade';
 import { createRechtlichesFooterData } from './footer-helper';
+import { SettingsDto } from '../../service/settings/settingsDto';
 
 @Component({
   selector: 'app-footer-container',
@@ -19,19 +20,24 @@ import { createRechtlichesFooterData } from './footer-helper';
   imports: [FooterComponent],
 })
 export class FooterContainer {
+  @Output() settingsChanged = new EventEmitter<SettingsDto | null>();
+  m_CurrentSettings = input.required<SettingsDto>();
+
   private readonly m_DialogFacade = inject(DialogFacade);
+
 
   openRechtliches(): void {
     const dialogInhalt = createRechtlichesFooterData();
-    this.m_DialogFacade.openModalDialogMitHtml(dialogInhalt.titel, dialogInhalt.datacontent);
+    this.m_DialogFacade.openModalDialogMitHtml(
+      dialogInhalt.titel,
+      dialogInhalt.datacontent
+    );
   }
 
   openSettings(): void {
-    console.log('Settings clicked');
-    // this.m_SettingsDialogService
-    //   .openSettingsDialog(this.m_SettingsService.Settings.isRightToLeft)
-    //   .subscribe((settings) => {
-    //     this.handleSettingsChange(settings);
-    //   });
+    const settings = this.m_DialogFacade.openSettingsDialog(this.m_CurrentSettings());
+    settings.subscribe((result) => {
+        this.settingsChanged.emit(result);
+    });
   }
 }

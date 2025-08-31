@@ -2,33 +2,32 @@ import { SettingsDto } from './settingsDto';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class SettingsDataService {
-  private settings: SettingsDto;
-  private readonly localStorageKey = 'settings';
+export class SettingsStorageService {
+  private m_Settings: SettingsDto;
+  private readonly m_LocalStorageKey = 'settings';
 
   constructor() {
     const initialSettings = this.loadSettings();
-    this.settings = initialSettings;
+    this.m_Settings = initialSettings;
   }
 
   get settings(): SettingsDto {
-    return this.settings;
+    return this.m_Settings;
   }
 
   get hasSettings(): boolean {
-    return sessionStorage.getItem(this.localStorageKey) != null;
+    return sessionStorage.getItem(this.m_LocalStorageKey) != null;
   }
 
   // Falls weitere Einstellungen benötigt werden, kann hier erweitert werden
   updateSettings(isRtl: boolean): void {
-    this.settings.isRightToLeft = isRtl;
-    sessionStorage.setItem(this.localStorageKey, JSON.stringify(this.settings));
+    this.m_Settings.isRightToLeft = isRtl;
+    sessionStorage.setItem(this.m_LocalStorageKey, JSON.stringify(this.m_Settings));
   }
 
   private loadSettings(): SettingsDto {
     try {
-      console.log('Loading settings from sessionStorage');
-      const storedSettings = sessionStorage.getItem(this.localStorageKey);
+      const storedSettings = sessionStorage.getItem(this.m_LocalStorageKey);
       return storedSettings
         ? JSON.parse(storedSettings)
         : this.getDefaultSettings();

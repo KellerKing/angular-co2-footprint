@@ -1,14 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import {
-  DialogSettingsOutput,
-} from './components/dialog.settings/dialog.settings.component';
-import { SettingsDialogService } from './service/settings/settings.dialog.service';
-import { DirectionService } from './service/direction.service';
-import { SettingsDataService } from './service/settings/settings.data.service';
-import { HeaderContainer } from "./layout/header/header.container";
-import { FooterContainer } from "./layout/footer/footer-container";
+import { HeaderContainer } from './layout/header/header.container';
+import { FooterContainer } from './layout/footer/footer-container';
+import { SettingsDto } from './service/settings/settingsDto';
+import { SettingsFacade } from './service/settings/settings-facade';
 
 @Component({
   selector: 'app-root',
@@ -22,57 +17,30 @@ import { FooterContainer } from "./layout/footer/footer-container";
         <router-outlet />
       </main>
       <footer>
-        <app-footer-container></app-footer-container>
-        <!-- <app-footer>
-          <div class="d-flex justify-content-center gap-3">
-            <button (click)="openRechtliches()" class="btn btn-primary">
-              Rechtliche Hinweise
-            </button>
-            <button (click)="openSettings()" class="btn btn-primary">
-              Einstellungen
-            </button>
-          </div>
-        </app-footer> -->
+        <app-footer-container
+          [m_CurrentSettings]="this.m_SettingsCopy"
+          (settingsChanged)="handleSettingsChanged($event)"
+        ></app-footer-container>
       </footer>
     </body>
   `,
   styles: [],
 })
 export class AppComponent implements OnInit {
-  readonly m_Dialog = inject(MatDialog);
-  readonly m_SettingsDialogService = inject(SettingsDialogService);
-  readonly m_DirectionService = inject(DirectionService);
-  readonly m_SettingsService = inject(SettingsDataService);
+  private readonly m_SettingsFacade = inject(SettingsFacade);
+  m_SettingsCopy: SettingsDto = this.m_SettingsFacade.settingsCopy;
 
   ngOnInit(): void {
-    if (this.m_SettingsService.hasSettings) {
-      const settings = this.m_SettingsService.settings;
-      this.m_DirectionService.richtungAktuallisieren(settings.isRightToLeft);
-      return;
-    }
-
-    const isRtl = this.m_DirectionService.isRichtungRtlBeiErstenStart();
-    this.m_DirectionService.richtungAktuallisieren(isRtl);
-    this.m_SettingsService.updateSettings(isRtl);
+    this.m_SettingsFacade.initializeSettings();
   }
 
-  openSettings(): void {
-    console.log('Settings clicked');
-    this.m_SettingsDialogService
-      .openSettingsDialog(this.m_SettingsService.settings.isRightToLeft)
-      .subscribe((settings) => {
-        this.handleSettingsChange(settings);
-      });
-  }
-
-  handleSettingsChange(settings?: DialogSettingsOutput): void {
-    if (!settings || settings.isCancelled) return;
-    // Nachteile dieser Implementierung:
+  handleSettingsChanged(settings: SettingsDto | null): void {
+     // Nachteile dieser Implementierung:
     // - Es wird nicht geprüft, ob die Einstellungen geändert wurden.
     // - Da global die Einstellungen geändert werden, kann jede Komponente nicht unabhängig darauf reagieren.
     //    Beispielsweise könnte der Header in rtl und ltr gleich bleiben und nur der Textfluss der Page wird geändert.
     //    Darum wäre es besser, wenn die Einstellungen ein Observable wären, das die Komponenten abonnieren können und dann einzeln darauf reagieren.
-    this.m_DirectionService.richtungAktuallisieren(settings.isRightToLeft);
-    this.m_SettingsService.updateSettings(settings.isRightToLeft);
+    this.m_SettingsFacade.updateSettings(settings!);
+    this.m_SettingsCopy = this.m_SettingsFacade.settingsCopy;
   }
 }

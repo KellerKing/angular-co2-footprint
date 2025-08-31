@@ -65,11 +65,7 @@ export class DialogSettingsComponent {
   }
 
   onExitDialog(isCancelled: boolean): void {
-    if (isCancelled) {
-      this.dialogRef.close({ isCancelled: isCancelled });
-      return;
-    }
-
-    this.dialogRef.close({ isRightToLeft: this.isRightToLeft });
+    this.dialogRef.close({ isRightToLeft: this.isRightToLeft, isCancelled: isCancelled });
+    return;
   }
 }

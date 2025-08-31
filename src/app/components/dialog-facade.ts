@@ -1,7 +1,13 @@
 import { inject, Injectable, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogRechtlichesComponent } from './dialog-anzeige/dialog-anzeige-component';
-import { Observable } from 'rxjs';
+import { filter, map, Observable, of, pipe } from 'rxjs';
+import { SettingsDto } from '../service/settings/settingsDto';
+import {
+  DialogSettingsComponent,
+  DialogSettingsInput,
+  DialogSettingsOutput,
+} from './dialog-settings/dialog.settings.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogFacade {
@@ -11,30 +17,51 @@ export class DialogFacade {
     this.m_Dialog.open(DialogRechtlichesComponent, {
       disableClose: true,
       data: {
-        titel: 'Fehler bei der Eingabe!', 
-        datacontent: 'Sonderzeichen oder Programmbefehle können nicht zur Suche verwendet werden. Bitte vermeiden Sie: ' + fehlerzeichen,
-        isHtmlSicher: false}
-      });
+        titel: 'Fehler bei der Eingabe!',
+        datacontent:
+          'Sonderzeichen oder Programmbefehle können nicht zur Suche verwendet werden. Bitte vermeiden Sie: ' +
+          fehlerzeichen,
+        isHtmlSicher: false,
+      },
+    });
   }
 
   openModalDialogMitHtml(titel: string, inhalt: string) {
-   this.m_Dialog.open(DialogRechtlichesComponent, {
+    this.m_Dialog.open(DialogRechtlichesComponent, {
       disableClose: true,
       data: {
-        titel: titel, 
+        titel: titel,
         datacontent: inhalt,
-        isHtmlSicher: true}
-      });
+        isHtmlSicher: true,
+      },
+    });
   }
 
-  openModal<TData = any, TResult = any>(
-    template: TemplateRef<any>,
-    data: TData
-  ) {
-    const result = this.m_Dialog
-      .open(DialogRechtlichesComponent, {
-        data: { template, data },
+  openSettingsDialog(settings: SettingsDto): Observable<SettingsDto | null> {
+    const dialogRef = this.m_Dialog.open<
+      DialogSettingsComponent,
+      DialogSettingsInput,
+      DialogSettingsOutput
+    >(DialogSettingsComponent, {
+      data: {  isRightToLeft: settings.isRightToLeft },
+      width: '500px',
+      height: '200px',
+      disableClose: true,
+    });
+
+    const toResult = (result: DialogSettingsOutput): SettingsDto | null => {
+      if (result.isCancelled)
+        return null;
+      return {
+        isRightToLeft: result.isRightToLeft,
+      };
+    };
+
+    return dialogRef.afterClosed().pipe(
+      filter((result) => result !== undefined),
+      map((x) => {
+        return toResult(x);
       })
-      .afterClosed() as Observable<TResult | undefined>;
+    );
   }
 }
