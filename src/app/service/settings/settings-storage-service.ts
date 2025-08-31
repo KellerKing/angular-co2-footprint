@@ -1,9 +1,9 @@
-import { SettingsDto } from './settingsDto';
+import { SettingsModel } from './settings-mode';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsStorageService {
-  private m_Settings: SettingsDto;
+  private m_Settings: SettingsModel;
   private readonly m_LocalStorageKey = 'settings';
 
   constructor() {
@@ -11,7 +11,7 @@ export class SettingsStorageService {
     this.m_Settings = initialSettings;
   }
 
-  get settings(): SettingsDto {
+  get settings(): SettingsModel {
     return this.m_Settings;
   }
 
@@ -25,7 +25,7 @@ export class SettingsStorageService {
     sessionStorage.setItem(this.m_LocalStorageKey, JSON.stringify(this.m_Settings));
   }
 
-  private loadSettings(): SettingsDto {
+  private loadSettings(): SettingsModel {
     try {
       const storedSettings = sessionStorage.getItem(this.m_LocalStorageKey);
       return storedSettings
@@ -37,7 +37,7 @@ export class SettingsStorageService {
     return this.getDefaultSettings();
   }
 
-  private getDefaultSettings(): SettingsDto {
+  private getDefaultSettings(): SettingsModel {
     return {
       isRightToLeft: false,
     };

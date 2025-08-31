@@ -1,20 +1,20 @@
 import { inject, Injectable } from '@angular/core';
-import { SettingsStorageService } from './settings-storage-service';
-import { SettingsDto } from './settingsDto';
-import { SettingsApplyService } from './settings-apply-service';
+import { SettingsStorageService } from '../service/settings/settings-storage-service';
+import { SettingsModel } from '../service/settings/settings-mode';
+import { SettingsApplyService } from '../service/settings/settings-apply-service';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsFacade {
   private readonly m_StorageService = inject(SettingsStorageService);
   private readonly m_ApplyService = inject(SettingsApplyService);
 
-  get settingsCopy(): SettingsDto {
+  get settingsCopy(): SettingsModel {
     console.log('SettingsFacade.settingsCopy aufgerufen');
     const result = this.m_StorageService.settings;
     return { ...result };
   }
 
-  updateSettings(settings: SettingsDto) : void {
+  updateSettings(settings: SettingsModel) : void {
     if (!settings) return;
     
     this.m_StorageService.updateSettings(settings.isRightToLeft);

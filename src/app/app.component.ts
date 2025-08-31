@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderContainer } from './layout/header/header.container';
 import { FooterContainer } from './layout/footer/footer-container';
-import { SettingsDto } from './service/settings/settingsDto';
-import { SettingsFacade } from './service/settings/settings-facade';
+import { SettingsModel } from './service/settings/settings-mode';
+import { SettingsFacade } from './facade/settings-facade';
 
 @Component({
   selector: 'app-root',
@@ -28,13 +28,13 @@ import { SettingsFacade } from './service/settings/settings-facade';
 })
 export class AppComponent implements OnInit {
   private readonly m_SettingsFacade = inject(SettingsFacade);
-  m_SettingsCopy: SettingsDto = this.m_SettingsFacade.settingsCopy;
+  m_SettingsCopy: SettingsModel = this.m_SettingsFacade.settingsCopy;
 
   ngOnInit(): void {
     this.m_SettingsFacade.initializeSettings();
   }
 
-  handleSettingsChanged(settings: SettingsDto | null): void {
+  handleSettingsChanged(settings: SettingsModel | null): void {
      // Nachteile dieser Implementierung:
     // - Es wird nicht geprüft, ob die Einstellungen geändert wurden.
     // - Da global die Einstellungen geändert werden, kann jede Komponente nicht unabhängig darauf reagieren.

@@ -1,13 +1,13 @@
 import { inject, Injectable, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogRechtlichesComponent } from './dialog-anzeige/dialog-anzeige-component';
+import { DialogRechtlichesComponent } from '../components/dialog-anzeige/dialog-anzeige-component';
 import { filter, map, Observable, of, pipe } from 'rxjs';
-import { SettingsDto } from '../service/settings/settingsDto';
+import { SettingsModel } from '../service/settings/settings-mode';
 import {
   DialogSettingsComponent,
   DialogSettingsInput,
   DialogSettingsOutput,
-} from './dialog-settings/dialog.settings.component';
+} from '../components/dialog-settings/dialog-settings-component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogFacade {
@@ -37,7 +37,7 @@ export class DialogFacade {
     });
   }
 
-  openSettingsDialog(settings: SettingsDto): Observable<SettingsDto | null> {
+  openSettingsDialog(settings: SettingsModel): Observable<SettingsModel | null> {
     const dialogRef = this.m_Dialog.open<
       DialogSettingsComponent,
       DialogSettingsInput,
@@ -49,7 +49,7 @@ export class DialogFacade {
       disableClose: true,
     });
 
-    const toResult = (result: DialogSettingsOutput): SettingsDto | null => {
+    const toResult = (result: DialogSettingsOutput): SettingsModel | null => {
       if (result.isCancelled)
         return null;
       return {

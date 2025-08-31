@@ -1,8 +1,8 @@
 import { Component, EventEmitter, inject, input, Output } from '@angular/core';
 import { FooterComponent } from './footer.component';
-import { DialogFacade } from '../../components/dialog-facade';
+import { DialogFacade } from '../../facade/dialog-facade';
 import { createRechtlichesFooterData } from './footer-helper';
-import { SettingsDto } from '../../service/settings/settingsDto';
+import { SettingsModel } from '../../service/settings/settings-mode';
 
 @Component({
   selector: 'app-footer-container',
@@ -20,8 +20,8 @@ import { SettingsDto } from '../../service/settings/settingsDto';
   imports: [FooterComponent],
 })
 export class FooterContainer {
-  @Output() settingsChanged = new EventEmitter<SettingsDto | null>();
-  m_CurrentSettings = input.required<SettingsDto>();
+  @Output() settingsChanged = new EventEmitter<SettingsModel | null>();
+  m_CurrentSettings = input.required<SettingsModel>();
 
   private readonly m_DialogFacade = inject(DialogFacade);
 
