@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { BasePfadHelper } from '../service/base.pfad.helper';
+import { BasePfadHelper } from '../../helper/base.pfad.helper';
 import { DOCUMENT } from '@angular/common';
 
 interface TestCase {

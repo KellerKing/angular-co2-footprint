@@ -3,7 +3,7 @@ import {
   Component,
   ViewChild,
   Input,
-  inject,
+  output,
 } from '@angular/core';
 import { SpaltenModel } from './spalten-model';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -12,7 +12,6 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { Sanitizer } from '../../../../service/sanitizer/sanitizer';
 
 @Component({
   imports: [
@@ -22,7 +21,7 @@ import { Sanitizer } from '../../../../service/sanitizer/sanitizer';
     MatExpansionModule,
     MatPaginatorModule,
   ],
-  selector: 'app-filtertabelle',
+  selector: 'app-filtertabelle-component',
   template: `
     <div class="m-2">
       @if (hasSpaltenZumFiltern()) {
@@ -79,7 +78,7 @@ import { Sanitizer } from '../../../../service/sanitizer/sanitizer';
         @if (pagingEnabled) {
         <mat-paginator
           [pageSizeOptions]="[5, 10, 20, 50, 100, 200, 500, 1000]"
-          [pageSize]="pageSize"
+          [pageSize]="20"
           [showFirstLastButtons]="true"
         >
         </mat-paginator>
@@ -92,8 +91,14 @@ import { Sanitizer } from '../../../../service/sanitizer/sanitizer';
 export class FiltertabelleComponent implements AfterViewInit {
   @Input() inputData!: Observable<any[]>;
   @Input() inputSpalten: SpaltenModel[] = [];
-  @Input() pageSize: number = 20;
   @Input() pagingEnabled: boolean = true;
+
+  @Input() set filterValue(value:{ mappingName: string; value: string } | null) {
+    if (!value) return;
+    this.filterValues.set(value.mappingName, value.value);
+  }
+
+  filterChanged = output<{ mappingName: string; value: string }>();
 
   filterValues = new Map<string, string>();
   dataSource!: MatTableDataSource<any>;
@@ -101,7 +106,6 @@ export class FiltertabelleComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  private readonly m_Sanitizer = inject(Sanitizer);
 
   ngAfterViewInit(): void {
     this.inputData.subscribe((data) => {
@@ -134,16 +138,13 @@ export class FiltertabelleComponent implements AfterViewInit {
 
   changeFilter($event: Event, mappingName: string) {
     const target = $event.target as HTMLInputElement;
-    const sanitizeResult = this.m_Sanitizer.sanitize(target.value);
+    const text = target.value;
+    target.value = this.getFilterValue(mappingName); //Setzt den Wert zurück, falls er durch Sanitizer verändert wurde
+    
+    this.filterChanged.emit({ mappingName: mappingName, value: text});
+  }
 
-    if (sanitizeResult.hasFehler) {
-      const ausgabe = sanitizeResult.fehler.join(", \r\n");
-      alert("Fehlerhafte Zeichen erkannt:" + "\r\n" + ausgabe);
-      target.value = sanitizeResult.wertOhneFehler;
-    }
-
-    this.filterValues.set(mappingName, target.value);
-
+  applyFilter() {
     const filter = Array.from(this.filterValues.entries());
     this.dataSource.filter = JSON.stringify(filter);
 

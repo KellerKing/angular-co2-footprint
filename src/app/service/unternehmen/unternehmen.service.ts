@@ -1,16 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
-import { BasePfadHelper } from './base.pfad.helper';
+import { BasePfadHelper } from '../../../helper/base.pfad.helper';
+import { UnternehmenModel } from './unternehmen.model';
 
-export interface Unternehmen {
-  name: string;
-  land: string;
-  countryCode: string;
-  branche: string;
-  co2Verbrauch: number;
-  id: number;
-}
+
 
 @Injectable({ providedIn: 'root' })
 export class UnternehmenService {
@@ -19,17 +13,17 @@ export class UnternehmenService {
   private readonly m_BasePfadHelper = inject(BasePfadHelper);
 
 
-  getAlleUnternehmen(): Observable<Unternehmen[]> {
-    return this.m_Http.get<Unternehmen[]>(this.m_BasePfadHelper.getVollstaendigenPfad(this.m_Url));
+  getAlleUnternehmen(): Observable<UnternehmenModel[]> {
+    return this.m_Http.get<UnternehmenModel[]>(this.m_BasePfadHelper.getVollstaendigenPfad(this.m_Url));
   }
 
-  getUnternehmen(pageIndex: number, count: number): Observable<Unternehmen[]> {
+  getUnternehmen(pageIndex: number, count: number): Observable<UnternehmenModel[]> {
     const startIndex = pageIndex * count;
     if (startIndex < 0) 
       return of([]);
 
     const result = this.getAlleUnternehmen().pipe(
-      map((unternehmen: Unternehmen[]) => {
+      map((unternehmen: UnternehmenModel[]) => {
         return unternehmen.slice(startIndex, startIndex + count);
       }),
       catchError((error) => {

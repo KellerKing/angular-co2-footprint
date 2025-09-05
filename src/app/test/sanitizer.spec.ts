@@ -1,6 +1,6 @@
 
 import { TestBed } from '@angular/core/testing';
-import { Sanitizer } from '../service/sanitizer/sanitizer';
+import { Sanitizer } from '../pages/tabelle-page/components/filtertabelle/sanitizer/sanitizer';
 
 describe('Sanitizer', () => {
   let sut: Sanitizer;

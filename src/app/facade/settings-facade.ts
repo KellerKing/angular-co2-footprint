@@ -9,7 +9,6 @@ export class SettingsFacade {
   private readonly m_ApplyService = inject(SettingsApplyService);
 
   get settingsCopy(): SettingsModel {
-    console.log('SettingsFacade.settingsCopy aufgerufen');
     const result = this.m_StorageService.settings;
     return { ...result };
   }

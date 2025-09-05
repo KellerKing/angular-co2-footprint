@@ -1,6 +1,5 @@
-import { Component, computed, inject, input, Input, OnInit, signal } from "@angular/core";
+import { Component, computed } from "@angular/core";
 import { HeaderComponent } from "./header-component";
-import { Route, Router } from "@angular/router";
 import { HeaderModel } from "./header-model";
 import { createViewModels } from "./header-viewmodel-creator";
 
@@ -12,12 +11,5 @@ import { createViewModels } from "./header-viewmodel-creator";
 })
 
 export class HeaderContainer {
-    //private m_Router = inject(Router);
-    
-    //routes = signal(this.m_Router.config);
-    viewModels = computed<HeaderModel>(() => this.erstelleViewModels());
-
-    erstelleViewModels() : HeaderModel {
-        return createViewModels();
-    }
+    viewModels = computed<HeaderModel>(() => createViewModels());
 }

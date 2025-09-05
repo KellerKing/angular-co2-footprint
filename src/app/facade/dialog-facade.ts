@@ -13,14 +13,12 @@ import {
 export class DialogFacade {
   private readonly m_Dialog = inject(MatDialog);
 
-  openFehlerDialog(fehlerzeichen: string): void {
+  openFehlerDialog(fehlercontent: string): void {
     this.m_Dialog.open(DialogRechtlichesComponent, {
       disableClose: true,
       data: {
         titel: 'Fehler bei der Eingabe!',
-        datacontent:
-          'Sonderzeichen oder Programmbefehle können nicht zur Suche verwendet werden. Bitte vermeiden Sie: ' +
-          fehlerzeichen,
+        datacontent: fehlercontent,
         isHtmlSicher: false,
       },
     });

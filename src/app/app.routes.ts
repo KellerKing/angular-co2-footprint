@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePageContainer } from './pages/home-page/home-page-container';
 import { AboutPageContainer } from './pages/about-page/about-page-container';
-import { TabellePageContainer } from './pages/tabelle-page/tabelle-page-component';
+import { TabellePageContainer } from './pages/tabelle-page/tabelle-page-container';
 
 export const routes: Routes = [
     {
