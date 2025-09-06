@@ -12,6 +12,7 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { evaluateFilterPredicate } from './tabelle-helper';
 
 @Component({
   imports: [
@@ -24,8 +25,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
   selector: 'app-filtertabelle-component',
   template: `
     <div class="m-2">
-      @if (hasSpaltenZumFiltern()) {
-
+      @if (hasSpaltenZumFiltern() && dataSource !== undefined && dataSource.data.length > 0) {
       <div>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -75,14 +75,12 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
           <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
         </table>
 
-        @if (pagingEnabled) {
         <mat-paginator
-          [pageSizeOptions]="[5, 10, 20, 50, 100, 200, 500, 1000]"
-          [pageSize]="20"
+          [pageSizeOptions]="pageSizes"
+          [pageSize]="defaultPageSize"
           [showFirstLastButtons]="true"
         >
         </mat-paginator>
-        }
       </div>
     </div>
   `,
@@ -91,26 +89,27 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 export class FiltertabelleComponent implements AfterViewInit {
   @Input() inputData!: Observable<any[]>;
   @Input() inputSpalten: SpaltenModel[] = [];
-  @Input() pagingEnabled: boolean = true;
+  @Input() pageSizes!: number[];
+  @Input() defaultPageSize = 20;
+
 
   @Input() set filterValue(value:{ mappingName: string; value: string } | null) {
     if (!value) return;
     this.filterValues.set(value.mappingName, value.value);
+    this.applyFilter();
   }
-
-  filterChanged = output<{ mappingName: string; value: string }>();
-
-  filterValues = new Map<string, string>();
-  dataSource!: MatTableDataSource<any>;
-
+  
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  filterChanged = output<{ mappingName: string; value: string }>();
+  filterValues = new Map<string, string>();
+  dataSource!: MatTableDataSource<any>;
 
   ngAfterViewInit(): void {
     this.inputData.subscribe((data) => {
       this.dataSource = new MatTableDataSource(data);
-      this.dataSource.filterPredicate = this.filterPredicate;
+      this.dataSource.filterPredicate = evaluateFilterPredicate;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
@@ -151,22 +150,4 @@ export class FiltertabelleComponent implements AfterViewInit {
     this.dataSource.paginator?.firstPage();
     this.dataSource.sort?.sortChange.emit();
   }
-
-  filterPredicate = (data: any, filter: string): boolean => {
-    const filterMap = new Map<string, string>(JSON.parse(filter));
-
-    for (const [key, value] of filterMap.entries()) {
-      if (!value || value.trim() === '') continue;
-
-      const cellValue = data[key as keyof any];
-      if (cellValue === undefined || cellValue === null) continue;
-
-      //Es werden nur Strings verglichen weil die Filterung auf Textfelder abzielt
-      const cellValueStr = String(cellValue).toLowerCase();
-      if (!cellValueStr.includes(value.toLowerCase())) {
-        return false;
-      }
-    }
-    return true;
-  };
 }

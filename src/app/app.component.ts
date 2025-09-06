@@ -28,7 +28,7 @@ import { SettingsFacade } from './facade/settings-facade';
 })
 export class AppComponent implements OnInit {
   private readonly m_SettingsFacade = inject(SettingsFacade);
-  m_SettingsCopy: SettingsModel = this.m_SettingsFacade.settingsCopy;
+  m_SettingsCopy: SettingsModel = this.m_SettingsFacade.settingsCopy; // Eine lokale Kopie weil ich nicht will, dass die FooterComponent die Settings direkt ändern kann.
 
   ngOnInit(): void {
     this.m_SettingsFacade.initializeSettings();

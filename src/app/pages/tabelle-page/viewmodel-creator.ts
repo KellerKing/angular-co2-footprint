@@ -1,4 +1,4 @@
-import { SpaltenModel } from "./spalten-model";
+import { SpaltenModel } from "./components/filtertabelle/spalten-model";
 
 export function createSpaltenViewModels(): SpaltenModel[] {
     return [
