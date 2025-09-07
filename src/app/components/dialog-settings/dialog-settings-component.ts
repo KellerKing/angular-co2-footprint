@@ -40,18 +40,20 @@ export interface DialogSettingsOutput {
   template: `
     <h2 mat-dialog-title>Einstellungen</h2>
     <mat-dialog-content>
-      <mat-slide-toggle [(ngModel)]="isRightToLeft"
-        > Links nach Rechts {{ isRightToLeft }} Rechts nach Links</mat-slide-toggle
-      >
+      <span>
+        <mat-slide-toggle [(ngModel)]="isRightToLeft">
+          Rechts-nach-Links Layout (für Sprachen wie Arabisch oder Hebräisch)
+        </mat-slide-toggle>
+      </span>
     </mat-dialog-content>
     <mat-dialog-actions>
       <button mat-button (click)="onExitDialog(false)" cdkFocusInitial>
         Übernehmen
       </button>
-       <button mat-button (click)="onExitDialog(true)">Abbrechen</button>
+      <button mat-button (click)="onExitDialog(true)">Abbrechen</button>
     </mat-dialog-actions>
   `,
-  styles: ``,
+  styles: [``],
 })
 export class DialogSettingsComponent {
   readonly dialogRef = inject(
@@ -65,7 +67,10 @@ export class DialogSettingsComponent {
   }
 
   onExitDialog(isCancelled: boolean): void {
-    this.dialogRef.close({ isRightToLeft: this.isRightToLeft, isCancelled: isCancelled });
+    this.dialogRef.close({
+      isRightToLeft: this.isRightToLeft,
+      isCancelled: isCancelled,
+    });
     return;
   }
 }
