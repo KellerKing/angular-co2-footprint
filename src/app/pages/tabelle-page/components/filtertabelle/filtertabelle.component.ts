@@ -3,16 +3,16 @@ import {
   Component,
   ViewChild,
   Input,
-  inject,
+  output,
 } from '@angular/core';
-import { SpaltenDto } from './spaltenDto';
+import { SpaltenModel } from './spalten-model';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { Sanitizer } from '../../service/sanitizer';
+import { evaluateFilterPredicate } from './tabelle-helper';
 
 @Component({
   imports: [
@@ -22,11 +22,10 @@ import { Sanitizer } from '../../service/sanitizer';
     MatExpansionModule,
     MatPaginatorModule,
   ],
-  selector: 'app-filtertabelle',
+  selector: 'app-filtertabelle-component',
   template: `
     <div class="m-2">
-      @if (hasSpaltenZumFiltern()) {
-
+      @if (hasSpaltenZumFiltern() && dataSource !== undefined && dataSource.data.length > 0) {
       <div>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -76,14 +75,12 @@ import { Sanitizer } from '../../service/sanitizer';
           <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
         </table>
 
-        @if (pagingEnabled) {
         <mat-paginator
-          [pageSizeOptions]="[5, 10, 20, 50, 100, 200, 500, 1000]"
-          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizes"
+          [pageSize]="defaultPageSize"
           [showFirstLastButtons]="true"
         >
         </mat-paginator>
-        }
       </div>
     </div>
   `,
@@ -91,22 +88,28 @@ import { Sanitizer } from '../../service/sanitizer';
 })
 export class FiltertabelleComponent implements AfterViewInit {
   @Input() inputData!: Observable<any[]>;
-  @Input() inputSpalten: SpaltenDto[] = [];
-  @Input() pageSize: number = 20;
-  @Input() pagingEnabled: boolean = true;
+  @Input() inputSpalten: SpaltenModel[] = [];
+  @Input() pageSizes!: number[];
+  @Input() defaultPageSize = 20;
 
-  filterValues = new Map<string, string>();
-  dataSource!: MatTableDataSource<any>;
 
+  @Input() set filterValue(value:{ mappingName: string; value: string } | null) {
+    if (!value) return;
+    this.filterValues.set(value.mappingName, value.value);
+    this.applyFilter();
+  }
+  
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  private readonly m_Sanitizer = inject(Sanitizer);
+  filterChanged = output<{ mappingName: string; value: string }>();
+  filterValues = new Map<string, string>();
+  dataSource!: MatTableDataSource<any>;
 
   ngAfterViewInit(): void {
     this.inputData.subscribe((data) => {
       this.dataSource = new MatTableDataSource(data);
-      this.dataSource.filterPredicate = this.filterPredicate;
+      this.dataSource.filterPredicate = evaluateFilterPredicate;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
@@ -120,7 +123,7 @@ export class FiltertabelleComponent implements AfterViewInit {
     return this.filterValues.get(mappingName) || '';
   }
 
-  getFilterbarSpalten(): SpaltenDto[] {
+  getFilterbarSpalten(): SpaltenModel[] {
     return this.inputSpalten.filter((col) => col.filterbar);
   }
 
@@ -128,44 +131,23 @@ export class FiltertabelleComponent implements AfterViewInit {
     return this.inputSpalten.map((col) => col.mappingName);
   }
 
-  getCellValue(row: any, col: SpaltenDto): any {
+  getCellValue(row: any, col: SpaltenModel): any {
     return row[col.mappingName as keyof any];
   }
 
   changeFilter($event: Event, mappingName: string) {
     const target = $event.target as HTMLInputElement;
-    const sanitizeResult = this.m_Sanitizer.sanitize(target.value);
+    const text = target.value;
+    target.value = this.getFilterValue(mappingName); //Setzt den Wert zurück, falls er durch Sanitizer verändert wurde
+    
+    this.filterChanged.emit({ mappingName: mappingName, value: text});
+  }
 
-    if (sanitizeResult.hasFehler) {
-      const ausgabe = sanitizeResult.fehler.join(", \r\n");
-      alert("Fehlerhafte Zeichen erkannt:" + "\r\n" + ausgabe);
-      target.value = sanitizeResult.wertOhneFehler;
-    }
-
-    this.filterValues.set(mappingName, target.value);
-
+  applyFilter() {
     const filter = Array.from(this.filterValues.entries());
     this.dataSource.filter = JSON.stringify(filter);
 
     this.dataSource.paginator?.firstPage();
     this.dataSource.sort?.sortChange.emit();
   }
-
-  filterPredicate = (data: any, filter: string): boolean => {
-    const filterMap = new Map<string, string>(JSON.parse(filter));
-
-    for (const [key, value] of filterMap.entries()) {
-      if (!value || value.trim() === '') continue;
-
-      const cellValue = data[key as keyof any];
-      if (cellValue === undefined || cellValue === null) continue;
-
-      //Es werden nur Strings verglichen weil die Filterung auf Textfelder abzielt
-      const cellValueStr = String(cellValue).toLowerCase();
-      if (!cellValueStr.includes(value.toLowerCase())) {
-        return false;
-      }
-    }
-    return true;
-  };
 }
