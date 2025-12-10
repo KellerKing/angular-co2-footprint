@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { form, Field, debounce } from '@angular/forms/signals';
 import { CO2Data, DatabaseService } from '../service/database-service';
-import { TabelleComponent, TabelleViewModel } from './components/tabelle-component/tabelle-component';
+import { TabelleComponent, TabelleDataViewModel } from './components/tabelle-component/tabelle-component';
 
 @Component({
   selector: 'app-page-tabelle',
@@ -34,13 +34,13 @@ export class PageTabelle {
 
   tabelleDataModel = signal<CO2Data[]>([]);
   
-  tabelleViewModel = computed<TabelleViewModel[]>(() => {
+  tabelleViewModel = computed<TabelleDataViewModel[]>(() => {
     return this.tabelleDataModel()
     .map(data => ({
       id: data.id,
       land: data.country,
       firma: data.company_name,
-      emissionen: data.co2_emissions
+      emissionen: data.co2_verbrauch || -1
       })
     );
   });

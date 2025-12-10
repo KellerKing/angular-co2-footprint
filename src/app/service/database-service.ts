@@ -31,5 +31,5 @@ export interface CO2Data {
   id: number;
   country: string;
   company_name: string;
-  co2_emissions: number;
+  co2_verbrauch: number;
 }
