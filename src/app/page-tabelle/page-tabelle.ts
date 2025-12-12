@@ -56,13 +56,13 @@ export class PageTabelle {
   constructor() {
     
     effect(() => {
-      console.log("Suche geändert:", this.sucheModel().land);
       this.m_Service.getData(this.sucheModel().land, this.sucheModel().firma)
       .then((data) => {
         this.tabelleDataModel.set(data);
         }
       );
     });
+    
   }
 }
 
