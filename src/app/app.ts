@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from "./layout/header/header.component";
+import { HeaderComponent, NavItem } from "./layout/header/header.component";
 
 @Component({
   selector: 'app-root',
@@ -10,4 +10,8 @@ import { HeaderComponent } from "./layout/header/header.component";
 })
 export class App {
   protected readonly title = signal('angular-co2-footprint');
+  
+  readonly navItems: NavItem[] = [
+    { label: 'Home', link: '#' },
+    { label: 'Tabelle', link: 'tabelle' }];  
 }
