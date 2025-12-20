@@ -7,7 +7,7 @@ import { createClient } from '@supabase/supabase-js';
 
 export class DatabaseService {
   private supabaseUrl = 'https://ynwvtfdglmlzfmagsrlc.supabase.co';
-  private supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlud3Z0ZmRnbG1semZtYWdzcmxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxODY2NjksImV4cCI6MjA4MDc2MjY2OX0.J0JdzAk175Ioabwl9K6sXyQP15bLUSmPlBk_bz4JXzA';
+  private supabaseKey = 'sb_publishable_PH5QOoZ5eBRrior-T-JckQ_FXGH7d0c';
   private supabase = createClient(this.supabaseUrl, this.supabaseKey); 
 
 
