@@ -12,6 +12,12 @@ export class App {
   protected readonly title = signal('angular-co2-footprint');
   
   readonly navItems: NavItem[] = [
-    { label: 'Home', link: '#' },
-    { label: 'Tabelle', link: 'tabelle' }];  
+    { label: 'Home', link: '' },
+    { label: 'Tabelle', link: 'tabelle' }, 
+    { label: 'Über', link: 'about' }];  
+
+  readonly homeItem = {
+    homeLink: '',
+    logoUrl: 'logo_iu.svg'
+  };
 }

@@ -1,15 +1,11 @@
 import { Component, computed, effect, inject, input, signal, viewChild, ViewChild } from '@angular/core';
-import { required } from '@angular/forms/signals';
-import { JsonPipe } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-tabelle-component',
-  imports: [JsonPipe, MatTableModule, MatSortModule],
+  imports: [MatTableModule, MatSortModule],
   template: `
-    <p>Tabelle Component works!</p>
-
     <table mat-table [dataSource]="dataSource()" matSort class="mat-elevation-z8">
       @for (item of tabelleTemplateViewModels; track $index) {
         <ng-container [matColumnDef]="item.mappingName">
@@ -23,14 +19,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 
           <td mat-cell *matCellDef="let element"> {{ element[item.mappingName] || "" }} </td>
         </ng-container>
-
       }  
 
       <tr mat-header-row *matHeaderRowDef="getSpaltenNamen()"></tr>
       <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
     </table>
-
-    <pre>{{ viewModels() | json }}</pre>
   `,
   styles: [``],
 })
