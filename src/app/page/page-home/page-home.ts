@@ -13,7 +13,7 @@ import { Component } from '@angular/core';
           <br />
 
           <p class="mt-5 fs-4">
-            Die Seite soll für für eine fitive Non-Profit-Organisation sein, um
+            Die Seite soll für eine fiktive Non-Profit-Organisation sein, um
             einen Überblick darüber zu schaffen, welche Unternehmen bzw. Länder
             wie viel Co2 Jährlich emittieren.
           </p>

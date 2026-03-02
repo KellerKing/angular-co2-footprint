@@ -17,9 +17,18 @@ import { MatInputModule } from '@angular/material/input';
     <mat-expansion-panel class="my-3">
       <mat-expansion-panel-header>Suchfilter</mat-expansion-panel-header>
       <form>
-        <label>Land:</label>
-        <input type="text" [field]="sucheForm.land" />
-        <input type="text" [field]="sucheForm.firma" />
+        <p>
+          Die Suche erfolgt ungenau, d.h. es werden auch Teilausdrücke gefunden.
+          Eine Suche nach "Ger" im Land findet z.B. "Germany", genauso wie die Suche nach "many" auch "Germany" findet. Das ist auch für Firmennamen so und eine bewusst gewählte Funktionalität.
+        </p>
+        <div class="form-group mb-2">
+          <label for="land">Land:</label>
+          <input type="text" [field]="sucheForm.land" id="land" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="firma">Firma:</label>
+          <input type="text" [field]="sucheForm.firma" id="firma" class="form-control" />
+        </div>
       </form>
     </mat-expansion-panel>
 
@@ -50,14 +59,6 @@ export class PageTabelle {
     }));
   });
 
-  // tableModel = computed(async () => {
-  //   const suche = this.sucheModel();
-  //   const data = await this.m_Service.getData(suche.land, suche.firma);
-  //   console.log("Tabelle aktualisiert:", data);
-  //   return data;
-  // });
-
-  //FrierenStaffel2
   constructor() {
     effect(() => {
       this.m_Service.getData(this.sucheModel().land, this.sucheModel().firma).then((data) => {
