@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent, NavItem } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ import { FooterComponent } from './layout/footer/footer.component';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('angular-co2-footprint');
+  protected readonly title = signal('Super coole Co2 App');
+  private readonly titleService: Title = inject(Title);
 
   readonly navItems: NavItem[] = [
     { label: 'Home', link: '' },
@@ -28,4 +30,9 @@ export class App {
     homeLink: '',
     logoUrl: 'logo_iu.svg',
   };
+
+  
+  constructor() {
+    this.titleService.setTitle(this.title());
+  }
 }
