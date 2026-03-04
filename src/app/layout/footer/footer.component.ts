@@ -6,7 +6,7 @@ import { DialogRectlichesTemplate } from './components/dialog-rectliches-templat
   selector: 'app-footer-component',
   imports: [],
   template: `
-    <div class="navbar bg-body-tertiary navbar-light bg-light border-top">
+    <div class="navbar bg-body-tertiary navbar-light bg-light border-top mt-auto">
       <div class="container justify-content-center mt-2">
         <div class="w-100 row">
           <div class="col-sm">
@@ -21,8 +21,8 @@ import { DialogRectlichesTemplate } from './components/dialog-rectliches-templat
             <button class="btn btn-primary w-100">Einstellungen</button>
           </div>
         </div>
-        <div class="mt-4 mb-2 row">
-          <p>&copy; 2025 IPWA01-01 - Programmierung von Webanwendungsoberflächen</p>
+        <div class="mt-3 row">
+          <p>&copy; 2026 IPWA01-01 - Programmierung von Webanwendungsoberflächen</p>
         </div>
       </div>
     </div>
