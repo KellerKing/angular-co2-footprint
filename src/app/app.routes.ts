@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PageTabelle } from './page-tabelle/page-tabelle';
+import { PageTabelle } from './page/page-tabelle/page-tabelle';
 import { PageHome } from './page/page-home/page-home';
 import { PageAbout } from './page/page-about/page-about';
 

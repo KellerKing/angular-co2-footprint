@@ -1,0 +1,9 @@
+<div class="main-container">
+  <div class="nav-container">
+    @for (item of navigationItems(); track $index) {
+      <ul>
+        <li routerLink="./" fragment="{{ item.route }}">{{ item.label }}</li>
+      </ul>
+    }
+  </div>
+</div>
