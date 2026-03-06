@@ -1,9 +1,21 @@
-<div class="main-container">
-  <div class="nav-container">
-    @for (item of navigationItems(); track $index) {
-      <ul>
-        <li routerLink="./" fragment="{{ item.route }}">{{ item.label }}</li>
-      </ul>
-    }
-  </div>
+<div class="navbar-nav">
+  @for (item of navigationItems(); track $index) {
+    <a class="nav-item nav-link" routerLink="./" fragment="{{ item.route }}">
+      {{ item.label }}
+    </a>
+  }
+</div>
+
+<div>
+  <nav style="--bs-breadcrumb-divider: ''" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      @for (item of navigationItems(); track $index) {
+        <li class="breadcrumb-item" routerLink="./" fragment="{{ item.route }}">
+          {{ item.label }}
+        </li>
+      }
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active">Library</li>
+    </ol>
+  </nav>
 </div>

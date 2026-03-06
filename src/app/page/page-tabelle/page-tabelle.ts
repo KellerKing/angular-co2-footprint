@@ -22,6 +22,15 @@ import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigati
   ],
   template: `
     <h1 class="py-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
+
+    <app-lokale-navigation
+      [navigationItems]="[
+        { label: 'Tabelle', route: 'tabelle' },
+        { label: 'B', route: 'B' },
+        { label: 'C', route: 'C' },
+      ]"
+    ></app-lokale-navigation>
+
     <mat-expansion-panel class="my-3">
       <mat-expansion-panel-header>Suchfilter</mat-expansion-panel-header>
       <form>
@@ -44,13 +53,6 @@ import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigati
     <section id="tabelle">
       <app-tabelle-component [viewModels]="tabelleViewModel()"></app-tabelle-component>
     </section>
-    <app-lokale-navigation
-      [navigationItems]="[
-        { label: 'Tabelle', route: 'tabelle' },
-        { label: 'B', route: 'B' },
-        { label: 'C', route: 'C' },
-      ]"
-    ></app-lokale-navigation>
   `,
   styles: ``,
 })
