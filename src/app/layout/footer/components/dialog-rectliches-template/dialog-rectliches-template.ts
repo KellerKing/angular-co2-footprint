@@ -27,7 +27,7 @@ import {
       Betreiber verantwortlich.
       <br />
       <br />
-      © 2025 Musterfirma GmbH. Alle Rechte vorbehalten.</mat-dialog-content
+      © 2026 Musterfirma GmbH. Alle Rechte vorbehalten.</mat-dialog-content
     >
     <mat-dialog-actions>
       <button matButton mat-dialog-close class="btn btn-primary">Okay</button>

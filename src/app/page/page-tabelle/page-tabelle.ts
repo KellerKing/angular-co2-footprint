@@ -22,37 +22,43 @@ import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigati
   ],
   template: `
     <h1 class="py-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
+    <div class="d-flex">
+      <app-lokale-navigation
+        [navigationItems]="[
+          { label: 'Tabelle', fragment: 'tabelle' },
+          { label: 'B', fragment: 'B' },
+          { label: 'C', fragment : 'C' },
+        ]"
+        ,
+        [isLeftToRight]="true"
+        ,
+      ></app-lokale-navigation>
+    </div>
 
-    <app-lokale-navigation
-      [navigationItems]="[
-        { label: 'Tabelle', route: 'tabelle' },
-        { label: 'B', route: 'B' },
-        { label: 'C', route: 'C' },
-      ]"
-    ></app-lokale-navigation>
+    <div>
+      <mat-expansion-panel class="my-3">
+        <mat-expansion-panel-header>Suchfilter</mat-expansion-panel-header>
+        <form>
+          <p>
+            Die Suche erfolgt ungenau, d.h. es werden auch Teilausdrücke gefunden. Eine Suche nach
+            "Ger" im Land findet z.B. "Germany", genauso wie die Suche nach "many" auch "Germany"
+            findet. Das ist auch für Firmennamen so und eine bewusst gewählte Funktionalität.
+          </p>
+          <div class="form-group mb-2">
+            <label for="land">Land:</label>
+            <input type="text" [field]="sucheForm.land" id="land" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="firma">Firma:</label>
+            <input type="text" [field]="sucheForm.firma" id="firma" class="form-control" />
+          </div>
+        </form>
+      </mat-expansion-panel>
 
-    <mat-expansion-panel class="my-3">
-      <mat-expansion-panel-header>Suchfilter</mat-expansion-panel-header>
-      <form>
-        <p>
-          Die Suche erfolgt ungenau, d.h. es werden auch Teilausdrücke gefunden. Eine Suche nach
-          "Ger" im Land findet z.B. "Germany", genauso wie die Suche nach "many" auch "Germany"
-          findet. Das ist auch für Firmennamen so und eine bewusst gewählte Funktionalität.
-        </p>
-        <div class="form-group mb-2">
-          <label for="land">Land:</label>
-          <input type="text" [field]="sucheForm.land" id="land" class="form-control" />
-        </div>
-        <div class="form-group">
-          <label for="firma">Firma:</label>
-          <input type="text" [field]="sucheForm.firma" id="firma" class="form-control" />
-        </div>
-      </form>
-    </mat-expansion-panel>
-
-    <section id="tabelle">
-      <app-tabelle-component [viewModels]="tabelleViewModel()"></app-tabelle-component>
-    </section>
+      <section id="tabelle">
+        <app-tabelle-component [viewModels]="tabelleViewModel()"></app-tabelle-component>
+      </section>
+    </div>
   `,
   styles: ``,
 })

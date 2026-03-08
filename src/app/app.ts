@@ -8,13 +8,13 @@ import { Title } from '@angular/platform-browser';
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, FooterComponent],
   template: `
-  <div class="d-flex flex-column min-vh-100">
-    <app-header-component [navItems]="this.navItems" [homeItem]="this.homeItem" />
-    <div id="content-bereich" class="flex-grow-1">
-      <router-outlet />
+    <div class="d-flex flex-column min-vh-100">
+      <app-header-component [navItems]="this.navItems" [homeItem]="this.homeItem" />
+      <div id="content-bereich" class="flex-grow-1">
+        <router-outlet />
+      </div>
+      <app-footer-component />
     </div>
-    <app-footer-component />
-  </div>
   `,
   styleUrl: './app.css',
 })
@@ -33,7 +33,6 @@ export class App {
     logoUrl: 'logo_iu.svg',
   };
 
-  
   constructor() {
     this.titleService.setTitle(this.title());
   }

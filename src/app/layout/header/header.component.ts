@@ -54,7 +54,6 @@ export class HeaderComponent {
   collapsableNav = viewChild.required<ElementRef>("collapse");
 
   toggleNavbar(): void {
-    console.log(this.collapsableNav());
     if (!this.collapsableNav()) return;
     this.collapsableNav().nativeElement.classList.toggle('show');
   }

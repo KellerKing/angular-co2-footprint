@@ -1,21 +1,8 @@
-<div class="navbar-nav">
+<nav class="nav flex-column position-sticky top-0" #meineNavbar id = "meineNavbar1">
   @for (item of navigationItems(); track $index) {
-    <a class="nav-item nav-link" routerLink="./" fragment="{{ item.route }}">
+    <a class="nav-link" (click)="navigereZuFragment(item.fragment)">
       {{ item.label }}
     </a>
   }
-</div>
-
-<div>
-  <nav style="--bs-breadcrumb-divider: ''" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      @for (item of navigationItems(); track $index) {
-        <li class="breadcrumb-item" routerLink="./" fragment="{{ item.route }}">
-          {{ item.label }}
-        </li>
-      }
-      <li class="breadcrumb-item"><a href="#">Home</a></li>
-      <li class="breadcrumb-item active">Library</li>
-    </ol>
-  </nav>
-</div>
+</nav>
+<!--https://getbootstrap.com/docs/5.3/components/scrollspy/ -->
