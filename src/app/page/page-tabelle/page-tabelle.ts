@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { form, Field, debounce } from '@angular/forms/signals';
 import { CO2Data, DatabaseService } from '../../service/database-service';
 import {
@@ -8,7 +8,7 @@ import {
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigation';
+import { LokaleNavigationService } from '../../layout/lokale-navigation/lokale-navigation.service';
 
 @Component({
   selector: 'app-page-tabelle',
@@ -18,23 +18,9 @@ import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigati
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
-    LokaleNavigation,
   ],
   template: `
     <h1 class="py-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
-    <div class="d-flex">
-      <app-lokale-navigation
-        [navigationItems]="[
-          { label: 'Tabelle', fragment: 'tabelle' },
-          { label: 'B', fragment: 'B' },
-          { label: 'C', fragment : 'C' },
-        ]"
-        ,
-        [isLeftToRight]="true"
-        ,
-      ></app-lokale-navigation>
-    </div>
-
     <div>
       <mat-expansion-panel class="my-3">
         <mat-expansion-panel-header>Suchfilter</mat-expansion-panel-header>
@@ -62,8 +48,9 @@ import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigati
   `,
   styles: ``,
 })
-export class PageTabelle {
-  private m_Service = inject(DatabaseService);
+export class PageTabelle implements OnInit {
+  private readonly m_Service = inject(DatabaseService);
+  private readonly m_NavigationService = inject(LokaleNavigationService);
 
   sucheModel = signal<SucheData>({
     land: '',
@@ -91,6 +78,14 @@ export class PageTabelle {
         this.tabelleDataModel.set(data);
       });
     });
+  }
+
+  ngOnInit(): void {
+    this.m_NavigationService.nutzeNavigation([
+      { label: 'Tabelle', fragment: 'tabelle' },
+      { label: 'B', fragment: 'B' },
+      { label: 'C', fragment : 'C' },
+    ]);
   }
 }
 

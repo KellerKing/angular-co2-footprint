@@ -6,16 +6,17 @@ import {
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LokaleNavigationService } from './lokale-navigation.service';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-lokale-navigation',
-  imports: [RouterModule],
+  imports: [RouterModule, MatSidenavModule],
   templateUrl: './lokale-navigation.html',
   styleUrl: './lokale-navigation.css',
 })
 export class LokaleNavigation  {
 
-  private readonly m_NavigationService = inject(LokaleNavigationService); 
+  readonly m_NavigationService = inject(LokaleNavigationService); 
 
 
   navigationItems1 = computed(() => {
@@ -24,12 +25,17 @@ export class LokaleNavigation  {
 
   //Später mit Service, damit die Navigation dynamisch ist
   isLeftToRight = input.required<boolean>();
-  navigationItems = input.required<LokaleNavigationInputItem[]>();
+  //navigationItems = input.required<LokaleNavigationInputItem[]>();
 
   /* Es ist theoretisch keine navigation mit Fragment-Id weil ich nicht über #Fragment gehe, aber so gefällt es mir besser weil einfacher und ich nicht das Problem habe, was passiert wenn ich beim 
   Fragment bin und es nochmal anklike, dann würde nix passieren auch wenn bereits weiter gescrollt. Alternativ Bootstrap Scrollspy aber da wollte klare Trennung zwischen den Komponente. */
-  navigereZuFragment(fragmentId: string) {
+  // navigereZuFragment(fragmentId: string) {
+  //   if (fragmentId) document.getElementById(fragmentId)?.scrollIntoView({ behavior: 'smooth' });
+  // }
+
+    navigereZuFragment(fragmentId: string) {
     if (fragmentId) document.getElementById(fragmentId)?.scrollIntoView({ behavior: 'smooth' });
+    this.m_NavigationService.isVisible.set(false);
   }
 }
 
@@ -58,64 +64,90 @@ interface LokaleNavigationInputItem {
 
 
 /*
-Wie erreiche ich es, dass nicht jede Seite den Sidenav anzeigen will und die Elemente per Singal übertragen werden
-Du willst also:
+Wenn ich die Sindenav haben will, dann will ich links oder rechts, je nach Schriftkultur einen Butten haben um sie darzustellen
+Alles klar – du willst also folgendes Verhalten:
 
-Nicht jede Seite soll die Sidenav anzeigen
+Wenn eine Seite die Sidenav nutzt, soll links oder rechts ein Button erscheinen,
 
-Die Elemente (Menüpunkte) sollen per Signal an die Sidenav übergeben werden
+abhängig von der Schriftkultur (LTR/RTL),
 
-Angular 21 + Standalone + Signals
+und dieser Button soll die Sidenav öffnen.
 
-Saubere, modulare Architektur
+Das lässt sich perfekt lösen, und zwar komplett signal‑basiert, ohne dass jede Seite selbst Buttons einbauen muss.
 
-Perfekt – das lässt sich richtig elegant lösen, und zwar mit einem globalen Layout + einem SidenavService mit Signals.
+Ich zeige dir die sauberste Architektur für Angular 21.
 
-Ich zeige dir die beste Architektur, die in Angular 21 idiomatisch ist.
+🌍 1) LTR/RTL automatisch erkennen
+Angular setzt dir="ltr" oder dir="rtl" automatisch, wenn du es im html-Tag angibst.
 
-🧱 Architektur, die du willst (und die in Angular 21 perfekt funktioniert)
-✔ Ein globales Layout (AppLayoutComponent)
-enthält mat-drawer-container
-
-enthält <app-sidenav>
-
-enthält <router-outlet>
-
-✔ Jede Seite entscheidet selbst:
-ob die Sidenav sichtbar ist
-
-welche Elemente angezeigt werden
-
-✔ Ein SidenavService mit Signals
-visible = signal(false)
-
-items = signal<MenuItem[]>([])
-
-Jede Seite kann beim Betreten sagen:
+Du kannst es aber auch im Code abfragen:
 
 ts
-this.sidenav.show([
-  { label: 'Übersicht', fragment: 'overview' },
-  { label: 'Details', fragment: 'details' }
-]);
-Oder:
+import { inject, Directionality } from '@angular/cdk/bidi';
+
+dir = inject(Directionality);
+Dann bekommst du:
 
 ts
-this.sidenav.hide();
-🧩 Schritt 1: SidenavService (Signals)
-ts
-import { Injectable, signal } from '@angular/core';
+dir.value === 'ltr' // links
+dir.value === 'rtl' // rechts
+🧱 2) Layout-Komponente: Button abhängig von LTR/RTL anzeigen
+Dein globales Layout enthält:
 
-export interface MenuItem {
-  label: string;
-  fragment?: string;
-  route?: string;
+den Button (links oder rechts)
+
+die Sidenav-Komponente
+
+den Main Content
+
+Template
+html
+<div class="layout">
+
+  <!-- Button links oder rechts -->
+  <button
+    class="toggle-btn"
+    [class.left]="dir.value === 'ltr'"
+    [class.right]="dir.value === 'rtl'"
+    *ngIf="sidenav.visible()"
+    (click)="sidenav.open()"
+  >
+    ☰
+  </button>
+
+  <mat-drawer-container>
+    <app-sidenav />
+
+    <div class="content">
+      <router-outlet />
+    </div>
+  </mat-drawer-container>
+
+</div>
+CSS (Tailwind oder klassisch)
+css
+.toggle-btn {
+  position: fixed;
+  top: 1rem;
+  z-index: 1000;
 }
 
+.toggle-btn.left {
+  left: 1rem;
+}
+
+.toggle-btn.right {
+  right: 1rem;
+}
+🧩 3) SidenavService steuert Sichtbarkeit + Items
+Du hast das schon fast fertig, hier die vollständige Version:
+
+ts
 @Injectable({ providedIn: 'root' })
 export class SidenavService {
   visible = signal(false);
   items = signal<MenuItem[]>([]);
+  opened = signal(false);
 
   show(items: MenuItem[]) {
     this.items.set(items);
@@ -125,9 +157,18 @@ export class SidenavService {
   hide() {
     this.visible.set(false);
     this.items.set([]);
+    this.opened.set(false);
+  }
+
+  open() {
+    this.opened.set(true);
+  }
+
+  close() {
+    this.opened.set(false);
   }
 }
-🧩 Schritt 2: Sidenav-Komponente (Child)
+🧩 4) Sidenav-Komponente (Child)
 ts
 @Component({
   selector: 'app-sidenav',
@@ -136,8 +177,8 @@ ts
   template: `
     <mat-drawer
       mode="over"
-      [opened]="service.visible()"
-      (closedStart)="service.visible.set(false)"
+      [opened]="service.opened()"
+      (closedStart)="service.close()"
     >
       <button
         *ngFor="let item of service.items()"
@@ -154,46 +195,21 @@ export class SidenavComponent {
   navigate(item: MenuItem) {
     if (item.route) this.router.navigate([item.route]);
     if (item.fragment) this.router.navigate([], { fragment: item.fragment });
-    this.service.visible.set(false);
+    this.service.close();
   }
 }
-🧩 Schritt 3: Layout-Komponente (Parent)
-html
-<mat-drawer-container class="layout">
-  <app-sidenav />
-
-  <div class="content">
-    <router-outlet />
-  </div>
-</mat-drawer-container>
-🧩 Schritt 4: Jede Seite entscheidet selbst
-Beispiel: Seite A will eine Navigation
+🧩 5) Jede Seite entscheidet selbst
+Seite mit Sidenav
 ts
-@Component({
-  standalone: true,
-  template: `...`
-})
-export class PageAComponent {
-  constructor(private sidenav: SidenavService) {}
-
-  ngOnInit() {
-    this.sidenav.show([
-      { label: 'Intro', fragment: 'intro' },
-      { label: 'Kapitel 1', fragment: 'chapter1' }
-    ]);
-  }
+ngOnInit() {
+  this.sidenav.show([
+    { label: 'Intro', fragment: 'intro' },
+    { label: 'Kapitel 1', fragment: 'chapter1' }
+  ]);
 }
-Beispiel: Seite B will keine Sidenav
+Seite ohne Sidenav
 ts
-@Component({
-  standalone: true,
-  template: `...`
-})
-export class PageBComponent {
-  constructor(private sidenav: SidenavService) {}
-
-  ngOnInit() {
-    this.sidenav.hide();
-  }
+ngOnInit() {
+  this.sidenav.hide();
 }
 */

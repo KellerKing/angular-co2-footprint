@@ -1,8 +1,19 @@
-<nav class="nav flex-column position-sticky top-0" #meineNavbar id = "meineNavbar1">
+<!-- <nav class="nav flex-column position-sticky top-0" #meineNavbar id = "meineNavbar1">
   @for (item of navigationItems(); track $index) {
     <a class="nav-link" (click)="navigereZuFragment(item.fragment)">
       {{ item.label }}
     </a>
   }
-</nav>
-<!--https://getbootstrap.com/docs/5.3/components/scrollspy/ -->
+</nav> -->
+
+<mat-drawer 
+  mode="over" 
+  [opened]="this.m_NavigationService.isVisible()"
+  (closedStart)="this.m_NavigationService.isVisible.set(false)">
+
+  @for (item of navigationItems1(); track $index) {
+    <a class="nav-link" (click)="navigereZuFragment(item.fragment)">
+      {{ item.label }}
+    </a>
+  }
+</mat-drawer>
