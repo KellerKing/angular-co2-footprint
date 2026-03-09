@@ -1,18 +1,35 @@
-import { Injectable, signal } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
+import { NavigationStart, Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
 export class LokaleNavigationService {
     isVisible = signal(false);
+    isOpen = signal(false);
     darstellbareElemente = signal<LokaleNavigationServiceInputItem[]>([]);
 
-    nutzeNavigation(items: LokaleNavigationServiceInputItem[]) {
+    private readonly m_Router = inject(Router);
+
+    constructor() {
+        this.m_Router.events.subscribe((event) => {  
+            if (event instanceof NavigationStart == false) return;
+            this.hide();
+            this.darstellbareElemente.set([]);
+        });
+    }
+
+    nutzeNavigation(items: LokaleNavigationServiceInputItem[]) : void {
         this.darstellbareElemente.set(items);
         this.isVisible.set(true);
     }
 
-    hide() {        
+    hide() : void {        
         this.isVisible.set(false);
+        this.isOpen.set(false);
         this.darstellbareElemente.set([]);
+    }
+
+    toggleOpenClose() : void {
+        this.isOpen.set(!this.isOpen());
     }
 }
 

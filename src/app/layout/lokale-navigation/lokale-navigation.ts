@@ -35,7 +35,7 @@ export class LokaleNavigation  {
 
     navigereZuFragment(fragmentId: string) {
     if (fragmentId) document.getElementById(fragmentId)?.scrollIntoView({ behavior: 'smooth' });
-    this.m_NavigationService.isVisible.set(false);
+    this.m_NavigationService.isOpen.set(false);
   }
 }
 
