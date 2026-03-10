@@ -6,23 +6,16 @@
   }
 </nav> -->
 
-@if(this.m_NavigationService.isVisible()) {
-<button
-  mat-icon-button
-  (click)="this.m_NavigationService.toggleOpenClose()">
-  ☰
-</button>
-}
 
-
-<mat-drawer 
-  mode="over" 
-  [opened]="this.m_NavigationService.isOpen()"
-  (closedStart)="this.m_NavigationService.isOpen.set(false)">
-
-  @for (item of navigationItems1(); track $index) {
-    <a class="nav-link" (click)="navigereZuFragment(item.fragment)">
-      {{ item.label }}
-    </a>
-  }
-</mat-drawer>
+  <mat-drawer
+    mode="over"
+    #drawer
+    [opened]="this.m_NavigationService.isOpen()"
+    (closedStart)="this.m_NavigationService.isOpen.set(false)"
+  >
+    @for (item of navigationItems1(); track $index) {
+      <a class="nav-link" (click)="navigereZuFragment(item.fragment)">
+        {{ item.label }}
+      </a>
+    }
+  </mat-drawer>

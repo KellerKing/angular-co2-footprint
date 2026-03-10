@@ -11,9 +11,8 @@ export class LokaleNavigationService {
 
     constructor() {
         this.m_Router.events.subscribe((event) => {  
-            if (event instanceof NavigationStart == false) return;
-            this.hide();
-            this.darstellbareElemente.set([]);
+            if (event instanceof NavigationStart) 
+                this.deaktivereNavigation();
         });
     }
 
@@ -22,7 +21,7 @@ export class LokaleNavigationService {
         this.isVisible.set(true);
     }
 
-    hide() : void {        
+    deaktivereNavigation() : void {        
         this.isVisible.set(false);
         this.isOpen.set(false);
         this.darstellbareElemente.set([]);
