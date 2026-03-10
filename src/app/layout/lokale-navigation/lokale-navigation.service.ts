@@ -28,7 +28,10 @@ export class LokaleNavigationService {
     }
 
     toggleOpenClose() : void {
+        console.log("Bevor Toggle: " + this.isOpen())
         this.isOpen.set(!this.isOpen());
+
+        console.log("Nach Toggle: " + this.isOpen())
     }
 }
 

@@ -4,7 +4,7 @@ import { HeaderComponent, NavItem } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { Title } from '@angular/platform-browser';
 import { LokaleNavigation } from './layout/lokale-navigation/lokale-navigation';
-import { MatDrawerContainer, MatDrawerContent } from '@angular/material/sidenav';
+import { MatDrawerContent, MatDrawerContainer } from '@angular/material/sidenav';
 import { LokaleNavigationService } from './layout/lokale-navigation/lokale-navigation.service';
 
 @Component({
@@ -14,9 +14,9 @@ import { LokaleNavigationService } from './layout/lokale-navigation/lokale-navig
     HeaderComponent,
     FooterComponent,
     LokaleNavigation,
-    MatDrawerContainer,
     MatDrawerContent,
-  ],
+    MatDrawerContainer
+],
   template: `
     <div class="d-flex flex-column min-vh-100">
       <app-header-component [navItems]="this.navItems" [homeItem]="this.homeItem" />
@@ -24,17 +24,24 @@ import { LokaleNavigationService } from './layout/lokale-navigation/lokale-navig
       <div class="flex-grow-1">
         <mat-drawer-container hasBackdrop="true">
           <app-lokale-navigation [isLeftToRight]="true" />
+
           <mat-drawer-content>
             @if (this.m_NavigationService.isVisible()) {
-              <button mat-icon-button="elevated" (click)="this.m_NavigationService.toggleOpenClose()">☰</button>
+              <button
+                mat-icon-button="elevated"
+                (click)="this.m_NavigationService.toggleOpenClose()"
+              >
+                ☰
+              </button>
             }
             <router-outlet id="content-bereich" />
           </mat-drawer-content>
+        
         </mat-drawer-container>
       </div>
 
       <app-footer-component />
-    </div> 
+    </div>
   `,
   styleUrl: './app.css',
 })
@@ -42,7 +49,7 @@ export class App {
   protected readonly title = signal('Super coole Co2 App');
   private readonly titleService: Title = inject(Title);
   readonly m_NavigationService = inject(LokaleNavigationService);
- //https://material.angular.dev/components/sidenav/examples
+  //https://material.angular.dev/components/sidenav/examples
   readonly navItems: NavItem[] = [
     { label: 'Home', link: '' },
     { label: 'Tabelle', link: 'tabelle' },
