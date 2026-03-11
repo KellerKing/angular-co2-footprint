@@ -15,29 +15,15 @@ import { LokaleNavigationService } from './layout/lokale-navigation/lokale-navig
     FooterComponent,
     LokaleNavigation,
     MatDrawerContent,
-    MatDrawerContainer
-],
+    MatDrawerContainer,
+  ],
   template: `
     <div class="d-flex flex-column min-vh-100">
       <app-header-component [navItems]="this.navItems" [homeItem]="this.homeItem" />
 
       <div class="flex-grow-1">
-        <mat-drawer-container hasBackdrop="true">
-          <app-lokale-navigation [isLeftToRight]="true" />
-
-          <mat-drawer-content>
-            @if (this.m_NavigationService.isVisible()) {
-              <button
-                mat-icon-button="elevated"
-                (click)="this.m_NavigationService.toggleOpenClose()"
-              >
-                ☰
-              </button>
-            }
-            <router-outlet id="content-bereich" />
-          </mat-drawer-content>
-        
-        </mat-drawer-container>
+        <app-lokale-navigation [isLeftToRight]="true" />
+        <router-outlet id="content-bereich" />
       </div>
 
       <app-footer-component />

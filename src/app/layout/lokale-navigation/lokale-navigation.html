@@ -14,7 +14,11 @@
   </div>
 
   <div class="offcanvas-body">
-    <ng-content></ng-content>
+     @for (item of navigationItems1(); track $index) {
+      <a class="nav-link" (click)="navigereZuFragment(item.fragment)">
+        {{ item.label }}
+      </a>
+    }
   </div>
 </div>
 

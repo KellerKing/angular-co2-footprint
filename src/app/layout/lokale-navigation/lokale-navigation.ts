@@ -1,29 +1,31 @@
 import {
+  AfterViewInit,
   Component,
   computed,
   effect,
+  ElementRef,
   inject,
   input,
   viewChild,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LokaleNavigationService } from './lokale-navigation.service';
-import { MatDrawer } from '@angular/material/sidenav';
+import { Offcanvas } from 'bootstrap';
 
 @Component({
   selector: 'app-lokale-navigation',
-  imports: [RouterModule, MatDrawer],
+  imports: [RouterModule],
   templateUrl: './lokale-navigation.html',
   styleUrl: './lokale-navigation.css',
 })
-export class LokaleNavigation  {
-
-  readonly m_NavigationService = inject(LokaleNavigationService); 
-  readonly sidenav = viewChild<MatDrawer>('drawer');
-
+export class LokaleNavigation {
+  readonly m_NavigationService = inject(LokaleNavigationService);
+  private readonly m_Offcanvas = viewChild<ElementRef<Offcanvas>>('offcanvas');
 
   navigationItems1 = computed(() => {
-    return this.m_NavigationService.darstellbareElemente().map(item => ({ label: item.label, fragment: item.fragment }));
+    return this.m_NavigationService
+      .darstellbareElemente()
+      .map((item) => ({ label: item.label, fragment: item.fragment }));
   });
 
   //Später mit Service, damit die Navigation dynamisch ist
@@ -36,14 +38,26 @@ export class LokaleNavigation  {
   //   if (fragmentId) document.getElementById(fragmentId)?.scrollIntoView({ behavior: 'smooth' });
   // }
 
-  constructor() {
-    effect(() => {
-      console.log("Toggle")
-      this.sidenav()?.toggle(this.m_NavigationService.isOpen())
-    });
+  // constructor() {
+  //   // effect(() => {
+  //   //   console.log("Toggle")
+  //   //   this.sidenav()?.toggle(this.m_NavigationService.isOpen())
+  //   // });
+  // }
+
+  open() {
+    this.m_Offcanvas()?.nativeElement.show();
   }
 
-    navigereZuFragment(fragmentId: string) {
+  close() {
+    this.m_Offcanvas()?.nativeElement.hide();
+  }
+
+  toggle() {
+    this.m_Offcanvas()?.nativeElement.toggle();
+  }
+
+  navigereZuFragment(fragmentId: string) {
     if (fragmentId) document.getElementById(fragmentId)?.scrollIntoView({ behavior: 'smooth' });
     this.m_NavigationService.isOpen.set(false);
   }
@@ -71,12 +85,7 @@ interface LokaleNavigationInputItem {
   fragment: string;
 }
 
-
-
 /*
-🎯 Wie du Bootstrap Offcanvas sauber in Angular nutzt
-Hier ist die minimalistische, saubere Variante, die perfekt zu deinem modularen Stil passt:
-
 1. Offcanvas-Komponente
 html
 <!-- offcanvas.component.html -->
@@ -144,4 +153,77 @@ ist visuell stabiler als Material Drawer
 ist einfacher zu stylen (Tailwind, Custom CSS, alles geht)
 
 Und du bekommst genau das Verhalten, das du willst – ohne Kompromisse.
+
+Wenn du willst, baue ich dir:
+
+eine RTL/LTR-automatische Version
+
+eine responsive Variante (Desktop = Sidenav, Mobile = Offcanvas)
+
+oder eine komplett modulare Navigation, die du überall einstecken kannst
+
+Sag einfach Bescheid, wohin du das entwickeln willst.
+
+Der Close Buttin hat keinen Text
+Ah, alles klar — das ist ein klassischer Bootstrap‑Offcanvas‑Stolperstein.
+Der Close‑Button hat absichtlich keinen Text, weil Bootstrap ihn als rein ikonischen Button designed hat. Der sichtbare „Text“ ist das SVG‑Icon, das über CSS eingeblendet wird.
+
+Wenn du also gar nichts siehst, liegt es fast immer an einem dieser drei Punkte:
+
+🎯 1. Bootstrap Icons fehlen
+Bootstrap Offcanvas nutzt kein eigenes Icon, sondern erwartet entweder:
+
+Bootstrap Icons (separat zu installieren)
+oder
+
+dass du das Icon selbst ersetzt
+
+Wenn du Bootstrap Icons nicht eingebunden hast, ist der Button leer.
+
+Lösung
+Entweder Bootstrap Icons installieren:
+
+bash
+npm install bootstrap-icons
+und in styles.css:
+
+css
+@import "bootstrap-icons/font/bootstrap-icons.css";
+Dann ersetzt du den Close‑Button durch:
+
+html
+<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+Bootstrap zeigt dann das Icon korrekt an.
+
+🎯 2. Du nutzt Tailwind → Bootstrap Close‑Icon wird überschrieben
+Tailwind setzt background-image: none auf Buttons.
+Damit verschwindet das eingebaute SVG‑Icon.
+
+Lösung
+Füge das wieder hinzu:
+
+css
+.btn-close {
+  background-image: var(--bs-btn-close-bg);
+}
+Oder minimal:
+
+css
+.btn-close {
+  background-image: url("data:image/svg+xml,...");
+}
+🎯 3. Du willst lieber einen sichtbaren Text
+Dann kannst du den Button einfach selbst definieren:
+
+html
+<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">
+  Schließen
+</button>
+Oder mit Icon + Text:
+
+html
+<button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2" data-bs-dismiss="offcanvas">
+  <i class="bi bi-x-lg"></i>
+  Schließen
+</button>
 */
