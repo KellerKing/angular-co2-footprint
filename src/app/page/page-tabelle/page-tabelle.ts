@@ -9,6 +9,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LokaleNavigationService } from '../../layout/lokale-navigation/lokale-navigation.service';
+import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigation';
 
 @Component({
   selector: 'app-page-tabelle',
@@ -18,9 +19,11 @@ import { LokaleNavigationService } from '../../layout/lokale-navigation/lokale-n
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
+    LokaleNavigation,
   ],
   template: `
     <h1 class="py-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
+    <app-lokale-navigation [isLeftToRight]="true" [navigationItems]="navigationItems" #menue />
     <div>
       <mat-expansion-panel class="my-3">
         <mat-expansion-panel-header>Suchfilter</mat-expansion-panel-header>
@@ -48,7 +51,7 @@ import { LokaleNavigationService } from '../../layout/lokale-navigation/lokale-n
   `,
   styles: ``,
 })
-export class PageTabelle implements OnInit {
+export class PageTabelle {
   private readonly m_Service = inject(DatabaseService);
   private readonly m_NavigationService = inject(LokaleNavigationService);
 
@@ -72,20 +75,18 @@ export class PageTabelle implements OnInit {
     }));
   });
 
+  navigationItems = [
+    { label: 'Tabelle', fragment: 'tabelle' },
+    { label: 'B', fragment: 'B' },
+    { label: 'C', fragment: 'C' },
+  ];
+
   constructor() {
     effect(() => {
       this.m_Service.getData(this.sucheModel().land, this.sucheModel().firma).then((data) => {
         this.tabelleDataModel.set(data);
       });
     });
-  }
-
-  ngOnInit(): void {
-    this.m_NavigationService.nutzeNavigation([
-      { label: 'Tabelle', fragment: 'tabelle' },
-      { label: 'B', fragment: 'B' },
-      { label: 'C', fragment : 'C' },
-    ]);
   }
 }
 
