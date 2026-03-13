@@ -9,7 +9,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { LokaleNavigationService } from './lokale-navigation.service';
+import { LokaleNavigationService } from '../../service/lokale-navigation.service';
 import { Offcanvas } from 'bootstrap';
 
 @Component({
@@ -19,13 +19,12 @@ import { Offcanvas } from 'bootstrap';
   styleUrl: './lokale-navigation.css',
 })
 export class LokaleNavigation implements AfterViewInit {
-  //readonly m_NavigationService = inject(LokaleNavigationService);
+
+  readonly m_NavigationService = inject(LokaleNavigationService);
   private readonly m_OffCanvasElement = viewChild<ElementRef>('offcanvas');
   private m_OffCanvasIstance! : Offcanvas
-  //private readonly m_Offcanvas = viewChild<ElementRef<Offcanvas>>('offcanvas');
 
-
-  readonly navigationItems = input.required<LokaleNavigationInputItem[]>();
+  readonly navigationItems = computed<LokaleNavigationInputItem[]>(() => this.m_NavigationService.darstellbareElemente().map((item) => ({ label: item.label, fragment: item.fragment })));
 
   //Später mit Service, damit die Navigation dynamisch ist
   isLeftToRight = input.required<boolean>();
@@ -34,14 +33,20 @@ export class LokaleNavigation implements AfterViewInit {
     this.m_OffCanvasIstance = new Offcanvas(this.m_OffCanvasElement()?.nativeElement);
   }
 
+  constructor() {
+    effect(() => {
+      if (!this.m_NavigationService.isVisible()) this.close();
+    });
+  }
+
   close(): void {
     console.log('close');
-    this.m_OffCanvasIstance.hide();
+    this.m_OffCanvasIstance?.hide();
   }
 
   toggle(): void {
     console.log('toggle');
-    this.m_OffCanvasIstance.toggle();
+    this.m_OffCanvasIstance?.toggle();
   }
 
   onFragmentClicked(fragmentId: string) : void {
@@ -52,7 +57,6 @@ export class LokaleNavigation implements AfterViewInit {
 /* Es ist theoretisch keine navigation mit Fragment-Id weil ich nicht über #Fragment gehe, aber so gefällt es mir besser weil einfacher und ich nicht das Problem habe, was passiert wenn ich beim  */
   navigereZuFragment(fragmentId: string) : void {
     if (fragmentId) document.getElementById(fragmentId)?.scrollIntoView({ behavior: 'smooth' });
-    //this.m_NavigationService.isOpen.set(false);
   }
 }
 

@@ -1,17 +1,21 @@
-<div>
-  <button class="btn btn-primary sticky-top custom-sticky rounded" aria-label="Menü öffnen" (click)="toggle()">
-   <i class="bi bi-list "></i>
+@if (this.m_NavigationService.isVisible()) {
+  <button
+    class="btn btn-primary rounded m-2 position-fixed bottom-0 start-0 m-4"
+    aria-label="Menü öffnen"
+    (click)="toggle()"
+  >
+    <i class="bi bi-list"></i>
   </button>
-</div>
+}
 
 <div class="offcanvas offcanvas-start" tabindex="-1" #offcanvas>
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title">Menü1</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas">.</button>
+    <h5 class="offcanvas-title">Lokale Navigation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
   <div class="offcanvas-body">
-     @for (item of navigationItems(); track $index) {
+    @for (item of navigationItems(); track $index) {
       <a class="nav-link" (click)="onFragmentClicked(item.fragment)">
         {{ item.label }}
       </a>

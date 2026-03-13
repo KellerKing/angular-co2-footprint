@@ -4,7 +4,6 @@ import { NavigationStart, Router } from "@angular/router";
 @Injectable({ providedIn: 'root' })
 export class LokaleNavigationService {
     isVisible = signal(false);
-    isOpen = signal(false);
     darstellbareElemente = signal<LokaleNavigationServiceInputItem[]>([]);
 
     private readonly m_Router = inject(Router);
@@ -23,15 +22,7 @@ export class LokaleNavigationService {
 
     deaktivereNavigation() : void {        
         this.isVisible.set(false);
-        this.isOpen.set(false);
         this.darstellbareElemente.set([]);
-    }
-
-    toggleOpenClose() : void {
-        console.log("Bevor Toggle: " + this.isOpen())
-        this.isOpen.set(!this.isOpen());
-
-        console.log("Nach Toggle: " + this.isOpen())
     }
 }
 

@@ -4,8 +4,7 @@ import { HeaderComponent, NavItem } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { Title } from '@angular/platform-browser';
 import { LokaleNavigation } from './layout/lokale-navigation/lokale-navigation';
-import { MatDrawerContent, MatDrawerContainer } from '@angular/material/sidenav';
-import { LokaleNavigationService } from './layout/lokale-navigation/lokale-navigation.service';
+import { LokaleNavigationService } from './service/lokale-navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -14,14 +13,13 @@ import { LokaleNavigationService } from './layout/lokale-navigation/lokale-navig
     HeaderComponent,
     FooterComponent,
     LokaleNavigation,
-    MatDrawerContent,
-    MatDrawerContainer,
   ],
   template: `
     <div class="d-flex flex-column min-vh-100">
       <app-header-component [navItems]="this.navItems" [homeItem]="this.homeItem" />
-
+       
       <div class="flex-grow-1">
+        <app-lokale-navigation [isLeftToRight]="true" />
         <router-outlet id="content-bereich" />
       </div>
 
@@ -34,7 +32,7 @@ export class App {
   protected readonly title = signal('Super coole Co2 App');
   private readonly titleService: Title = inject(Title);
   readonly m_NavigationService = inject(LokaleNavigationService);
-  //https://material.angular.dev/components/sidenav/examples
+
   readonly navItems: NavItem[] = [
     { label: 'Home', link: '' },
     { label: 'Tabelle', link: 'tabelle' },

@@ -8,8 +8,7 @@ import {
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { LokaleNavigationService } from '../../layout/lokale-navigation/lokale-navigation.service';
-import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigation';
+import { LokaleNavigationService } from '../../service/lokale-navigation.service';
 
 @Component({
   selector: 'app-page-tabelle',
@@ -19,11 +18,10 @@ import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigati
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
-    LokaleNavigation,
   ],
   template: `
-    <h1 class="py-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
-    <app-lokale-navigation [isLeftToRight]="true" [navigationItems]="navigationItems" #menue />
+    <h1 class="p-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
+    
     <div>
       <mat-expansion-panel class="my-3">
         <mat-expansion-panel-header>Suchfilter</mat-expansion-panel-header>
@@ -51,7 +49,7 @@ import { LokaleNavigation } from '../../layout/lokale-navigation/lokale-navigati
   `,
   styles: ``,
 })
-export class PageTabelle {
+export class PageTabelle implements OnInit {
   private readonly m_Service = inject(DatabaseService);
   private readonly m_NavigationService = inject(LokaleNavigationService);
 
@@ -87,6 +85,10 @@ export class PageTabelle {
         this.tabelleDataModel.set(data);
       });
     });
+  }
+
+  ngOnInit(): void {
+    this.m_NavigationService.nutzeNavigation(this.navigationItems);
   }
 }
 
