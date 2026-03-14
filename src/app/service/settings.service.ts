@@ -6,9 +6,6 @@ type Einstellungen = {
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
-  private readonly ltr = 'ltr';
-  private readonly rtl = 'rtl';
-
   private readonly currentEinstellungen = signal<Einstellungen>({
     isRlt: this.isRichtungRtlBeiErstenStart(),
   });
