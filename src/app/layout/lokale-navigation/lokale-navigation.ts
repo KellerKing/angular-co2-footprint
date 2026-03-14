@@ -5,12 +5,12 @@ import {
   effect,
   ElementRef,
   inject,
-  input,
   viewChild,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LokaleNavigationService } from '../../service/lokale-navigation.service';
 import { Offcanvas } from 'bootstrap';
+import { SettingsService } from '../../service/settings.service';
 
 @Component({
   selector: 'app-lokale-navigation',
@@ -19,15 +19,16 @@ import { Offcanvas } from 'bootstrap';
   styleUrl: './lokale-navigation.css',
 })
 export class LokaleNavigation implements AfterViewInit {
-
   readonly m_NavigationService = inject(LokaleNavigationService);
   private readonly m_OffCanvasElement = viewChild<ElementRef>('offcanvas');
-  private m_OffCanvasIstance! : Offcanvas
+  readonly settingsService = inject(SettingsService);
+  private m_OffCanvasIstance!: Offcanvas;
 
-  readonly navigationItems = computed<LokaleNavigationInputItem[]>(() => this.m_NavigationService.darstellbareElemente().map((item) => ({ label: item.label, fragment: item.fragment })));
-
-  //Später mit Service, damit die Navigation dynamisch ist
-  isLeftToRight = input.required<boolean>();
+  readonly navigationItems = computed<LokaleNavigationInputItem[]>(() =>
+    this.m_NavigationService
+      .darstellbareElemente()
+      .map((item) => ({ label: item.label, fragment: item.fragment })),
+  );
 
   ngAfterViewInit(): void {
     this.m_OffCanvasIstance = new Offcanvas(this.m_OffCanvasElement()?.nativeElement);
@@ -37,29 +38,45 @@ export class LokaleNavigation implements AfterViewInit {
     effect(() => {
       if (!this.m_NavigationService.isVisible()) this.close();
     });
+
+
+    //TODO: Brauche ich das wirklich? 
+    // Es könnte sein, dass die Offcanvas-Instanz die Änderung der Richtung nicht mitbekommt, 
+    // weil sie ja nur einmalig in ngAfterViewInit erstellt wird. 
+    // Das müsste ich testen. Wenn das so ist, dann könnte ich entweder die Offcanvas-Instanz neu erstellen oder veruschen
+    // die Richtung der Offcanvas-Instanz zu ändern.
+    effect(() => {
+      this.settingsService.isRtl();
+      this.reInitOffcanvas();
+    });
   }
 
+  private reInitOffcanvas(): void {
+    const nativeElement = this.m_OffCanvasElement()?.nativeElement;
+    if (!nativeElement) return;
+    this.m_OffCanvasIstance?.dispose();
+    this.m_OffCanvasIstance = new Offcanvas(nativeElement);
+  }
+
+
   close(): void {
-    console.log('close');
     this.m_OffCanvasIstance?.hide();
   }
 
   toggle(): void {
-    console.log('toggle');
     this.m_OffCanvasIstance?.toggle();
   }
 
-  onFragmentClicked(fragmentId: string) : void {
+  onFragmentClicked(fragmentId: string): void {
     this.navigereZuFragment(fragmentId);
     this.close();
   }
 
-/* Es ist theoretisch keine navigation mit Fragment-Id weil ich nicht über #Fragment gehe, aber so gefällt es mir besser weil einfacher und ich nicht das Problem habe, was passiert wenn ich beim  */
-  navigereZuFragment(fragmentId: string) : void {
+  /* Es ist theoretisch keine navigation mit Fragment-Id weil ich nicht über #Fragment gehe, aber so gefällt es mir besser weil einfacher und ich nicht das Problem habe, was passiert wenn ich beim  */
+  navigereZuFragment(fragmentId: string): void {
     if (fragmentId) document.getElementById(fragmentId)?.scrollIntoView({ behavior: 'smooth' });
   }
 }
-
 
 interface LokaleNavigationInputItem {
   label: string;

@@ -2,16 +2,24 @@
   <button
     class="btn btn-primary rounded m-2 position-fixed bottom-0 start-0 m-4"
     aria-label="Menü öffnen"
+    [class.start-0]="!settingsService.isRtl()"
+    [class.end-0]="settingsService.isRtl()"
     (click)="toggle()"
   >
     <i class="bi bi-list"></i>
   </button>
 }
 
-<div class="offcanvas offcanvas-start" tabindex="-1" #offcanvas>
+<div
+  class="offcanvas offcanvas-start"
+  [class.offcanvas-start]="!settingsService.isRtl()"
+  [class.offcanvas-end]="settingsService.isRtl()"
+  tabindex="-1"
+  #offcanvas
+>
   <div class="offcanvas-header">
     <h5 class="offcanvas-title">Lokale Navigation</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
   </div>
 
   <div class="offcanvas-body">

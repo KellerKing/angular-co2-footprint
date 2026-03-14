@@ -19,7 +19,7 @@ import { LokaleNavigationService } from './service/lokale-navigation.service';
       <app-header-component [navItems]="this.navItems" [homeItem]="this.homeItem" />
        
       <div class="flex-grow-1">
-        <app-lokale-navigation [isLeftToRight]="true" />
+        <app-lokale-navigation/>
         <router-outlet id="content-bereich" />
       </div>
 
