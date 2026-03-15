@@ -2,13 +2,18 @@
 <mat-dialog-content>
   <div class="form-check form-switch mt-2">
     <form>
-      <div class="form-group mb-2">
-        <label for="land">Land:</label>
-        <input type="checkbox" [checked]="einstellungenForm.isRtl" id="land" class="form-control" />
+      <div class="form-check form-switch mt-2">
+        <input
+          class="form-check-input"
+          type="radio"
+          id="ltrCheckbox"
+          [formField]="!einstellungenForm.isRtl"
+        />
+        <label class="form-check-label" for="ltrCheckbox"> Left To Right Ausrichtung </label>
       </div>
     </form>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button matButton mat-dialog-close class="btn btn-primary">Okay</button>
+  <button matButton mat-dialog-close class="btn btn-primary">Schließen</button>
 </mat-dialog-actions>
