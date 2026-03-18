@@ -5,7 +5,7 @@ import {
   MatDialogTitle,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { SettingsService } from '../../../service/settings.service';
+import { SettingsService } from '../../../../service/settings.service';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 

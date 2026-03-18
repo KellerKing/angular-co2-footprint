@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogRectlichesTemplate } from './components/dialog-rectliches-template/dialog-rectliches-template';
-import { DialogEinstellungen } from './dialog-einstellungen/dialog-einstellungen';
+import { DialogEinstellungen } from './components/dialog-einstellungen/dialog-einstellungen';
 
 @Component({
   selector: 'app-footer-component',

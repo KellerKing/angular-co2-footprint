@@ -1,3 +1,25 @@
 .custom-sticky {
   inset-inline-end: 0;
 }
+
+
+.offcanvas-body .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px; 
+  margin-bottom: 5px;
+  border-radius: 5px;
+  color: #000; 
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.offcanvas-body .nav-link:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.offcanvas-body .nav-link i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
