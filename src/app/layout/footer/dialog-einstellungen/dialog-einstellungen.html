@@ -1,19 +1,32 @@
 <h1 matDialogTitle>Einstellungen</h1>
 <mat-dialog-content>
-  <div class="form-check form-switch mt-2">
+  <div class="">
     <form>
-      <div class="form-check form-switch mt-2">
-        <input
-          class="form-check-input"
-          type="radio"
-          id="ltrCheckbox"
-          [formField]="!einstellungenForm.isRtl"
-        />
-        <label class="form-check-label" for="ltrCheckbox"> Left To Right Ausrichtung </label>
+      <div class="">
+        <mat-form-field>
+          <mat-label>Ausrichtung</mat-label>
+          <mat-select [(value)]="selectedAusrichtung">
+            @for (model of this.m_AusrichtungenViewModel; track $index) {
+              <mat-option [value]="model">
+                {{ model.displayText }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <div class="mb-3 mt-2 px-0">
+          <label class="form-label">Ausrichtung</label>
+          <select class="form-select" title="Ausrichtung">
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
       </div>
     </form>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button matButton mat-dialog-close class="btn btn-primary">Schließen</button>
+<mat-dialog-actions class="d-flex justify-content-between">
+  <button class="btn btn-danger" (click)="onAbbrechen()">Abbrechen</button>
+  <button (click)="onEinstellungenUebernehmen()" class="btn btn-primary">Übernehmen</button>
 </mat-dialog-actions>

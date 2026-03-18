@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
-import { form, Field, debounce } from '@angular/forms/signals';
+import { form, debounce, FormField } from '@angular/forms/signals';
 import { CO2Data, DatabaseService } from '../../service/database-service';
 import {
   TabelleComponent,
@@ -13,12 +13,13 @@ import { LokaleNavigationService } from '../../service/lokale-navigation.service
 @Component({
   selector: 'app-page-tabelle',
   imports: [
-    Field,
+    FormField,
     TabelleComponent,
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
-  ],
+    FormField
+],
   template: `
     <h1 class="p-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
     
@@ -33,11 +34,11 @@ import { LokaleNavigationService } from '../../service/lokale-navigation.service
           </p>
           <div class="form-group mb-2">
             <label for="land">Land:</label>
-            <input type="text" [field]="sucheForm.land" id="land" class="form-control" />
+            <input type="text" [formField]="sucheForm.land" id="land" class="form-control" />
           </div>
           <div class="form-group">
             <label for="firma">Firma:</label>
-            <input type="text" [field]="sucheForm.firma" id="firma" class="form-control" />
+            <input type="text" [formField]="sucheForm.firma" id="firma" class="form-control" />
           </div>
         </form>
       </mat-expansion-panel>
