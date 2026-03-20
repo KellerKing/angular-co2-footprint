@@ -1,7 +1,7 @@
-.custom-sticky {
-  inset-inline-end: 0;
+.offcanvas-header .local-nav-close {
+  margin: 0;
+  margin-inline-start: auto;
 }
-
 
 .offcanvas-body .nav-link {
   display: flex;

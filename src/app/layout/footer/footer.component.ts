@@ -7,7 +7,7 @@ import { DialogEinstellungen } from './components/dialog-einstellungen/dialog-ei
   selector: 'app-footer-component',
   imports: [],
   template: `
-    <div class="navbar bg-body-tertiary navbar-light bg-light border-top mt-auto">
+    <div class="navbar navbar-light bg-light border-top mt-auto">
       <div class="container justify-content-center mt-2">
         <div class="w-100 row">
           <div class="col-sm">
@@ -19,7 +19,7 @@ import { DialogEinstellungen } from './components/dialog-einstellungen/dialog-ei
           <div class="w-100 mb-2 d-block d-md-none"></div>
 
           <div class="col-sm">
-            <button class="btn btn-primary w-100"(click)="openEinstellungen()" >Einstellungen</button>
+            <button class="btn btn-primary w-100" (click)="openEinstellungen()">Einstellungen</button>
           </div>
         </div>
         <div class="mt-3 row">
@@ -28,7 +28,7 @@ import { DialogEinstellungen } from './components/dialog-einstellungen/dialog-ei
       </div>
     </div>
   `,
-  styleUrl: './footer.component.css',
+  styles: [],
 })
 export class FooterComponent {
   private readonly m_Dialog = inject(MatDialog);

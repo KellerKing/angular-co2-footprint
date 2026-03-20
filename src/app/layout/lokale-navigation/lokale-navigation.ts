@@ -22,7 +22,7 @@ export class LokaleNavigation implements AfterViewInit {
   readonly m_NavigationService = inject(LokaleNavigationService);
   private readonly m_OffCanvasElement = viewChild<ElementRef>('offcanvas');
   readonly settingsService = inject(SettingsService);
-  private m_OffCanvasIstance!: Offcanvas;
+  private m_OffCanvasInstance!: Offcanvas;
 
   readonly navigationItems = computed<LokaleNavigationInputItem[]>(() =>
     this.m_NavigationService
@@ -31,7 +31,7 @@ export class LokaleNavigation implements AfterViewInit {
   );
 
   ngAfterViewInit(): void {
-    this.m_OffCanvasIstance = new Offcanvas(this.m_OffCanvasElement()?.nativeElement);
+    this.m_OffCanvasInstance = new Offcanvas(this.m_OffCanvasElement()?.nativeElement);
   }
 
   constructor() {
@@ -54,17 +54,17 @@ export class LokaleNavigation implements AfterViewInit {
   private reInitOffcanvas(): void {
     const nativeElement = this.m_OffCanvasElement()?.nativeElement;
     if (!nativeElement) return;
-    this.m_OffCanvasIstance?.dispose();
-    this.m_OffCanvasIstance = new Offcanvas(nativeElement);
+    this.m_OffCanvasInstance?.dispose();
+    this.m_OffCanvasInstance = new Offcanvas(nativeElement);
   }
 
 
   close(): void {
-    this.m_OffCanvasIstance?.hide();
+    this.m_OffCanvasInstance?.hide();
   }
 
   toggle(): void {
-    this.m_OffCanvasIstance?.toggle();
+    this.m_OffCanvasInstance?.toggle();
   }
 
   onFragmentClicked(fragmentId: string): void {

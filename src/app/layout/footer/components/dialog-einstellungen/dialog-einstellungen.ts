@@ -49,7 +49,7 @@ export class DialogEinstellungen {
 
   onEinstellungenUebernehmen(): void {
     const isRtl = this.selectedAusrichtung.isLtr === false;
-    this.m_EinstellungenService.setRlt(isRtl);
+    this.m_EinstellungenService.setRtl(isRtl);
     this.dialogRef.close();
   }
 }

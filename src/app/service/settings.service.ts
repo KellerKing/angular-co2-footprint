@@ -1,20 +1,20 @@
 import { computed, Injectable, signal } from '@angular/core';
 
 type Einstellungen = {
-  isRlt: boolean;
+  isRtl: boolean;
 };
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
   private readonly currentEinstellungen = signal<Einstellungen>({
-    isRlt: this.isRichtungRtlBeiErstenStart(),
+    isRtl: this.isRichtungRtlBeiErstenStart(),
   });
 
-  isRtl = computed(() => this.currentEinstellungen().isRlt);
+  isRtl = computed(() => this.currentEinstellungen().isRtl);
 
 
-  setRlt(isRlt: boolean): void {
-    this.currentEinstellungen.update((einstellungen) => ({ ...einstellungen, isRlt: isRlt }));
+  setRtl(isRtl: boolean): void {
+    this.currentEinstellungen.update((einstellungen) => ({ ...einstellungen, isRtl: isRtl }));
   }
 
   isRichtungRtlBeiErstenStart(): boolean {

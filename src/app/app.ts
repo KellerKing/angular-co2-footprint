@@ -18,9 +18,9 @@ import { LokaleNavigationService } from './service/lokale-navigation.service';
     <div class="d-flex flex-column min-vh-100">
       <app-header-component [navItems]="this.navItems" [homeItem]="this.homeItem" />
        
-      <div class="flex-grow-1">
-        <app-lokale-navigation/>
+      <div class="flex-grow-1 d-flex flex-column">
         <router-outlet id="content-bereich" />
+        <app-lokale-navigation />
       </div>
 
       <app-footer-component />
