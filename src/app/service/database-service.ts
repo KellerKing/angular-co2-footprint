@@ -24,12 +24,6 @@ export class DatabaseService {
     const { data, error } = await query;
     return data as CO2Data[];
   }
-
-  test() : void {
-    this.supabase.from('co2Verbrauch').insert({country: 'Germany'}).then(({ data, error }) => {
-      console.log(data, error);
-    });
-  }
 }
 
 export interface CO2Data {

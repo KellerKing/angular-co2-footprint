@@ -4,7 +4,7 @@
     [class.justify-content-start]="!settingsService.isRtl()"
     [class.justify-content-end]="settingsService.isRtl()"
   >
-    <button class="btn btn-primary rounded" (click)="toggle()">
+    <button class="btn btn-primary rounded" (click)="toggle()" aria-label="Navigation öffnen">
       <i class="bi bi-list"></i>
     </button>
   </div>
@@ -24,6 +24,7 @@
       type="button"
       class="btn-close local-nav-close"
       (click)="close()"
+      aria-label="schließen"
     ></button>
   </div>
 
