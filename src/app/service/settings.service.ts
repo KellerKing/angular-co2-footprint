@@ -14,7 +14,6 @@ export class SettingsService {
 
   constructor() {
     effect(() => {
-      console.log('Einstellungen geändert:', this.currentEinstellungen());
       const einstellungen = this.currentEinstellungen();
       sessionStorage.setItem(this.m_LocalStorageKey, JSON.stringify(einstellungen));
     });
