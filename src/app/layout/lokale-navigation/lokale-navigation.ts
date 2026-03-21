@@ -10,7 +10,7 @@ import {
 import { RouterModule } from '@angular/router';
 import { LokaleNavigationService } from '../../service/lokale-navigation.service';
 import { Offcanvas } from 'bootstrap';
-import { SettingsService } from '../../service/settings.service';
+import { SettingsService } from '../../service/settings-service/settings.service';
 
 @Component({
   selector: 'app-lokale-navigation',

@@ -7,7 +7,6 @@ type Einstellungen = {
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
   private readonly m_LocalStorageKey = 'settings';
-
   private readonly currentEinstellungen = signal<Einstellungen>(this.loadSettings());
 
   isRtl = computed(() => this.currentEinstellungen().isRtl);
