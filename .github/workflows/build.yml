@@ -39,7 +39,7 @@ jobs:
         run: npx ng build --configuration production
     
     # test
-      - name: test
-        run: npx ng test --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox
+      - name: Tests
+        run: ng test --watch=false --coverage
           
               
