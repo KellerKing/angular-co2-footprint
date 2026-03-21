@@ -40,6 +40,6 @@ jobs:
     
     # test
       - name: Tests
-        run: ng test --watch=false --coverage
+        run: npx ng test --watch=false --coverage
           
               
