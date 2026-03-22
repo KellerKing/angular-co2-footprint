@@ -12,14 +12,7 @@ import { LokaleNavigationService } from '../../service/lokale-navigation.service
 
 @Component({
   selector: 'app-page-tabelle',
-  imports: [
-    FormField,
-    TabelleComponent,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormField,
-  ],
+  imports: [FormField, TabelleComponent, MatExpansionModule, MatFormFieldModule, MatInputModule],
   template: `
     <h1 class="p-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
 
@@ -52,15 +45,13 @@ import { LokaleNavigationService } from '../../service/lokale-navigation.service
     <section id="zusaetzliche-informationen" class="mt-3">
       <h3>Zusätzliche Informationen</h3>
       <p>
-        Das ist ein Text um die Seite etwas zu füllen. Besonders um die lokale Navigation zu testen. 
-        Die Daten,der Tabelle ,sind Dummy-Daten. Sie werden über eine SupaBase Web-API abgerufen,
-        um die Funktionalität zu demonstrieren.
+        Das ist ein Text um die Seite etwas zu füllen. Besonders um die lokale Navigation zu testen.
+        Die Daten,der Tabelle ,sind Dummy-Daten. Sie werden über eine SupaBase Web-API abgerufen, um
+        die Funktionalität zu demonstrieren.
       </p>
-      <p>
-        Viel Spaß beim Ausprobieren.
-      </p>
+      <p>Viel Spaß beim Ausprobieren.</p>
     </section>
-  <section id="ende"></section>
+    <section id="ende"></section>
   `,
   styles: ``,
 })
@@ -88,13 +79,6 @@ export class PageTabelle implements OnInit {
     }));
   });
 
-  navigationItems = [
-    { label: 'Tabelle', fragment: 'tabelle' },
-    { label: 'Suchfilter', fragment: 'suchfilter' },
-    { label: 'Zusätzliche Informationen', fragment: 'zusaetzliche-informationen' },
-    { label: 'Ende', fragment: 'ende' },
-  ];
-
   constructor() {
     effect(() => {
       this.m_Service.getData(this.sucheModel().land, this.sucheModel().firma).then((data) => {
@@ -104,7 +88,14 @@ export class PageTabelle implements OnInit {
   }
 
   ngOnInit(): void {
-    this.m_NavigationService.nutzeNavigation(this.navigationItems);
+    const navigationItems = [
+      { label: 'Tabelle', fragment: 'tabelle' },
+      { label: 'Suchfilter', fragment: 'suchfilter' },
+      { label: 'Zusätzliche Informationen', fragment: 'zusaetzliche-informationen' },
+      { label: 'Ende', fragment: 'ende' },
+    ];
+
+    this.m_NavigationService.nutzeNavigation(navigationItems);
   }
 }
 

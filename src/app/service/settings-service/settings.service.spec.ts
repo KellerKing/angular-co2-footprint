@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { SettingsService } from './settings.service';
+import { Einstellungen, SettingsService } from './settings.service';
 import { TestBed } from '@angular/core/testing';
 
 describe('SettingsService', () => {
@@ -65,7 +65,8 @@ describe('SettingsService', () => {
       service.setRtl(true);
       expect(service.isRtl()).toBe(true);
 
-      const stored = JSON.parse(sessionStorage.getItem('settings')!);
+      TestBed.tick();
+      const stored = JSON.parse(sessionStorage.getItem('settings')!) as Einstellungen;
       expect(stored.isRtl).toBe(true);
     });
 
@@ -77,7 +78,8 @@ describe('SettingsService', () => {
       service.setRtl(false);
       expect(service.isRtl()).toBe(false);
 
-      const stored = JSON.parse(sessionStorage.getItem('settings')!);
+      TestBed.tick();
+      const stored = JSON.parse(sessionStorage.getItem('settings')!) as Einstellungen;
       expect(stored.isRtl).toBe(false);
     });
   });

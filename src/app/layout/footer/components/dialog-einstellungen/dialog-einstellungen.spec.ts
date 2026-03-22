@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DialogEinstellungen } from './dialog-einstellungen';
+import { MatDialogRef } from '@angular/material/dialog';
 
 describe('DialogEinstellungen', () => {
   let component: DialogEinstellungen;
@@ -8,7 +9,10 @@ describe('DialogEinstellungen', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DialogEinstellungen]
+      imports: [DialogEinstellungen],
+       providers: [
+        { provide: MatDialogRef, useValue: {} }
+      ]
     })
     .compileComponents();
 

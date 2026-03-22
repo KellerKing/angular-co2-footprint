@@ -1,6 +1,6 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 
-type Einstellungen = {
+export type Einstellungen = {
   isRtl: boolean;
 };
 
@@ -18,7 +18,7 @@ export class SettingsService {
     });
   }
 
-  setRtl(isRtl: boolean): void {
+  public setRtl(isRtl: boolean): void {
     this.currentEinstellungen.update((einstellungen) => ({ ...einstellungen, isRtl: isRtl }));
   }
 

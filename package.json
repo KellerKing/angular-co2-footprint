@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test_ui": "ng run angular-co2-footprint:test_ui"
   },
   "prettier": {
     "printWidth": 100,
@@ -42,6 +43,7 @@
     "@angular/compiler-cli": "^21.2.4",
     "@types/bootstrap": "^5.2.10",
     "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/ui": "^4.1.0",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
