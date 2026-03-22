@@ -8,11 +8,12 @@ describe('TabelleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TabelleComponent]
-    })
-    .compileComponents();
+      imports: [TabelleComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TabelleComponent);
+    fixture.componentRef.setInput('viewModels', []);
+
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

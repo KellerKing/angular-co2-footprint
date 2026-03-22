@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageTabelle } from './page-tabelle';
+import { LokaleNavigation } from './lokale-navigation';
 
-describe('PageTabelle', () => {
-  let component: PageTabelle;
-  let fixture: ComponentFixture<PageTabelle>;
+describe('LokaleNavigation', () => {
+  let component: LokaleNavigation;
+  let fixture: ComponentFixture<LokaleNavigation>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PageTabelle]
+      imports: [LokaleNavigation]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PageTabelle);
+    fixture = TestBed.createComponent(LokaleNavigation);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

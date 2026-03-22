@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-page-home',
   imports: [],
   template: `
-    <div class="rounded bg-light-blue container p-3">
+    <div class="rounded container p-3">
       <div class="row">
         <div class="col-sm text-center">
           <h1 class="mt-5">IPWA01-01</h1>
@@ -29,7 +29,7 @@ import { Component } from '@angular/core';
         </div>
       </div>
 
-      <div class="container" style="margin-top: 5%;">
+      <div class="container mt-5">
         <h3 class="pt-3">Tabelle</h3>
         <p>
           Der Schwerpunkt liegt auf dem Menüpunkt "Tabelle". Über ihn gelangt
@@ -57,7 +57,7 @@ import { Component } from '@angular/core';
       </div>
     </div>
   `,
-  styleUrl: './page-home.css',
+  styles: [],
 })
 export class PageHome {
 
