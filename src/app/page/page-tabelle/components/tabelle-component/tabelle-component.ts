@@ -1,15 +1,6 @@
-import {
-  Component,
-  computed,
-  effect,
-  inject,
-  input,
-  signal,
-  viewChild,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, computed, effect, input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 import { MatSort, MatSortModule } from '@angular/material/sort';
 
@@ -34,27 +25,46 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
       <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
     </table>
 
-    <mat-paginator
-      [length]="100"
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-    >
-    </mat-paginator>
+    <mat-paginator [pageSizeOptions]="pageSizes()" showFirstLastButtons> </mat-paginator>
   `,
-  styles: [``],
+  styles: [
+    `
+      :host {
+        --mat-select-panel-background-color: rgb(255, 255, 255);
+        --mat-select-enabled-trigger-text-color: rgb(0, 0, 0);
+      }
+    `,
+  ],
 })
-export class TabelleComponent {
+export class TabelleComponent implements AfterViewInit {
   viewModels = input.required<TabelleDataViewModel[]>();
-  
-  dataSource = computed(() => {
-    const result = new MatTableDataSource(this.viewModels());
-    result.sort = this.sort;
-    result.paginator = this.paginator;
-    return result;
-  });
+
+  private readonly m_DataSource = new MatTableDataSource<TabelleDataViewModel>([]);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  dataSource = computed(() => {
+    this.m_DataSource.data = this.viewModels();
+    return this.m_DataSource;
+  });
+
+  pageSizes = computed(() => {
+    const viewModelsLength = this.viewModels().length;
+    console.log('Berechne pageSizes basierend auf Länge der ViewModels:', viewModelsLength);
+    let basis = [5, 10, 25, 50, 100, 250, 500, 1000];
+    let basisGefiltert = basis.filter((size) => size < viewModelsLength);
+
+    if (basisGefiltert.length === 0) {
+      return viewModelsLength > 0 ? [viewModelsLength] : basis;
+    }
+
+    if (basisGefiltert[basisGefiltert.length - 1] !== viewModelsLength) {
+      basisGefiltert.push(viewModelsLength);
+    }
+
+    return basisGefiltert.sort((a, b) => a - b);
+  });
 
   tabelleTemplateViewModels: TabelleTemplateViewModel[] = [
     {
@@ -74,6 +84,11 @@ export class TabelleComponent {
     },
   ];
 
+  ngAfterViewInit(): void {
+    this.m_DataSource.sort = this.sort;
+    this.m_DataSource.paginator = this.paginator;
+  }
+
   getSpaltenNamen(): string[] {
     return this.tabelleTemplateViewModels.map((col) => col.mappingName);
   }
@@ -90,10 +105,4 @@ interface TabelleTemplateViewModel {
   displayText: string;
   mappingName: string;
   isSortierbar: boolean;
-}
-
-interface paginatorModel {
-  length: number;
-  pageSize: number;
-  pageIndex: number;
 }

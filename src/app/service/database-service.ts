@@ -22,11 +22,6 @@ export class DatabaseService {
       query = query.ilike('company_name', `%${firma}%`);
 
     const { data, error } = await query;
-    if (error) {
-      console.error('Error fetching data:', error);
-      return [];
-    }
-    
     return data as CO2Data[];
   }
 }
