@@ -25,7 +25,10 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
       <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="pageSizes()" showFirstLastButtons> </mat-paginator>
+    <mat-paginator 
+    [pageSizeOptions]="pageSizes()"
+    [pageSize]="initPageSize()"
+    showFirstLastButtons> </mat-paginator>
   `,
   styles: [
     `
@@ -47,6 +50,10 @@ export class TabelleComponent implements AfterViewInit {
   dataSource = computed(() => {
     this.m_DataSource.data = this.viewModels();
     return this.m_DataSource;
+  });
+
+  initPageSize = computed(() => {
+    return Math.min(this.pageSizes()[this.pageSizes().length - 1], 25)
   });
 
   pageSizes = computed(() => {
