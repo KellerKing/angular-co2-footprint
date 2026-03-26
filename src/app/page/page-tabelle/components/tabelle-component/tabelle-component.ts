@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, computed, effect, input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  effect,
+  input,
+  viewChild,
+  ViewChild,
+} from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
@@ -8,7 +16,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
   selector: 'app-tabelle-component',
   imports: [MatTableModule, MatSortModule, MatPaginatorModule],
   template: `
-    <table mat-table [dataSource]="dataSource()" matSort class="mat-elevation-z8">
+    <table mat-table [dataSource]="this.m_DataSource" matSort class="mat-elevation-z8">
       @for (item of tabelleTemplateViewModels; track $index) {
         <ng-container [matColumnDef]="item.mappingName">
           @if (item.isSortierbar) {
@@ -25,10 +33,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
       <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
     </table>
 
-    <mat-paginator 
-    [pageSizeOptions]="pageSizes()"
-    [pageSize]="initPageSize()"
-    showFirstLastButtons> </mat-paginator>
+    <mat-paginator [pageSizeOptions]="pageSizes()" showFirstLastButtons> </mat-paginator>
   `,
   styles: [
     `
@@ -42,28 +47,32 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 export class TabelleComponent implements AfterViewInit {
   viewModels = input.required<TabelleDataViewModel[]>();
 
-  private readonly m_DataSource = new MatTableDataSource<TabelleDataViewModel>([]);
+  readonly m_DataSource = new MatTableDataSource<TabelleDataViewModel>([]);
+  private readonly m_Sort = viewChild<MatSort>(MatSort);
+  private readonly m_Paginator = viewChild<MatPaginator>(MatPaginator);
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  dataSource = computed(() => {
-    this.m_DataSource.data = this.viewModels();
-    return this.m_DataSource;
-  });
+  private static readonly BASE_PAGE_SIZE_OPTIONS = [5, 10, 25, 50, 100, 250, 500, 1000];
+  static readonly MAX_INITIAL_PAGE_SIZE_BEI_NEU_LADEN = 25;
 
   initPageSize = computed(() => {
-    return Math.min(this.pageSizes()[this.pageSizes().length - 1], 25)
+    if (this.pageSizes().length === 0) return 0;
+    const result = Math.min(
+      this.pageSizes()[this.pageSizes().length - 1],
+      TabelleComponent.MAX_INITIAL_PAGE_SIZE_BEI_NEU_LADEN,
+    );
+
+    console.log('Berechnete initPageSize:', result);
+    return result;
   });
 
   pageSizes = computed(() => {
     const viewModelsLength = this.viewModels().length;
-    console.log('Berechne pageSizes basierend auf Länge der ViewModels:', viewModelsLength);
-    let basis = [5, 10, 25, 50, 100, 250, 500, 1000];
-    let basisGefiltert = basis.filter((size) => size < viewModelsLength);
+    const basisGefiltert = TabelleComponent.BASE_PAGE_SIZE_OPTIONS.filter(
+      (size) => size < viewModelsLength,
+    );
 
     if (basisGefiltert.length === 0) {
-      return viewModelsLength > 0 ? [viewModelsLength] : basis;
+      return viewModelsLength > 0 ? [viewModelsLength] : [0];
     }
 
     if (basisGefiltert[basisGefiltert.length - 1] !== viewModelsLength) {
@@ -91,13 +100,40 @@ export class TabelleComponent implements AfterViewInit {
     },
   ];
 
+  constructor() {
+    effect(() => {
+      this.m_DataSource.data = this.viewModels();
+      this.updatePaginatorState();
+    });
+  }
   ngAfterViewInit(): void {
-    this.m_DataSource.sort = this.sort;
-    this.m_DataSource.paginator = this.paginator;
+    this.m_DataSource.sort = this.m_Sort();
+    this.m_DataSource.paginator = this.m_Paginator();
   }
 
   getSpaltenNamen(): string[] {
     return this.tabelleTemplateViewModels.map((col) => col.mappingName);
+  }
+
+  /**
+   * @description
+   * Beim laden / Datenänderung durch z.B Suchfilter wird die pageSize auf den größten verfügbaren Wert gesetzt.
+   * maximal jedoch 25. Die verfügbaren pageSizeOptions passen sich dynamisch an die Anzahl der geladenen Einträge an.
+   */
+  private updatePaginatorState(): void {
+    const paginator = this.m_DataSource.paginator;
+    if (!paginator) return;
+    //Bewusst hier den Wert speichern da durch das setzten der pageSizeOptions, die Variable wahrscheinlich auf Index  0 zeigt und sich dann ändert. Dadurch würde wenn ich von 0 Einträgen komme immer 5 gesetzt.
+    const letzteGenutztePageSize = paginator.pageSize;
+    const defaultPageSize = this.initPageSize();
+    paginator.pageSizeOptions = this.pageSizes();
+
+    if (!paginator.pageSizeOptions.includes(letzteGenutztePageSize)) {
+      paginator.pageSize = defaultPageSize;
+    }
+
+    paginator.firstPage();
+    this.m_DataSource._updateChangeSubscription();
   }
 }
 
