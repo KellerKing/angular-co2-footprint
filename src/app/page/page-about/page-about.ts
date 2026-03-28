@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { DatabaseService } from '../../service/database-service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-page-about',
@@ -21,10 +20,4 @@ import { DatabaseService } from '../../service/database-service';
     `,
   styles: [''],
 })
-export class PageAbout {
-  // m_Service = inject(DatabaseService);
-  // constructor() {
-  //   this.m_Service.test();
-  // }
- 
-}
+export class PageAbout {}

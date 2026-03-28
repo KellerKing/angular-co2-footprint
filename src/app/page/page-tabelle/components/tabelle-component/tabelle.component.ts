@@ -5,7 +5,6 @@ import {
   effect,
   input,
   viewChild,
-  ViewChild,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -15,26 +14,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 @Component({
   selector: 'app-tabelle-component',
   imports: [MatTableModule, MatSortModule, MatPaginatorModule],
-  template: `
-    <table mat-table [dataSource]="this.m_DataSource" matSort class="mat-elevation-z8">
-      @for (item of tabelleTemplateViewModels; track $index) {
-        <ng-container [matColumnDef]="item.mappingName">
-          @if (item.isSortierbar) {
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ item.displayText }}</th>
-          } @else {
-            <th mat-header-cell *matHeaderCellDef>{{ item.displayText }}</th>
-          }
-
-          <td mat-cell *matCellDef="let element">{{ element[item.mappingName] || '' }}</td>
-        </ng-container>
-      }
-
-      <tr mat-header-row *matHeaderRowDef="getSpaltenNamen()"></tr>
-      <tr mat-row *matRowDef="let row; columns: getSpaltenNamen()"></tr>
-    </table>
-
-    <mat-paginator [pageSizeOptions]="pageSizes()" showFirstLastButtons> </mat-paginator>
-  `,
+  templateUrl: './tabelle.component.html',
   styles: [
     `
       :host {

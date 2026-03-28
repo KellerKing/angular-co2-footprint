@@ -59,6 +59,4 @@ import { Component } from '@angular/core';
   `,
   styles: [],
 })
-export class PageHome {
-
-}
+export class PageHome {}

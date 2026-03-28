@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent, NavItem } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { Title } from '@angular/platform-browser';
-import { LokaleNavigation } from './layout/lokale-navigation/lokale-navigation';
+import { LokaleNavigation } from './layout/lokale-navigation/lokale-navigation.component';
 import { LokaleNavigationService } from './service/lokale-navigation.service';
 
 @Component({

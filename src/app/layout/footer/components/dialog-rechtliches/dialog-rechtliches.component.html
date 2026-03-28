@@ -1,16 +1,4 @@
-import { Component } from '@angular/core';
-import {
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogTitle,
-} from '@angular/material/dialog';
-
-@Component({
-  selector: 'app-dialog-rectliches-component',
-  imports: [MatDialogContent, MatDialogActions, MatDialogClose, MatDialogTitle],
-  template: `
-    <h1 matDialogTitle>Rechtliche Hinweise</h1>
+<h1 matDialogTitle>Rechtliche Hinweise</h1>
     <mat-dialog-content
       >Rechtliche Hinweise Impressum Musterfirma GmbH <br />
       Vertreten durch den Geschäftsführer Max Mustermann <br />
@@ -32,7 +20,3 @@ import {
     <mat-dialog-actions>
       <button matButton mat-dialog-close class="btn btn-primary">Okay</button>
     </mat-dialog-actions>
-  `,
-  styles: ``,
-})
-export class DialogRectlichesTemplate {}

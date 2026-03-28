@@ -5,7 +5,7 @@ import {
   MatDialogTitle,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { SettingsService } from '../../../../service/settings-service/settings.service';
+import { SettingsService } from '../../../../service/settings.service/settings.service';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 
@@ -20,8 +20,8 @@ import { MatOption, MatSelect } from '@angular/material/select';
     MatSelect,
     MatOption,
   ],
-  templateUrl: './dialog-einstellungen.html',
-  styleUrl: './dialog-einstellungen.css',
+  templateUrl: './dialog-einstellungen.component.html',
+  styleUrl: './dialog-einstellungen.component.css',
 })
 export class DialogEinstellungen {
   private readonly m_EinstellungenService = inject(SettingsService);

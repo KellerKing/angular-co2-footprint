@@ -1,10 +1,10 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { form, debounce, FormField } from '@angular/forms/signals';
-import { CO2Data, DatabaseService } from '../../service/database-service';
+import { CO2Data, DatabaseService } from '../../service/database.service/database.service';
 import {
   TabelleComponent,
   TabelleDataViewModel,
-} from './components/tabelle-component/tabelle-component';
+} from './components/tabelle-component/tabelle.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,46 +13,7 @@ import { LokaleNavigationService } from '../../service/lokale-navigation.service
 @Component({
   selector: 'app-page-tabelle',
   imports: [FormField, TabelleComponent, MatExpansionModule, MatFormFieldModule, MatInputModule],
-  template: `
-    <h1 class="p-2">Sieh dir den Co2 Verbrauch verschiedener Unternehmen an</h1>
-
-    <div>
-      <section id="suchfilter">
-        <mat-expansion-panel class="my-3">
-          <mat-expansion-panel-header>Suchfilter</mat-expansion-panel-header>
-          <form>
-            <p>
-              Die Suche erfolgt ungenau, d.h. es werden auch Teilausdrücke gefunden. Eine Suche nach
-              "Ger" im Land findet z.B. "Germany", genauso wie die Suche nach "many" auch "Germany"
-              findet. Das ist auch für Firmennamen so und eine bewusst gewählte Funktionalität.
-            </p>
-            <div class="form-group mb-2">
-              <label for="land">Land:</label>
-              <input type="text" [formField]="sucheForm.land" id="land" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label for="firma">Firma:</label>
-              <input type="text" [formField]="sucheForm.firma" id="firma" class="form-control" />
-            </div>
-          </form>
-        </mat-expansion-panel>
-      </section>
-
-      <section id="tabelle">
-        <app-tabelle-component [viewModels]="tabelleViewModel()"></app-tabelle-component>
-      </section>
-    </div>
-    <section id="zusaetzliche-informationen" class="mt-3">
-      <h3>Zusätzliche Informationen</h3>
-      <p>
-        Das ist ein Text um die Seite etwas zu füllen. Besonders um die lokale Navigation zu testen.
-        Die Daten,der Tabelle ,sind Dummy-Daten. Sie werden über eine SupaBase Web-API abgerufen, um
-        die Funktionalität zu demonstrieren.
-      </p>
-      <p>Viel Spaß beim Ausprobieren.</p>
-    </section>
-    <section id="ende"></section>
-  `,
+  templateUrl: './page-tabelle.html',
   styles: ``,
 })
 export class PageTabelle implements OnInit {
@@ -89,10 +50,10 @@ export class PageTabelle implements OnInit {
 
   ngOnInit(): void {
     const navigationItems = [
-      { label: 'Tabelle', fragment: 'tabelle' },
       { label: 'Suchfilter', fragment: 'suchfilter' },
+      { label: 'Tabelle', fragment: 'tabelle' },
       { label: 'Zusätzliche Informationen', fragment: 'zusaetzliche-informationen' },
-      { label: 'Ende', fragment: 'ende' },
+      { label: 'Zum Footer', fragment: 'ende' },
     ];
 
     this.m_NavigationService.nutzeNavigation(navigationItems);

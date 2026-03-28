@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogEinstellungen } from './dialog-einstellungen';
+import { DialogEinstellungen } from './dialog-einstellungen.component';
 import { MatDialogRef } from '@angular/material/dialog';
 
 describe('DialogEinstellungen', () => {

@@ -10,13 +10,13 @@ import {
 import { RouterModule } from '@angular/router';
 import { LokaleNavigationService } from '../../service/lokale-navigation.service';
 import { Offcanvas } from 'bootstrap';
-import { SettingsService } from '../../service/settings-service/settings.service';
+import { SettingsService } from '../../service/settings.service/settings.service';
 
 @Component({
   selector: 'app-lokale-navigation',
   imports: [RouterModule],
-  templateUrl: './lokale-navigation.html',
-  styleUrl: './lokale-navigation.css',
+  templateUrl: './lokale-navigation.component.html',
+  styleUrl: './lokale-navigation.component.css',
 })
 export class LokaleNavigation implements AfterViewInit {
   readonly m_NavigationService = inject(LokaleNavigationService);
