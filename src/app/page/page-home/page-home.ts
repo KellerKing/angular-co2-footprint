@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-page-home',
-  imports: [],
+  imports: [ NgOptimizedImage],
   template: `
     <div class="rounded container p-3">
       <div class="row">
@@ -20,11 +21,13 @@ import { Component } from '@angular/core';
         </div>
         <div class="col-sm">
           <img
-            src="Regenwald.png"
+            ngSrc="Regenwald@0,5x.png"
             class="img-fluid rounded"
             alt="Regenwald"
-            width="500"
-            height="500"
+            width="512"
+            height="512"
+            priority
+            placeholder="Regenwald@0,1x.png"
           />
         </div>
       </div>
