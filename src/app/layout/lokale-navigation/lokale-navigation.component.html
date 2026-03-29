@@ -1,0 +1,38 @@
+@if (this.m_NavigationService.isVisible()) {
+  <div
+    class="d-flex fixed-bottom px-4 pb-4"
+    [class.justify-content-start]="!settingsService.isRtl()"
+    [class.justify-content-end]="settingsService.isRtl()"
+  >
+    <button class="btn btn-primary rounded" (click)="toggle()" aria-label="Navigation öffnen">
+      <i class="bi bi-list"></i>
+    </button>
+  </div>
+}
+
+<div
+  class="offcanvas"
+  [class.offcanvas-start]="!settingsService.isRtl()"
+  [class.offcanvas-end]="settingsService.isRtl()"
+  [attr.dir]="settingsService.isRtl() ? 'rtl' : 'ltr'"
+  tabindex="-1"
+  #offcanvas
+>
+  <div class="offcanvas-header justify-content-start border-bottom">
+    <h5 class="offcanvas-title mb-0">Lokale Navigation</h5>
+    <button
+      type="button"
+      class="btn-close btn-lokale-navigation-toggle"
+      (click)="close()"
+      aria-label="schließen"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body">
+    @for (item of navigationItems(); track $index) {
+      <a class="nav-link" (click)="onFragmentClicked(item.fragment)">
+        {{ item.label }}
+      </a>
+    }
+  </div>
+</div>

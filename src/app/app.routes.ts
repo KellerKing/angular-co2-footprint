@@ -1,19 +1,9 @@
 import { Routes } from '@angular/router';
-import { HomePageContainer } from './pages/home-page/home-page-container';
-import { AboutPageContainer } from './pages/about-page/about-page-container';
-import { TabellePageContainer } from './pages/tabelle-page/tabelle-page-container';
+import { PageHome } from './page/page-home/page-home';
 
-export const routes: Routes = [
-    {
-        path: '',
-        component: HomePageContainer,
-    },
-    {
-        path: 'about',
-        component: AboutPageContainer
-    },
-    {
-        path: 'tabelle',
-        component: TabellePageContainer
-    },
+export const routes: Routes = [ 
+    {path: 'tabelle', loadComponent: () => import('./page/page-tabelle/page-tabelle').then(m => m.PageTabelle)},
+    {path: '', component: PageHome},
+    {path: 'about', loadComponent: () => import('./page/page-about/page-about').then(m => m.PageAbout)},
+    {path: '**', component: PageHome},
 ];
