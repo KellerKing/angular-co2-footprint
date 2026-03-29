@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogRectlichesTemplate } from './dialog-rectliches-template';
+import { DialogRectlichesTemplate } from './dialog-rechtliches.component';
 
 describe('DialogRectlichesComponent', () => {
   let component: DialogRectlichesTemplate;
