@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, Signal, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent, NavItem } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
@@ -29,7 +29,7 @@ import { LokaleNavigationService } from './service/lokale-navigation.service';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('Super coole Co2 App');
+  protected readonly title : Signal<string> = signal('Super coole Co2 App');
   private readonly titleService: Title = inject(Title);
   readonly m_NavigationService = inject(LokaleNavigationService);
 

@@ -31,27 +31,16 @@ export class LokaleNavigation implements AfterViewInit {
   );
 
   ngAfterViewInit(): void {
-    this.m_OffCanvasInstance = new Offcanvas(this.m_OffCanvasElement()?.nativeElement);
+    this.initalisiereOffCanvas();
   }
 
   constructor() {
     effect(() => {
       if (!this.m_NavigationService.isVisible()) this.close();
     });
-
-
-    //TODO: Brauche ich das wirklich? 
-    // Es könnte sein, dass die Offcanvas-Instanz die Änderung der Richtung nicht mitbekommt, 
-    // weil sie ja nur einmalig in ngAfterViewInit erstellt wird. 
-    // Das müsste ich testen. Wenn das so ist, dann könnte ich entweder die Offcanvas-Instanz neu erstellen oder veruschen
-    // die Richtung der Offcanvas-Instanz zu ändern.
-    effect(() => {
-      this.settingsService.isRtl();
-      this.reInitOffcanvas();
-    });
   }
 
-  private reInitOffcanvas(): void {
+  private initalisiereOffCanvas(): void {
     const nativeElement = this.m_OffCanvasElement()?.nativeElement;
     if (!nativeElement) return;
     this.m_OffCanvasInstance?.dispose();
