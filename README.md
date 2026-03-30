@@ -11,7 +11,8 @@ Das ist meine lösung implementierung der Aufgabenstellung 1 der Fallstudie des 
 ## Projekt lokal starten
 
 **Voraussetzungen**
-- Installierte Version von npm >= 22
+- Installierte Version von npm >= 10.9.2 (siehe package.json `packageManager`)
+- Installiertes Angular-CLI (empfohlen via npm)
 - Zugriff auf ein Terminal
 
 
@@ -22,9 +23,9 @@ Mit diesem Befehl startet der Server in der Entwicklungsumgebung und ist unter `
 ng serve
 ```
 
-Mit dem folgendem Befehl startet der Browser automatisch mit der entsprechenden Url. 
+Mit dem folgenden Befehl startet der Browser automatisch mit der entsprechenden Url.
 ```bash
-ng s -o
+ng serve --open
 ```
 
 ### Bauen
@@ -36,14 +37,19 @@ ng build
 
 ### Testen
 
-Mit UI:
+Mit UI (z.B. für interaktive Test-Runner-Oberfläche):
 ```bash
-ng test
+npm run test_ui
 ```
 
-Ohne UI:
+Standard-Tests (Headless, Watch-Modus):
 ```bash
-npx ng test --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox
+npm test
+```
+
+Direkter Vitest-Aufruf (optional):
+```bash
+npx vitest
 ```
 
 
@@ -77,14 +83,23 @@ Es gibt eine Github Action die manuell gestartet werden muss (**angular-co2-foot
 
 ## Verwendete Technologien/Frameworks
 
-Auflistung der wichtigsten Technologien
+Auflistung der wichtigsten Technologien (Stand aus `package.json`):
 
-- [Angular CLI](https://github.com/angular/angular-cli) version 19.0.0.
-- [Bootstrap](https://getbootstrap.com) version 5.3.7
-- [Angular Material](https://material.angular.dev) version 19.2
-- [Karma tests - Kommt mit Angular mit ](https://karma-runner.github.io/6.4/index.html) version 6.4
-- [Puppeteer headless Browser ](https://pptr.dev) version 24.16
+- Angular CLI und Angular Framework: Version 21.2.x (`@angular/cli`, `@angular/core`, etc.)
+- Angular Material: Version 21.2.x (`@angular/material`)
+- Bootstrap: Version 5.3.8
+- Supabase JavaScript SDK: Version 2.86.2 (`@supabase/supabase-js`)
+- TypeScript: Version ~5.9.2
+- Vitest: Version ^4.0.8 (Test Runner)
+- jsdom: Version ^27.1.0 (Dom-Umgebung für Tests)
+- RxJS: Version ~7.8.0
 
+Test-Konfiguration:
+
+- Angular Build Unit Test Runner: `@angular/build:unit-test`
+- Test-Runner: `vitest` (statt Karma)
+
+Hinweis: Puppeteer wird aktuell nicht direkt in `package.json` verwendet.
 
 
 
