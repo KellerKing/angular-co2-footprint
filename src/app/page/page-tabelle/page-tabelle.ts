@@ -14,7 +14,7 @@ import { LokaleNavigationService } from '../../service/lokale-navigation.service
   selector: 'app-page-tabelle',
   imports: [FormField, TabelleComponent, MatExpansionModule, MatFormFieldModule, MatInputModule],
   templateUrl: './page-tabelle.html',
-  styles: ``,
+  styleUrl: './page-tabelle.css',
 })
 export class PageTabelle implements OnInit {
   private readonly m_Service = inject(DatabaseService);
