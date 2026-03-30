@@ -8,7 +8,7 @@ import {
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { LokaleNavigationService } from '../../service/lokale-navigation.service';
+import { LokaleNavigationService } from '../../service/lokale-navigation.service/lokale-navigation.service';
 
 @Component({
   selector: 'app-page-tabelle',
@@ -30,6 +30,10 @@ export class PageTabelle implements OnInit {
   });
 
   tabelleDataModel = signal<CO2Data[]>([]);
+  
+  // Error Handling Signal für UI
+  fehlerMeldung = signal<string | null>(null);
+  istLaedend = signal(false);
 
   tabelleViewModel = computed<TabelleDataViewModel[]>(() => {
     return this.tabelleDataModel().map((data) => ({
@@ -42,8 +46,18 @@ export class PageTabelle implements OnInit {
 
   constructor() {
     effect(() => {
-      this.m_Service.getData(this.sucheModel().land, this.sucheModel().firma).then((data) => {
-        this.tabelleDataModel.set(data);
+      this.istLaedend.set(true);
+      this.m_Service.getData(this.sucheModel().land, this.sucheModel().firma).then((result) => {
+        if (result.success) {
+          this.tabelleDataModel.set(result.data);
+          this.fehlerMeldung.set(null);
+        } else {
+          // Fehler-Handling: Zeige User-freundliche Meldung
+          this.fehlerMeldung.set(result.error.message);
+          this.tabelleDataModel.set([]);
+          console.error('Datenbankfehler:', result.error.type, result.error.originalError);
+        }
+        this.istLaedend.set(false);
       });
     });
   }

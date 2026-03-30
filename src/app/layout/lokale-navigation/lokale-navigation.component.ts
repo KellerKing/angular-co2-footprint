@@ -8,7 +8,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { LokaleNavigationService } from '../../service/lokale-navigation.service';
+import { LokaleNavigationService } from '../../service/lokale-navigation.service/lokale-navigation.service';
 import { Offcanvas } from 'bootstrap';
 import { SettingsService } from '../../service/settings.service/settings.service';
 
