@@ -12,7 +12,7 @@ Das ist meine lösung implementierung der Aufgabenstellung 1 der Fallstudie des 
 
 **Voraussetzungen**
 - Installierte Version von npm >= 10 
-- Installiertes Angular-CLI (```bash npm install -g @angular/cli ```)
+- Installiertes Angular-CLI (```npm install -g @angular/cli ```)
 - Zugriff auf ein Terminal
 
 
@@ -83,8 +83,8 @@ Es gibt eine Github Action die manuell gestartet werden muss (**angular-co2-foot
 
 Auflistung der wichtigsten Technologien (Stand aus `package.json`):
 
-- Angular: Version 21.2.x (`@angular/cli`, `@angular/core`, etc.)
-- Angular Material: Version 21.2.x (`@angular/material`)
+- Angular: Version 21.2.x 
+- Angular Material: Version 21.2.x
 - Bootstrap: Version 5.3.8
 - Supabase JavaScript SDK: Version 2.86.2 (`@supabase/supabase-js`)
 - Vitest: Version ^4.0.8 (Test) --> Kommt mit Angular mit
