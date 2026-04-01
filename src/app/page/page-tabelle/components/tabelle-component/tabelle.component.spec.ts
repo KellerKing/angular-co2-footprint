@@ -78,6 +78,23 @@ describe('TabelleComponent', () => {
 
     expect(component.m_DataSource.paginator?.pageSize).toBe(6);
   });
+
+  it('sortiert Firmennamen aufsteigend', async () => {
+    fixture.componentRef.setInput('viewModels', [
+      { id: 1, land: 'DE', firma: 'Zeta GmbH', emissionen: 10 },
+      { id: 2, land: 'DE', firma: 'Alpha AG', emissionen: 20 },
+      { id: 3, land: 'DE', firma: 'Mitte KG', emissionen: 30 },
+    ]);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const sorted = component.m_DataSource.sortData(
+      [...component.m_DataSource.data],
+      { active: 'firma', direction: 'asc' } as never,
+    );
+
+    expect(sorted.map((item) => item.firma)).toEqual(['Alpha AG', 'Mitte KG', 'Zeta GmbH']);
+  });
 });
 
 function createViewModels(count: number) {
