@@ -63,7 +63,7 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('[aria-label="Navigation öffnen"]')).toBeNull();
 
 
-    const tabelleLink = links.find((link) => link.textContent?.includes("Über"));
+    const tabelleLink = links.find((link) => link.textContent?.includes("Tabelle"));
     expect(tabelleLink).toBeTruthy();
 
     tabelleLink?.click();
@@ -79,5 +79,6 @@ describe('App', () => {
     await fixture.whenStable();
 
     const navItems = Array.from(fixture.nativeElement.querySelectorAll('nav a')) as HTMLAnchorElement[];
+    expect(navItems.length).greaterThan(0);
   });
 });

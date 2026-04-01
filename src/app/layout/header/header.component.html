@@ -1,6 +1,6 @@
 <header>
   <nav class="navbar navbar-light bg-light navbar-expand-md ps-3 pe-3 shadow-sm">
-    <a class="navbar-brand" routerLink="{{ this.homeItem().homeLink }}">
+    <a class="navbar-brand" [routerLink]="this.homeItem().homeLink">
       <img
         src="{{ this.homeItem().logoUrl }}"
         width="100"
@@ -25,7 +25,7 @@
       <div class="navbar-nav">
         @for (item of navItems(); track $index) {
           <a
-            routerLink="{{ item.link }}"
+            [routerLink]="item.link"
             [routerLinkActiveOptions]="{ exact: true }"
             routerLinkActive="active"
             class="nav-item nav-link ms-2"
