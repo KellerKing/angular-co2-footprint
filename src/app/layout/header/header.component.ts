@@ -11,7 +11,7 @@ export class HeaderComponent {
   navItems = input.required<NavItem[]>();
   homeItem = input.required<HomeItem>();
 
-  collapsableNav = viewChild.required<ElementRef>("collapse");
+  private collapsableNav = viewChild.required<ElementRef>("collapse");
 
   toggleNavbar(): void {
     if (!this.collapsableNav()) return;

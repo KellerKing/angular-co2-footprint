@@ -56,13 +56,12 @@ describe('PageTabelle', () => {
     await fixture.whenStable();
   });
 
-  // Smoke-Test: Nur Basiserstellung, keine fachliche Interaktion.
+  // Smoke-Test: Nur Erstellung um sicherzustellen, dass die Komponente grundsätzlich funktioniert.
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  // Integration: Verifiziert Datenladen und Service-Aufruf bei Modell-Aenderung.
-  it('laedt initial Daten und ruft Service bei Suchaenderung erneut auf', async () => {
+  it('Integration: Ändern des Suchmodells führt zu einem neuen Service-Aufruf mit den eingaben.', async () => {
     expect(getDataMock).toHaveBeenCalledWith('', '');
 
     component.sucheModel.set({ land: 'Ger', firma: 'Acme' });
@@ -72,8 +71,7 @@ describe('PageTabelle', () => {
     expect(getDataMock).toHaveBeenLastCalledWith('Ger', 'Acme');
   });
 
-  // Integration: Verifiziert die sichtbare Datenmenge auf der Tabellenseite bei Suchaenderung.
-  it('zeigt mit Mockdaten nach Suchaenderung eine andere Eintragsanzahl', async () => {
+  it('Integration: Suchaenderung aktualisiert sichtbare Daten', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -85,8 +83,8 @@ describe('PageTabelle', () => {
     expect(component.tabelleViewModel().length).toBe(2);
   });
 
-  // Integration: Verifiziert, dass ngOnInit die lokale Navigation korrekt befuellt.
-  it('initialisiert lokale Navigation in ngOnInit', async () => {
+
+  it('Integration: Lokale Navigation wird erstmal aufgerufen. Ob diese selbst funktiniert hat mit dem Test nichts zu tun.', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
 

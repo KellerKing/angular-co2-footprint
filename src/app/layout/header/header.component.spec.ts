@@ -37,4 +37,12 @@ describe('HeaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('Unit-Test: toggleNavbar toggelt die Klasse "show" auf dem collapsableNav Element', () => {
+    const objektZuTesten = component['collapsableNav']();
+    
+    expect(objektZuTesten.nativeElement.classList.contains("show")).toBe(false);
+    component.toggleNavbar();
+    expect(objektZuTesten.nativeElement.classList.contains("show")).toBe(true);
+  });
 });

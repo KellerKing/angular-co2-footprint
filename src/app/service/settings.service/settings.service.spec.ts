@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Einstellungen, SettingsService } from './settings.service';
 import { TestBed } from '@angular/core/testing';
 
