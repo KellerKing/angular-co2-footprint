@@ -15,11 +15,11 @@ describe('LokaleNavigationService', () => {
     service = TestBed.inject(LokaleNavigationService);
   });
 
-  it('should be created', () => {
+  it('Smoke Test: Komponente erstellbar', () => {
     expect(service).toBeTruthy();
   });
 
-  it('setzt Sichtbarkeit und Elemente mit nutzeNavigation', () => {
+  it('Unit-Test: setzt Sichtbarkeit und Elemente mit nutzeNavigation', () => {
     const items = [
       { label: 'Suchfilter', fragment: 'suchfilter' },
       { label: 'Tabelle', fragment: 'tabelle' },
@@ -31,7 +31,7 @@ describe('LokaleNavigationService', () => {
     expect(service.darstellbareElemente()).toEqual(items);
   });
 
-  it('setzt Zustand mit deaktivereNavigation zurueck', () => {
+  it('Unit-Test: setzt Zustand mit deaktivereNavigation zurueck', () => {
     service.nutzeNavigation([{ label: 'Test', fragment: 'test' }]);
     expect(service.isVisible()).toBe(true);
     expect(service.darstellbareElemente().length).toBe(1);

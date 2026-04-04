@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TabelleComponent } from './tabelle.component';
+import { TabelleComponent, TabelleDataViewModel } from './tabelle.component';
+import { MatSort } from '@angular/material/sort';
 
 describe('TabelleComponent', () => {
   let component: TabelleComponent;
@@ -37,7 +38,7 @@ describe('TabelleComponent', () => {
   });
 
 
-  it("PageSize wird angepasst wenn Daten aktualisiert werden und neue Ergebnismenge kleiner als der gesetzte Wert ist. Dann wird auf den definierten Default gesetzt", async () => {
+  it("Integration-Test: PageSize wird angepasst wenn Daten aktualisiert werden und neue Ergebnismenge kleiner als der gesetzte Wert ist. Dann wird auf den definierten Default gesetzt", async () => {
     fixture.componentRef.setInput('viewModels', createViewModels(50));
     fixture.detectChanges();
     await fixture.whenStable();
@@ -79,7 +80,7 @@ describe('TabelleComponent', () => {
     expect(component.m_DataSource.paginator?.pageSize).toBe(6);
   });
 
-  it('sortiert Firmennamen aufsteigend', async () => {
+  it('Unit-Test: sortiert Firmennamen aufsteigend', async () => {
     fixture.componentRef.setInput('viewModels', [
       { id: 1, land: 'DE', firma: 'Zeta GmbH', emissionen: 10 },
       { id: 2, land: 'DE', firma: 'Alpha AG', emissionen: 20 },
@@ -90,14 +91,14 @@ describe('TabelleComponent', () => {
 
     const sorted = component.m_DataSource.sortData(
       [...component.m_DataSource.data],
-      { active: 'firma', direction: 'asc' } as never,
+      { active: 'firma', direction: 'asc' } as MatSort,
     );
 
     expect(sorted.map((item) => item.firma)).toEqual(['Alpha AG', 'Mitte KG', 'Zeta GmbH']);
   });
 });
 
-function createViewModels(count: number) {
+function createViewModels(count: number) : TabelleDataViewModel[] {
   return Array.from({ length: count }, (_, index) => ({
     id: index + 1,
     land: `Land ${index + 1}`,
