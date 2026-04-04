@@ -4,7 +4,7 @@
     [class.justify-content-start]="!settingsService.isRtl()"
     [class.justify-content-end]="settingsService.isRtl()"
   >
-    <button class="btn btn-primary rounded" (click)="toggle()" aria-label="Navigation öffnen">
+    <button class="btn btn-primary rounded" (click)="toggle()" aria-label="Navigation öffnen" data-testid="lokale-navigation-oeffnen">
       <i class="bi bi-list"></i>
     </button>
   </div>
@@ -12,6 +12,7 @@
 
 <div
   class="offcanvas"
+  data-testid="offcanvas"
   [class.offcanvas-start]="!settingsService.isRtl()"
   [class.offcanvas-end]="settingsService.isRtl()"
   [attr.dir]="settingsService.isRtl() ? 'rtl' : 'ltr'"
@@ -23,6 +24,7 @@
     <button
       type="button"
       class="btn-close btn-lokale-navigation-toggle"
+      data-testid="lokale-navigation-schliessen"
       (click)="close()"
       aria-label="schließen"
     ></button>

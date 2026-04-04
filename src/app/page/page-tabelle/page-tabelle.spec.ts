@@ -56,12 +56,11 @@ describe('PageTabelle', () => {
     await fixture.whenStable();
   });
 
-  // Smoke-Test: Nur Erstellung um sicherzustellen, dass die Komponente grundsätzlich funktioniert.
-  it('should create', () => {
+  it('Smoke Test: Komponente erstellbar', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Integration: Ändern des Suchmodells führt zu einem neuen Service-Aufruf mit den eingaben.', async () => {
+  it('Integration-Test: Ändern des Suchmodells führt zu einem neuen Service-Aufruf mit den eingaben.', async () => {
     expect(getDataMock).toHaveBeenCalledWith('', '');
 
     component.sucheModel.set({ land: 'Ger', firma: 'Acme' });
@@ -71,7 +70,7 @@ describe('PageTabelle', () => {
     expect(getDataMock).toHaveBeenLastCalledWith('Ger', 'Acme');
   });
 
-  it('Integration: Suchaenderung aktualisiert sichtbare Daten', async () => {
+  it('Integration-Test: Suchänderung aktualisiert sichtbare Daten', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -84,7 +83,7 @@ describe('PageTabelle', () => {
   });
 
 
-  it('Integration: Lokale Navigation wird erstmal aufgerufen. Ob diese selbst funktiniert hat mit dem Test nichts zu tun.', async () => {
+  it('Integration-Test: Lokale Navigation wird erstmal aufgerufen. Ob diese selbst funktiniert hat mit dem Test nichts zu tun.', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
 

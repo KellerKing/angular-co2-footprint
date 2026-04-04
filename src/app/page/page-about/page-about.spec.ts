@@ -17,7 +17,7 @@ describe('PageAbout', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
+  it('Smoke Test: Komponente erstellbar', () => {
     expect(component).toBeTruthy();
   });
 });
