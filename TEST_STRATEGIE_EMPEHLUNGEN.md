@@ -135,6 +135,12 @@ it('Integration-Test: Lokale Navigation wird erstmal aufgerufen', async () => {
 3. **App Component** - Echte Integration (Navigation)
 4. **PageTabelle** - Component-Service Integration
 
+**Diese 4 Beispiele zeigen:**
+✅ Unit Tests: Isolierte Logik, Mocking, Browser-APIs
+✅ Integration Tests: Component-Service, Router, Data Flow
+✅ Verschiedene Test-Ebenen: Service, Component, App-Level
+✅ Gute Kommentierung und Erklärungen
+
 ### **Gesamt: 50 Tests laufen erfolgreich**
 - ✅ **49/50 Tests passieren** (1 Test ist erwartungsgemäß anders)
 - ✅ **CI/CD läuft** (GitHub Actions)
