@@ -11,7 +11,7 @@ export class DatabaseServiceHelper {
     if (error instanceof PostgrestError) {
       return  {
             message: error.message,
-            details: `Code: ${error.code}, Details: ${error.details}, Ursache: ${error.cause}`,
+            details: `Code: ${error.code} \r\n Details: ${error.details} \r\n Hinweis: ${error.hint}`,
             abhilfe: 'Bitte versuchen Sie es später erneut oder kontaktieren Sie: andreasks56@gmail.com'
         };
     }
@@ -25,7 +25,7 @@ export class DatabaseServiceHelper {
 
     return {
         message: 'Ein unbekannter Fehler ist aufgetreten.',
-        details: JSON.stringify(error),
+        details: (error ? "Details: " + JSON.stringify(error) : "Details: Nicht verfügbar"),
         abhilfe: 'Bitte versuchen Sie es später erneut oder kontaktieren Sie: andreasks56@gmail.com'
     };
   }

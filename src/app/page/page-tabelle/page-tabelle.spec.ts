@@ -17,14 +17,12 @@ describe('PageTabelle', () => {
   ];
 
   const getDataMock = vi.fn(async (land: string, firma: string) => {
-    const landNormalized = land.toLowerCase();
-    const firmaNormalized = firma.toLowerCase();
-
-    return daten.filter(
-      (item) =>
-        item.country.toLowerCase().includes(landNormalized) &&
-        item.company_name.toLowerCase().includes(firmaNormalized),
+    const gefilterteDaten = daten.filter(x =>
+        x.country.toLowerCase().includes(land.toLowerCase()) &&
+        x.company_name.toLowerCase().includes(firma.toLowerCase()),
     );
+
+    return { success: true, data: gefilterteDaten };
   });
   const nutzeNavigationMock = vi.fn();
 

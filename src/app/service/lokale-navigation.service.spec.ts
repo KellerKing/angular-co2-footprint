@@ -1,28 +1,30 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
+import { routes } from '../app.routes';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { LokaleNavigationService } from './lokale-navigation.service';
 
 // Reine Unit-Tests: Service wird isoliert getestet.
 // In app.spec.ts  und page-tabelle.spec.ts gibt es bereits Integrationstests, die das Zusammenspiel mit der Komponente testen.
-describe('LokaleNavigationService', () => {
-  let service: LokaleNavigationService;
-
+describe("LokaleNavigationService", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [provideRouter(routes)],
     });
-    service = TestBed.inject(LokaleNavigationService);
   });
 
-  it('Smoke Test: Komponente erstellbar', () => {
+  it("Smoke Test: Komponente erstellbar", () => {
+    const service = TestBed.inject(LokaleNavigationService);
     expect(service).toBeTruthy();
   });
 
-  it('Unit-Test: setzt Sichtbarkeit und Elemente mit nutzeNavigation', () => {
+  it("Unit-Test: setzt Sichtbarkeit und Elemente mit nutzeNavigation", () => {
+    const service = TestBed.inject(LokaleNavigationService);
+
     const items = [
-      { label: 'Suchfilter', fragment: 'suchfilter' },
-      { label: 'Tabelle', fragment: 'tabelle' },
+      { label: "Suchfilter", fragment: "suchfilter" },
+      { label: "Tabelle", fragment: "tabelle" },
     ];
 
     service.nutzeNavigation(items);
@@ -31,8 +33,10 @@ describe('LokaleNavigationService', () => {
     expect(service.darstellbareElemente()).toEqual(items);
   });
 
-  it('Unit-Test: setzt Zustand mit deaktivereNavigation zurueck', () => {
-    service.nutzeNavigation([{ label: 'Test', fragment: 'test' }]);
+  it("Unit-Test: setzt Zustand mit deaktivereNavigation zurueck", () => {
+    const service = TestBed.inject(LokaleNavigationService);
+
+    service.nutzeNavigation([{ label: "Test", fragment: "test" }]);
     expect(service.isVisible()).toBe(true);
     expect(service.darstellbareElemente().length).toBe(1);
 

@@ -19,12 +19,13 @@ export class SettingsService {
   }
 
   public setRtl(isRtl: boolean): void {
-    this.currentEinstellungen.update((einstellungen) => ({ ...einstellungen, isRtl: isRtl }));
+    this.currentEinstellungen.update((einstellungen : Einstellungen) => (
+      { ...einstellungen, isRtl: isRtl } as Einstellungen));
   }
 
   private isRichtungRtlBeiErstenStart(): boolean {
-    const lang = (navigator.language || 'en').toLowerCase();
-    const rtlLangs = ['ar', 'fa', 'he', 'ur'];
+    const lang = (navigator.language || "en").toLowerCase();
+    const rtlLangs = ["ar", "fa", "he", "ur"];
     return rtlLangs.some((code) => lang.startsWith(code));
   }
 
