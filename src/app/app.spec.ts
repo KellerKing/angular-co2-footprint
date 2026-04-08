@@ -4,7 +4,7 @@ import { provideRouter, Router } from '@angular/router';
 import { routes } from './app.routes';
 import { describe, it, expect, beforeEach } from 'vitest';
 
-describe('App', () => {
+describe("App", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
@@ -12,14 +12,14 @@ describe('App', () => {
     }).compileComponents();
   });
 
-  it('Smoke Test: Komponente erstellbar', () => {
+  it("Smoke Test: Komponente erstellbar", () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
 
-  it('Integration-Test: navigiert per Header-Link zu About und wieder zurueck zu Home', async () => {
+  it("Integration-Test: navigiert per Header-Link zu About und wieder zurueck zu Home", async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -29,29 +29,30 @@ describe('App', () => {
     const links = Array.from(fixture.nativeElement.querySelectorAll('a')) as HTMLAnchorElement[];
 
     //Auf Über im Header klicken
-    const aboutLink = links.find((link) => link.textContent?.includes('Über'));
+    const aboutLink = links.find((link) => link.textContent?.includes("Über"));
     expect(aboutLink).toBeTruthy();
     aboutLink?.click();
     
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(router.url).toBe('/about');
-    expect(fixture.nativeElement.textContent).toContain('Diese Seite hat keine Funktionalit');
+    expect(router.url).toBe("/about");
+    expect(fixture.nativeElement.textContent).toContain("Diese Seite hat keine Funktionalit");
 
     //Zurück zu "Home" navgieren
-    const homeLink = links.find((link) => link.textContent?.includes('Home'));
+    const homeLink = links.find((link) => link.textContent?.includes("Home"));
     expect(homeLink).toBeTruthy();
     homeLink?.click();
 
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(router.url).toBe('/');
-    expect(fixture.nativeElement.textContent).toContain('IPWA01-01');
+    expect(router.url).toBe("/");
+    expect(fixture.nativeElement.textContent).toContain("IPWA01-01");
+    expect(fixture.nativeElement.textContent).toContain("Programmierung von Webanwendungsoberflächen");
   });
 
-  it('Integration-Test: Schaut das lokale Navigation nicht da ist, geht zur Tabellenseite und schaut ob sie da ist und benutzt sie', async () => {
+  it("Integration-Test: Schaut das lokale Navigation nicht da ist, geht zur Tabellenseite und schaut ob sie da ist und benutzt sie", async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -84,7 +85,28 @@ describe('App', () => {
     await fixture.whenStable();
 
     //Schauen, dass das Offcanvas Einträge hat. Welche es Sind ist mir egal, da ich nur schauen will, dass es da ist und funktioniert.
-    const navItems = Array.from(fixture.nativeElement.querySelectorAll('nav a')) as HTMLAnchorElement[];
+    const navItems = Array.from(fixture.nativeElement.querySelectorAll("nav a")) as HTMLAnchorElement[];
     expect(navItems.length).greaterThan(0);
+  });
+
+  it("Integration-Test: Nicht vorhandene Router wird auf Home umgeleitet und rendert", async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    //Schauen, dass ich nicht auf der Fallbackseite bin weil sonst merke ich nicht ob die Umleitung richtig funktioniert hat oder ich einfach auf der Startseite bleibe mit anderer Url.
+    await router.navigateByUrl("/about");
+    fixture.detectChanges();
+    await fixture.whenStable(); 
+    expect(router.url).toBe("/about");
+    expect(fixture.nativeElement.textContent).toContain("Diese Seite hat keine Funktionalit");
+
+    await router.navigateByUrl("/Roland-Kaiser");
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    //Url wurde nicht gefunden. Es wird auf die Home Seite redirected.
+    expect(router.url).toBe("/");
+    expect(fixture.nativeElement.textContent).toContain("IPWA01-01");
+    expect(fixture.nativeElement.textContent).toContain("Programmierung von Webanwendungsoberflächen");
   });
 });

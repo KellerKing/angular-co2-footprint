@@ -5,7 +5,6 @@ import { PageTabelle } from './page-tabelle';
 import { CO2Data, DatabaseService } from '../../service/database.service/database.service';
 import { LokaleNavigationService } from '../../service/lokale-navigation.service';
 
-// Integration-Tests (komponentennah): Zusammenspiel aus Komponente, Service-Mocks und Lifecycle.
 describe('PageTabelle', () => {
   let component: PageTabelle;
   let fixture: ComponentFixture<PageTabelle>;
@@ -79,6 +78,45 @@ describe('PageTabelle', () => {
 
     expect(component.tabelleViewModel().length).toBe(2);
   });
+
+  it("Integration-Test: Ändern der Suche ohne Treffer", async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.sucheModel.set({ land: "xyz", firma: "1abc1" });
+    await fixture.whenStable();
+
+    expect(component.tabelleViewModel().length).toBe(0);
+  });
+
+  //Keine Ahnung ob ich das noch brauche und will.
+  // it("Integration-Test: Suchfilter über HTML-Input reduziert die gerenderten Tabellenzeilen", async () => {
+  //   vi.useFakeTimers();
+
+  //   try {
+  //     fixture.detectChanges();
+  //     await fixture.whenStable();
+
+  //     const landInput = fixture.nativeElement.querySelector('#land') as HTMLInputElement;
+  //     expect(landInput).toBeTruthy();
+
+  //     landInput.value = 'Ger';
+  //     landInput.dispatchEvent(new Event('input', { bubbles: true }));
+  //     fixture.detectChanges();
+
+  //     await vi.advanceTimersByTimeAsync(350);
+  //     await fixture.whenStable();
+  //     fixture.detectChanges();
+
+  //     expect(component.tabelleViewModel().length).toBe(2);
+
+  //     const rows = fixture.nativeElement.querySelectorAll('tr.mat-mdc-row') as NodeListOf<HTMLTableRowElement>;
+  //     expect(rows.length).toBe(2);
+  //     expect(fixture.nativeElement.textContent).toContain('Germany');
+  //   } finally {
+  //     vi.useRealTimers();
+  //   }
+  // });
 
 
   it('Integration-Test: Lokale Navigation wird erstmal aufgerufen. Ob diese selbst funktiniert hat mit dem Test nichts zu tun.', async () => {

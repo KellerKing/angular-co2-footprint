@@ -5,5 +5,5 @@ export const routes: Routes = [
     {path: 'tabelle', loadComponent: () => import('./page/page-tabelle/page-tabelle').then(m => m.PageTabelle)},
     {path: '', component: PageHome},
     {path: 'about', loadComponent: () => import('./page/page-about/page-about').then(m => m.PageAbout)},
-    {path: '**', component: PageHome},
+    {path: '**', redirectTo: '/', pathMatch: 'full'},
 ];
