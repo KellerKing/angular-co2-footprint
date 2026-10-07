@@ -43,7 +43,18 @@ export class PageTabelle implements OnInit {
   constructor() {
     effect(() => {
       this.m_Service.getData(this.sucheModel().land, this.sucheModel().firma).then((data) => {
-        this.tabelleDataModel.set(data);
+        if (data.success) {
+          this.tabelleDataModel.set(data.data);
+          return;
+        }
+        this.tabelleDataModel.set([]);
+        
+        const message = "Nachricht: " + data.error.message;
+        const details = data.error.details ? "\r\n Details: " + data.error.details : "Details: Keine weiteren Informationen vorhanden.";
+        const abhilfe = data.error.abhilfe ? "\r\n Abhilfe: " + data.error.abhilfe : "Abhilfe: Keine weiteren Informationen vorhanden.";
+        
+        alert("Fehler beim Laden der Daten:" + "\r\n" + message + "\r\n" + details + "\r\n" + abhilfe);
+
       });
     });
   }

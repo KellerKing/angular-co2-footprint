@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
+import { DatabaseServiceHelper, FehlerResult } from './database.service.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -9,25 +10,33 @@ export class DatabaseService {
   private supabaseKey = 'sb_publishable_PH5QOoZ5eBRrior-T-JckQ_FXGH7d0c';
   private supabase = createClient(this.supabaseUrl, this.supabaseKey);
 
-  async getData(land: string, firma: string): Promise<CO2Data[]> {
-    let query = this.supabase.from('co2Verbrauch').select('*');
+  async getData(land: string, firma: string): Promise<DatenbankResult<CO2Data[]>> {
+    try {
+      let query = this.supabase.from('co2Verbrauch').select('*');
 
-    if (land) query = query.ilike('country', `%${this.entferneSonderzeichen(land)}%`);
-    if (firma) query = query.ilike('company_name', `%${this.entferneSonderzeichen(firma)}%`);
+      const landOhneSonderzeichen = DatabaseServiceHelper.entferneSonderzeichen(land);
+      const firmaOhneSonderzeichen = DatabaseServiceHelper.entferneSonderzeichen(firma);
 
-    const { data, error } = await query;
-    if (error) {
-      console.error('Fehler beim Abrufen der Daten:', error);
-      return [];
+      if (land) query = query.ilike('country', `%${landOhneSonderzeichen}%`);
+      if (firma) query = query.ilike('company_name', `%${firmaOhneSonderzeichen}%`);
+
+      const { data, error } = await query;
+      if (error) return { success: false, error: this.generiereFehler(error) };
+
+      return { success: true, data: data as CO2Data[] };
+    } catch (error) {
+      return { success: false, error: this.generiereFehler(error) };
     }
-    
-    return data as CO2Data[];
   }
+  private generiereFehler(error: unknown): Fehler {
+    const fehlerAusHelper = DatabaseServiceHelper.generiereFehler(error);
 
-  /* Supabase ist zwar gegen Injektion abgesichert, aber Stern oder Fragezeichen werden als Platzhalter interpretiert. Das ist aus meiner Sicht kein Fehler, aber je nach dem 
-  wie streng man die Aufgabe sieht, wäre das schon ein Fehler */
-  private entferneSonderzeichen(value: string): string {
-    return value.replace(/[%_*]/g, (char) => `\\${char}`);
+    //Mapping um nicht an den Helper gebunden zu sein.
+    return {
+      message: fehlerAusHelper.message,
+      details: fehlerAusHelper.details,
+      abhilfe: fehlerAusHelper.abhilfe,
+    };
   }
 }
 
@@ -37,3 +46,13 @@ export interface CO2Data {
   company_name: string;
   co2_verbrauch: number;
 }
+
+export interface Fehler {
+  message: string;
+  details?: string;
+  abhilfe?: string;
+}
+
+export type DatenbankResult<T> =
+  | { success: true; data: T } //Erfolgsfall . Angular weis dann welche Felder es gibt
+  | { success: false; error: Fehler }; // Fehlerfall. Angular weis dann welche Felder es gibt

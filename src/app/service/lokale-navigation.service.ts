@@ -9,7 +9,7 @@ export class LokaleNavigationService {
   private readonly m_Router = inject(Router);
 
   constructor() {
-    this.m_Router.events.subscribe((event) => {
+    this.m_Router.events.subscribe((event : any) => {
       if (event instanceof NavigationStart) this.deaktivereNavigation();
     });
   }
